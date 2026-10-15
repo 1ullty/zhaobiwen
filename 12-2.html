@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>12-2 Grid 布局</title>
+  <style>
+    :root {
+      --zhao_ink: #0b2545;
+      --zhao_blue: #1d5fad;
+      --zhao_accent: #e8a33d;
+      --zhao_paper: #f1f5fa;
+      --zhao_card: #ffffff;
+      --zhao_line: #d6e1ee;
+      --zhao_text: #24364a;
+      --zhao_muted: #61768c;
+      --zhao_radius: 14px;
+      --zhao_gap: 20px;
+      --zhao_shadow: 0 10px 30px rgba(11, 37, 69, .12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      background: var(--zhao_paper);
+      color: var(--zhao_text);
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      line-height: 1.8;
+    }
+
+    .zhao_wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+    .zhao_topbar {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 12px 24px;
+      background: var(--zhao_ink); color: #f2f6fb;
+      border-bottom: 1px solid rgba(255, 255, 255, .12);
+    }
+    .zhao_topbar .zhao_brand { font-weight: 700; letter-spacing: .5px; }
+    .zhao_topbar nav { display: flex; gap: 18px; flex-wrap: wrap; }
+    .zhao_topbar nav a { color: #cfdcec; text-decoration: none; font-size: 14px; }
+    .zhao_topbar nav a:hover { color: #fff; }
+
+    .zhao_hero {
+      background: var(--zhao_ink); color: #f2f6fb; padding: 56px 24px 60px;
+    }
+    .zhao_hero h1 { font-size: clamp(28px, 4.6vw, 46px); font-weight: 800; margin: 0 0 12px; }
+    .zhao_hero .zhao_sub { color: #b9cbde; max-width: 640px; font-size: 15.5px; margin: 0; }
+    .zhao_hero .zhao_kicker {
+      font-family: Consolas, monospace; color: var(--zhao_accent);
+      font-size: 14px; letter-spacing: 1px; margin-bottom: 14px;
+    }
+
+    .zhao_section { padding: 52px 0 8px; }
+    .zhao_sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; }
+    .zhao_sec-head .zhao_idx { font-family: Consolas, monospace; color: var(--zhao_blue); font-weight: 700; }
+    .zhao_sec-head h2 { font-size: 24px; font-weight: 800; color: var(--zhao_ink); margin: 0; }
+    .zhao_sec-head .zhao_note { font-size: 13px; color: var(--zhao_muted); }
+    .zhao_desc { font-size: 15px; color: var(--zhao_muted); margin: 0 0 24px; max-width: 760px; }
+
+    .zhao_grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-areas:
+        "a b b"
+        "c b b"
+        "c d e"
+        "c d f";
+      gap: var(--zhao_gap);
+      background: var(--zhao_card);
+      border: 1px solid var(--zhao_line);
+      border-radius: var(--zhao_radius);
+      padding: var(--zhao_gap);
+      box-shadow: var(--zhao_shadow);
+    }
+    .zhao_cell {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 120px; padding: 18px; border-radius: var(--zhao_radius);
+      color: #fff; text-align: center;
+    }
+    .zhao_cell .zhao_letter { font-size: 44px; font-weight: 800; line-height: 1; }
+    .zhao_cell .zhao_pos { font-family: Consolas, monospace; font-size: 13px; opacity: .85; margin-top: 8px; }
+
+    .zhao_a { grid-area: a; background: #e8a33d; }
+    .zhao_b { grid-area: b; background: #1d5fad; }
+    .zhao_c { grid-area: c; background: #0b2545; }
+    .zhao_d { grid-area: d; background: #3a7d44; }
+    .zhao_e { grid-area: e; background: #9b59b6; }
+    .zhao_f { grid-area: f; background: #c0392b; }
+
+    .zhao_code {
+      background: var(--zhao_ink); color: #d9e4f2;
+      border-radius: var(--zhao_radius); padding: 22px 24px;
+      font-family: Consolas, monospace; font-size: 14px; line-height: 1.7;
+      overflow-x: auto; margin: 24px 0 0;
+    }
+    .zhao_code .zhao_kw { color: #7fd1ff; }
+    .zhao_code .zhao_val { color: #ffd479; }
+
+    .zhao_footer {
+      text-align: center; color: var(--zhao_muted); font-size: 13px;
+      padding: 40px 0 48px;
+    }
+  </style>
+</head>
+<body>
+  <header class="zhao_topbar">
+    <span class="zhao_brand">高级网页设计</span>
+    <nav>
+      <a href="index.html">目录</a>
+      <a href="#zhao_grid">Grid</a>
+      <a href="#zhao_code">代码</a>
+    </nav>
+  </header>
+
+  <section class="zhao_hero">
+    <div class="zhao_wrap">
+      <div class="zhao_kicker">LESSON 12-2</div>
+      <h1>Grid 布局</h1>
+      <p class="zhao_sub">使用 grid-template-areas 命名区域，直观地描述二维页面结构。</p>
+    </div>
+  </section>
+
+  <main class="zhao_wrap">
+    <section class="zhao_section" id="zhao_grid">
+      <div class="zhao_sec-head">
+        <span class="zhao_idx">01</span>
+        <h2>区域划分</h2>
+        <span class="zhao_note">3 列 × 4 行</span>
+      </div>
+      <p class="zhao_desc">每个区域由字母命名，跨行跨列的区域自动合并，最终形成如下布局：</p>
+
+      <div class="zhao_grid">
+        <div class="zhao_cell zhao_a"><span class="zhao_letter">a</span><span class="zhao_pos">1 行 1 列</span></div>
+        <div class="zhao_cell zhao_b"><span class="zhao_letter">b</span><span class="zhao_pos">1-2 行 · 2-3 列</span></div>
+        <div class="zhao_cell zhao_c"><span class="zhao_letter">c</span><span class="zhao_pos">2-4 行 · 1 列</span></div>
+        <div class="zhao_cell zhao_d"><span class="zhao_letter">d</span><span class="zhao_pos">3-4 行 · 2 列</span></div>
+        <div class="zhao_cell zhao_e"><span class="zhao_letter">e</span><span class="zhao_pos">3 行 3 列</span></div>
+        <div class="zhao_cell zhao_f"><span class="zhao_letter">f</span><span class="zhao_pos">4 行 3 列</span></div>
+      </div>
+    </section>
+
+    <section class="zhao_section" id="zhao_code">
+      <div class="zhao_sec-head">
+        <span class="zhao_idx">02</span>
+        <h2>核心代码</h2>
+        <span class="zhao-note">grid-template-areas</span>
+      </div>
+      <div class="zhao_code"><span class="zhao_kw">.zhao_grid</span> {
+  <span class="zhao_kw">display</span>: <span class="zhao-val">grid</span>;
+  <span class="zhao_kw">grid-template-columns</span>: <span class="zhao-val">repeat(3, 1fr)</span>;
+  <span class="zhao_kw">grid-template-areas</span>:
+    <span class="zhao-val">"a b b"</span>
+    <span class="zhao-val">"c b b"</span>
+    <span class="zhao-val">"c d e"</span>
+    <span class="zhao-val">"c d f"</span>;
+}
+<span class="zhao_kw">.zhao_a</span> { <span class="zhao_kw">grid-area</span>: <span class="zhao-val">a</span>; }
+<span class="zhao_kw">.zhao_b</span> { <span class="zhao_kw">grid-area</span>: <span class="zhao-val">b</span>; }
+<span class="zhao_kw">.zhao_c</span> { <span class="zhao_kw">grid-area</span>: <span class="zhao-val">c</span>; }
+<span class="zhao_kw">.zhao_d</span> { <span class="zhao_kw">grid-area</span>: <span class="zhao-val">d</span>; }
+<span class="zhao_kw">.zhao_e</span> { <span class="zhao_kw">grid-area</span>: <span class="zhao-val">e</span>; }
+<span class="zhao_kw">.zhao_f</span> { <span class="zhao_kw">grid-area</span>: <span class="zhao-val">f</span>; }</div>
+    </section>
+  </main>
+
+  <footer class="zhao_footer">高级网页设计 · 赵壁文 · 12-2 Grid 布局</footer>
+</body>
+</html>
