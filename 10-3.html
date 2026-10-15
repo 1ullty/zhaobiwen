@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10-3 媒体查询</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+    }
+
+    .screen {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      background: #315c9b;
+      color: #fff;
+      font-family: "Microsoft YaHei", sans-serif;
+      font-size: 4rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 768px) {
+      .screen {
+        background: #278c78;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .screen {
+        background: #d77b36;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="screen">赵壁文</main>
+</body>
+</html>

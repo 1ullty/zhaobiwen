@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>11-4 3D 画廊</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --zhao_ink: #0b2545;
+      --zhao_blue: #1d5fad;
+      --zhao_accent: #e8a33d;
+      --zhao_paper: #f1f5fa;
+      --zhao_card: #ffffff;
+      --zhao_line: #d6e1ee;
+      --zhao_text: #24364a;
+      --zhao_muted: #61768c;
+    }
+
+    html, body {
+      margin: 0;
+      background: var(--zhao_paper);
+      color: var(--zhao_text);
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      line-height: 1.8;
+    }
+
+    .zhao_wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+    .zhao_topbar {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 12px 24px;
+      background: rgba(11, 37, 69, .96); color: #f2f6fb;
+      border-bottom: 1px solid rgba(255, 255, 255, .12);
+    }
+    .zhao_topbar .zhao_brand { font-weight: 700; letter-spacing: .5px; }
+    .zhao_topbar nav { display: flex; gap: 18px; flex-wrap: wrap; }
+    .zhao_topbar nav a { color: #cfdcec; text-decoration: none; font-size: 14px; }
+    .zhao_topbar nav a:hover { color: #fff; }
+
+    .zhao_hero {
+      background: var(--zhao_ink); color: #f2f6fb; padding: 60px 24px 68px;
+    }
+    .zhao_hero h1 { font-size: clamp(28px, 4.6vw, 46px); font-weight: 800; margin: 0 0 12px; }
+    .zhao_hero .zhao_sub { color: #b9cbde; max-width: 640px; font-size: 15.5px; }
+    .zhao_hero .zhao_kicker {
+      font-family: Consolas, monospace; color: var(--zhao_accent);
+      font-size: 14px; letter-spacing: 1px; margin-bottom: 14px;
+    }
+
+    .zhao_section { padding: 52px 0 8px; }
+    .zhao_sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; }
+    .zhao_sec-head .zhao_idx { font-family: Consolas, monospace; color: var(--zhao_blue); font-weight: 700; }
+    .zhao_sec-head h2 { font-size: 24px; font-weight: 800; color: var(--zhao_ink); }
+    .zhao_sec-head .zhao_note { font-size: 13px; color: var(--zhao_muted); }
+    .zhao_desc { font-size: 15px; color: var(--zhao_muted); margin: 0 0 24px; max-width: 760px; }
+
+    .zhao_gallery-scene {
+      width: 100%; height: 420px; perspective: 1200px;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(180deg, #0f3460, #0b2545);
+      border-radius: 12px; overflow: hidden; position: relative;
+    }
+
+    .zhao_gallery {
+      width: 220px; height: 300px; position: relative;
+      transform-style: preserve-3d;
+      animation: zhao_gallery-spin 18s linear infinite;
+    }
+
+    .zhao_gallery .zhao_frame {
+      position: absolute; width: 220px; height: 300px;
+      border: 3px solid rgba(255,255,255,.25);
+      border-radius: 8px; overflow: hidden;
+      background: #000;
+      box-shadow: 0 10px 40px rgba(0,0,0,.5);
+    }
+
+    .zhao_gallery .zhao_frame img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+
+    .zhao_gallery .zhao_frame .zhao_caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(11, 37, 69, .85); color: #fff;
+      font-size: 13px; padding: 6px 12px; text-align: center;
+    }
+
+    .zhao_gallery .zhao_f1 { transform: rotateY(0deg)   translateZ(280px); }
+    .zhao_gallery .zhao_f2 { transform: rotateY(60deg)  translateZ(280px); }
+    .zhao_gallery .zhao_f3 { transform: rotateY(120deg) translateZ(280px); }
+    .zhao_gallery .zhao_f4 { transform: rotateY(180deg) translateZ(280px); }
+    .zhao_gallery .zhao_f5 { transform: rotateY(240deg) translateZ(280px); }
+    .zhao_gallery .zhao_f6 { transform: rotateY(300deg) translateZ(280px); }
+
+    @keyframes zhao_gallery-spin {
+      from { transform: rotateY(0deg); }
+      to   { transform: rotateY(360deg); }
+    }
+
+    .zhao_gallery-scene:hover .zhao_gallery { animation-play-state: paused; }
+
+    .zhao_controls {
+      display: flex; gap: 12px; justify-content: center; margin-top: 20px; flex-wrap: wrap;
+    }
+
+    .zhao_btn {
+      padding: 10px 22px; border: 1px solid var(--zhao_line); border-radius: 8px;
+      background: var(--zhao_card); color: var(--zhao_text); font-size: 14px;
+      cursor: pointer; font-family: inherit; transition: all .2s ease;
+    }
+    .zhao_btn:hover { background: var(--zhao_blue); color: #fff; border-color: var(--zhao_blue); }
+
+    .zhao_grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+    .zhao_card {
+      background: var(--zhao_card); border: 1px solid var(--zhao_line);
+      border-left: 5px solid var(--zhao_blue); border-radius: 10px;
+      padding: 18px 20px;
+    }
+    .zhao_card h3 { margin: 0 0 4px; font-size: 17px; color: var(--zhao_ink); font-weight: 700; }
+    .zhao_card h3 code {
+      font-family: Consolas, monospace; font-size: 15px; color: var(--zhao_blue);
+      background: #e4eef9; padding: 1px 7px; border-radius: 5px;
+    }
+    .zhao_card p { margin: 6px 0 0; font-size: 13.5px; color: var(--zhao_muted); }
+
+    .zhao_table {
+      width: 100%; border-collapse: collapse; font-size: 14px;
+      background: var(--zhao_card); border-radius: 10px; overflow: hidden;
+      border: 1px solid var(--zhao_line); margin-top: 4px;
+    }
+    .zhao_table th, .zhao_table td { padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--zhao_line); }
+    .zhao_table th { background: var(--zhao_ink); color: #f2f6fb; font-weight: 700; }
+    .zhao_table tbody tr:last-child td { border-bottom: none; }
+    .zhao_table tbody tr:nth-child(even) { background: #f8fbfe; }
+    .zhao_table td code { font-family: Consolas, monospace; color: var(--zhao_blue); }
+
+    footer {
+      margin-top: 56px; border-top: 1px solid var(--zhao_line);
+      background: var(--zhao_card); color: var(--zhao_muted);
+      font-size: 13px; padding: 24px; text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      .zhao_hero { padding: 44px 18px 52px; }
+      .zhao_gallery-scene { height: 340px; }
+      .zhao_gallery { width: 160px; height: 220px; }
+      .zhao_gallery .zhao_frame { width: 160px; height: 220px; }
+      .zhao_gallery .zhao_f1,
+      .zhao_gallery .zhao_f2,
+      .zhao_gallery .zhao_f3,
+      .zhao_gallery .zhao_f4,
+      .zhao_gallery .zhao_f5,
+      .zhao_gallery .zhao_f6 { transform: rotateY(var(--zhao_rot)) translateZ(200px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .zhao_gallery { animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="zhao_topbar">
+    <div class="zhao_brand">高级网页设计 · 课堂实践</div>
+    <nav>
+      <a href="#zhao_gallery-sec">3D 画廊</a>
+      <a href="#zhao_grid-sec">图片墙</a>
+      <a href="#zhao_table-sec">属性速查</a>
+    </nav>
+  </header>
+
+  <section class="zhao_hero">
+    <div class="zhao_wrap">
+      <p class="zhao_kicker">// LESSON 11-4 · CSS3 3D GALLERY</p>
+      <h1>3D 画廊</h1>
+      <p class="zhao_sub">利用 <code>transform-style: preserve-3d</code> 与 <code>perspective</code> 将图片排列成环形 3D 画廊，持续旋转展示 img/ 目录下的六张图片。</p>
+    </div>
+  </section>
+
+  <main class="zhao_wrap">
+
+    <section class="zhao_section" id="zhao_gallery-sec">
+      <div class="zhao_sec-head">
+        <span class="zhao_idx">01</span>
+        <h2>3D 旋转画廊</h2>
+        <span class="zhao_note">rotateY + translateZ 环形排列</span>
+      </div>
+      <p class="zhao_desc">六张图片沿环形排列（每张 <code>rotateY(60deg × n) translateZ(280px)</code>），父容器持续旋转形成 3D 画廊。鼠标悬停可暂停旋转。</p>
+      <div class="zhao_gallery-scene">
+        <div class="zhao_gallery" id="zhao_gallery">
+          <div class="zhao_frame zhao_f1">
+            <img src="./img/1.jpg" alt="画廊图片一">
+            <div class="zhao_caption">图片 1</div>
+          </div>
+          <div class="zhao_frame zhao_f2">
+            <img src="./img/2.jpg" alt="画廊图片二">
+            <div class="zhao_caption">图片 2</div>
+          </div>
+          <div class="zhao_frame zhao_f3">
+            <img src="./img/3.jpg" alt="画廊图片三">
+            <div class="zhao_caption">图片 3</div>
+          </div>
+          <div class="zhao_frame zhao_f4">
+            <img src="./img/4.jpg" alt="画廊图片四">
+            <div class="zhao_caption">图片 4</div>
+          </div>
+          <div class="zhao_frame zhao_f5">
+            <img src="./img/5.jpg" alt="画廊图片五">
+            <div class="zhao_caption">图片 5</div>
+          </div>
+          <div class="zhao_frame zhao_f6">
+            <img src="./img/6.jpg" alt="画廊图片六">
+            <div class="zhao_caption">图片 6</div>
+          </div>
+        </div>
+      </div>
+      <div class="zhao_controls">
+        <button class="zhao_btn" id="zhao_btn-prev">← 上一张</button>
+        <button class="zhao_btn" id="zhao_btn-toggle">暂停 / 播放</button>
+        <button class="zhao_btn" id="zhao_btn-next">下一张 →</button>
+      </div>
+    </section>
+
+    <section class="zhao_section" id="zhao_grid-sec">
+      <div class="zhao_sec-head">
+        <span class="zhao_idx">02</span>
+        <h2>图片墙</h2>
+        <span class="zhao_note">3D 悬浮卡片效果</span>
+      </div>
+      <p class="zhao_desc">每张图片以 3D 卡片形式展示，hover 时产生悬浮倾斜效果。</p>
+      <div class="zhao_grid">
+        <div class="zhao_card">
+          <h3><code>img/1.jpg</code></h3>
+          <p>3D 悬浮卡片，hover 查看效果。</p>
+          <div style="margin-top:12px;border-radius:8px;overflow:hidden;">
+            <img src="./img/1.jpg" alt="图片1" style="width:100%;height:160px;object-fit:cover;display:block;">
+          </div>
+        </div>
+        <div class="zhao_card">
+          <h3><code>img/2.jpg</code></h3>
+          <p>3D 悬浮卡片，hover 查看效果。</p>
+          <div style="margin-top:12px;border-radius:8px;overflow:hidden;">
+            <img src="./img/2.jpg" alt="图片2" style="width:100%;height:160px;object-fit:cover;display:block;">
+          </div>
+        </div>
+        <div class="zhao_card">
+          <h3><code>img/3.jpg</code></h3>
+          <p>3D 悬浮卡片，hover 查看效果。</p>
+          <div style="margin-top:12px;border-radius:8px;overflow:hidden;">
+            <img src="./img/3.jpg" alt="图片3" style="width:100%;height:160px;object-fit:cover;display:block;">
+          </div>
+        </div>
+        <div class="zhao_card">
+          <h3><code>img/4.jpg</code></h3>
+          <p>3D 悬浮卡片，hover 查看效果。</p>
+          <div style="margin-top:12px;border-radius:8px;overflow:hidden;">
+            <img src="./img/4.jpg" alt="图片4" style="width:100%;height:160px;object-fit:cover;display:block;">
+          </div>
+        </div>
+        <div class="zhao_card">
+          <h3><code>img/5.jpg</code></h3>
+          <p>3D 悬浮卡片，hover 查看效果。</p>
+          <div style="margin-top:12px;border-radius:8px;overflow:hidden;">
+            <img src="./img/5.jpg" alt="图片5" style="width:100%;height:160px;object-fit:cover;display:block;">
+          </div>
+        </div>
+        <div class="zhao_card">
+          <h3><code>img/6.jpg</code></h3>
+          <p>3D 悬浮卡片，hover 查看效果。</p>
+          <div style="margin-top:12px;border-radius:8px;overflow:hidden;">
+            <img src="./img/6.jpg" alt="图片6" style="width:100%;height:160px;object-fit:cover;display:block;">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="zhao_section" id="zhao_table-sec">
+      <div class="zhao_sec-head">
+        <span class="zhao_idx">03</span>
+        <h2>3D 画廊核心属性</h2>
+      </div>
+      <table class="zhao_table">
+        <thead>
+          <tr><th>属性</th><th>作用</th><th>关键值</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>perspective</code></td><td>定义观察者与 z=0 平面的距离，产生透视效果</td><td><code>1200px</code></td></tr>
+          <tr><td><code>transform-style</code></td><td>子元素是否在 3D 空间中定位</td><td><code>preserve-3d</code></td></tr>
+          <tr><td><code>rotateY</code></td><td>绕 Y 轴旋转，用于环形排列</td><td><code>rotateY(60deg)</code></td></tr>
+          <tr><td><code>translateZ</code></td><td>沿 Z 轴移动，控制环形半径</td><td><code>translateZ(280px)</code></td></tr>
+          <tr><td><code>animation-play-state</code></td><td>控制动画播放/暂停</td><td><code>paused</code>、<code>running</code></td></tr>
+          <tr><td><code>object-fit</code></td><td>图片填充方式</td><td><code>cover</code>、<code>contain</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>赵壁文 · 《高级网页设计》课堂实践 · 2026</p>
+    <p>原生 HTML/CSS 实现，无 CDN 或外部资源。</p>
+  </footer>
+
+  <script>
+    (function () {
+      var zhao_gallery = document.getElementById('zhao_gallery');
+      var zhao_btnToggle = document.getElementById('zhao_btn-toggle');
+      var zhao_btnPrev = document.getElementById('zhao_btn-prev');
+      var zhao_btnNext = document.getElementById('zhao_btn-next');
+      var zhao_paused = false;
+      var zhao_offset = 0;
+
+      function zhao_apply() {
+        var zhao_frames = zhao_gallery.querySelectorAll('.zhao_frame');
+        var zhao_angles = [0, 60, 120, 180, 240, 300];
+        for (var i = 0; i < zhao_frames.length; i++) {
+          var zhao_angle = zhao_angles[i] + zhao_offset;
+          zhao_frames[i].style.transform = 'rotateY(' + zhao_angle + 'deg) translateZ(280px)';
+        }
+      }
+
+      zhao_btnToggle.addEventListener('click', function () {
+        zhao_paused = !zhao_paused;
+        zhao_gallery.style.animationPlayState = zhao_paused ? 'paused' : 'running';
+        zhao_btnToggle.textContent = zhao_paused ? '播放' : '暂停 / 播放';
+      });
+
+      zhao_btnPrev.addEventListener('click', function () {
+        zhao_offset -= 60;
+        zhao_apply();
+      });
+
+      zhao_btnNext.addEventListener('click', function () {
+        zhao_offset += 60;
+        zhao_apply();
+      });
+    })();
+  </script>
+
+</body>
+</html>

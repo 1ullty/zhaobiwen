@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10-2 图片幻灯片</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 48px 20px;
+      display: grid;
+      place-items: center;
+      background: #f2f4f6;
+      color: #20252b;
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+
+    .gallery {
+      width: min(100%, 720px);
+      overflow: hidden;
+      background: #fff;
+      border: 1px solid #dfe3e8;
+      border-radius: 8px;
+      box-shadow: 0 16px 40px rgb(25 35 45 / 10%);
+    }
+
+    .slides {
+      display: flex;
+      width: 400%;
+      animation: slide 12s ease-in-out infinite;
+    }
+
+    .slide {
+      flex: 0 0 25%;
+      min-width: 0;
+      margin: 0;
+    }
+
+    .slide img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    .slide figcaption {
+      padding: 18px 20px 20px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .slide figcaption span {
+      display: block;
+      margin-top: 6px;
+      color: #68727d;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    @keyframes slide {
+      0%, 24% { transform: translateX(0); }
+      30%, 54% { transform: translateX(-25%); }
+      60%, 84% { transform: translateX(-50%); }
+      90%, 100% { transform: translateX(-75%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .slides {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="gallery" aria-label="赵壁文的图片幻灯片">
+    <div class="slides">
+      <figure class="slide">
+        <img src="./img/1.jpg" alt="幻灯片图片一">
+        <figcaption>赵壁文<span>图片一</span></figcaption>
+      </figure>
+      <figure class="slide">
+        <img src="./img/2.jpg" alt="幻灯片图片二">
+        <figcaption>赵壁文<span>图片二</span></figcaption>
+      </figure>
+      <figure class="slide">
+        <img src="./img/3.jpg" alt="幻灯片图片三">
+        <figcaption>赵壁文<span>图片三</span></figcaption>
+      </figure>
+      <figure class="slide" aria-hidden="true">
+        <img src="./img/1.jpg" alt="">
+        <figcaption>赵壁文<span>图片一</span></figcaption>
+      </figure>
+    </div>
+  </main>
+</body>
+</html>

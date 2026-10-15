@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>四色背景动画</title>
+	<style>
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			min-height: 100vh;
+			margin: 0;
+			display: grid;
+			place-items: center;
+			background: #f3f5f7;
+		}
+
+		.box {
+			width: 220px;
+			height: 220px;
+			border-radius: 18px;
+			background-color: #ff5c5c;
+			animation: color-change 8s infinite;
+		}
+
+		@keyframes color-change {
+			0%, 100% { background-color: #ff5c5c; }
+			25% { background-color: #ffbd4a; }
+			50% { background-color: #35c98b; }
+			75% { background-color: #4a90e2; }
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.box {
+				animation: none;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="box" aria-label="背景颜色循环变化的盒子"></div>
+</body>
+</html>

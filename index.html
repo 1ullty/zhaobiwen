@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>赵壁文 · 高级网页设计课堂实践</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B2545'/%3E%3Ctext x='16' y='23' font-size='17' text-anchor='middle' fill='%23E9A13B' font-family='sans-serif' font-weight='bold'%3E高%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --ink:#0B2545;
+    --ink-2:#0F3460;
+    --blue:#1D5FAD;
+    --blue-soft:#E4EEF9;
+    --paper:#F1F5FA;
+    --card:#FFFFFF;
+    --accent:#E8A33D;
+    --accent-soft:#FBEED7;
+    --line:#D6E1EE;
+    --text:#24364A;
+    --muted:#61768C;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC","Segoe UI",sans-serif;
+    background:var(--paper);
+    color:var(--text);
+    line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:Consolas,"Courier New",monospace}
+
+  /* ===== 顶栏 ===== */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+    background:rgba(11,37,69,.96);
+    color:#F2F6FB;
+    padding:10px 24px;
+    border-bottom:1px solid rgba(255,255,255,.12);
+    backdrop-filter:blur(6px);
+  }
+  .topbar .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.5px}
+  .topbar .brand .dot{width:10px;height:10px;border-radius:2px;background:var(--accent);flex:none}
+  .topbar nav{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .topbar nav a{
+    color:#CFDCEC;text-decoration:none;font-size:14px;padding:10px 4px;
+    border-bottom:2px solid transparent;transition:color .2s,border-color .2s;
+  }
+  .topbar nav a:hover{color:#fff;border-color:var(--accent)}
+  a:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+  /* ===== Hero ===== */
+  .hero{
+    position:relative;overflow:hidden;
+    background:var(--ink);
+    color:#F2F6FB;
+    padding:72px 24px 84px;
+  }
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:46px 46px;
+    pointer-events:none;
+  }
+  .hero::after{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(ellipse 90% 70% at 70% 10%,rgba(29,95,173,.28),transparent 60%);
+    pointer-events:none;
+  }
+  .hero .wrap{position:relative;z-index:2;max-width:1040px;margin:0 auto}
+  .hero .kicker{
+    font-family:Consolas,"Courier New",monospace;
+    color:var(--accent);
+    font-size:15px;
+    letter-spacing:1px;
+    margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:clamp(34px,5.4vw,58px);
+    line-height:1.22;
+    font-weight:800;
+    letter-spacing:1px;
+  }
+  .hero h1 .line{display:block}
+  .hero .rule{
+    width:96px;height:4px;border-radius:2px;
+    background:var(--accent);
+    margin:26px 0 20px;
+  }
+  .hero .sub{font-size:16px;color:#B9CBDE;max-width:620px}
+  .hero .sub strong{color:#fff;font-weight:600}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+  .chips span{
+    display:inline-flex;align-items:center;gap:8px;
+    border:1px solid rgba(255,255,255,.22);
+    border-radius:999px;
+    padding:5px 14px;
+    font-size:13.5px;
+    color:#E6EEF7;
+    background:rgba(255,255,255,.06);
+  }
+  .chips b{color:var(--accent);font-weight:600}
+  .hero .watermark{
+    position:absolute;right:-10px;bottom:-46px;z-index:1;
+    font-family:Consolas,"Courier New",monospace;
+    font-size:clamp(150px,22vw,290px);
+    font-weight:700;
+    color:rgba(255,255,255,.045);
+    line-height:1;user-select:none;pointer-events:none;
+  }
+
+  /* ===== 通用区块 ===== */
+  .section{max-width:1040px;margin:0 auto;padding:56px 24px}
+  .sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:26px}
+  .sec-head .idx{
+    font-family:Consolas,"Courier New",monospace;
+    color:var(--blue);font-weight:700;font-size:15px;
+  }
+  .sec-head h2{font-size:26px;font-weight:800;color:var(--ink);letter-spacing:.5px}
+  .sec-head .note{font-size:13px;color:var(--muted)}
+
+  /* ===== 卡片 ===== */
+  .card-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:18px}
+  .card{
+    display:flex;flex-direction:column;gap:12px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-left:5px solid var(--blue);
+    border-radius:10px;
+    padding:20px 22px;
+    text-decoration:none;color:inherit;
+    transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+  }
+  .card:hover{
+    transform:translateY(-4px);
+    border-color:var(--blue);
+    box-shadow:0 12px 26px rgba(11,37,69,.12);
+  }
+  .card .top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .card .lesson{
+    font-family:Consolas,"Courier New",monospace;
+    font-weight:700;color:var(--blue);font-size:15px;
+  }
+  .card .fname{
+    font-family:Consolas,"Courier New",monospace;
+    font-size:12px;color:var(--muted);
+    background:var(--paper);border:1px solid var(--line);
+    border-radius:6px;padding:2px 8px;
+  }
+  .card h3{font-size:19px;font-weight:700;color:var(--ink)}
+  .card p{font-size:14px;color:var(--muted);flex:1}
+  .card .tags{display:flex;flex-wrap:wrap;gap:6px}
+  .card .tags i{
+    font-style:normal;
+    font-size:12px;
+    color:var(--ink-2);
+    background:var(--blue-soft);
+    border-radius:999px;
+    padding:2px 10px;
+  }
+  .card .go{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:14px;font-weight:700;color:var(--blue);
+  }
+  .card .go::after{content:"→";transition:transform .2s ease}
+  .card:hover .go::after{transform:translateX(4px)}
+  .footnote{margin-top:22px;font-size:13px;color:var(--muted)}
+
+  /* ===== 原始需求 ===== */
+  .prompt{
+    background:var(--ink);
+    border-radius:12px;
+    color:#E6EEF7;
+    padding:34px 34px 30px;
+    position:relative;overflow:hidden;
+  }
+  .prompt::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--accent);
+  }
+  .prompt .label{
+    font-family:Consolas,"Courier New",monospace;
+    font-size:13px;color:var(--accent);letter-spacing:1px;margin-bottom:10px;
+  }
+  .prompt h2{font-size:22px;font-weight:800;margin-bottom:16px}
+  .prompt blockquote{
+    border:1px dashed rgba(255,255,255,.3);
+    border-radius:8px;
+    background:rgba(255,255,255,.05);
+    padding:18px 20px;
+    font-size:15px;
+    line-height:1.9;
+    color:#DCE7F3;
+  }
+  .prompt blockquote .mono{color:#fff;background:rgba(232,163,61,.18);padding:0 6px;border-radius:4px;font-size:14px}
+  .prompt .meta{margin-top:14px;font-size:12.5px;color:#93A9C0}
+
+  /* ===== 页脚 ===== */
+  footer{
+    border-top:1px solid var(--line);
+    background:var(--card);
+    color:var(--muted);
+    font-size:13px;
+    padding:26px 24px 34px;
+    text-align:center;
+  }
+  footer .row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 22px;margin-bottom:6px}
+  footer a{color:var(--blue);text-decoration:none;display:inline-block;padding:8px 6px}
+  footer a:hover{text-decoration:underline}
+
+  /* ===== 响应式与动效偏好 ===== */
+  @media (max-width:720px){
+    .hero{padding:52px 18px 64px}
+    .section{padding:44px 18px}
+    .card-list{grid-template-columns:1fr}
+    .topbar nav{gap:12px}
+    .chips span{font-size:14px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{transition:none!important;animation:none!important}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><span class="dot"></span>高级网页设计 · 课堂实践</div>
+  <nav>
+    <a href="#catalog">作品目录</a>
+    <a href="#prompt">原始需求</a>
+    <a href="#top">返回顶部</a>
+  </nav>
+</header>
+
+<main id="top">
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <span class="watermark">109</span>
+    <div class="wrap">
+      <p class="kicker">// 课堂实践作品目录 · COURSE WORK INDEX</p>
+      <h1>
+        <span class="line">《高级网页设计》</span>
+        <span class="line">课堂实践作品集</span>
+      </h1>
+      <div class="rule"></div>
+      <p class="sub">本页面汇总了 <strong>赵壁文</strong> 在《高级网页设计》课程中的全部课堂实践网页，涵盖 HTML 基础、超链接与图片、表单、CSS 选择器、层叠与继承、盒模型、Flex 弹性布局、图文排版、CSS3 选择器与过渡动画等知识点。点击下方卡片即可打开对应作品。</p>
+      <div class="chips">
+        <span>姓名 <b>赵壁文</b></span>
+        <span>学号 <b>109 · 24001010109</b></span>
+        <span>班级 <b>计算机24001班</b></span>
+        <span>课程 <b>高级网页设计</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 作品目录 ===== -->
+  <section class="section" id="catalog">
+    <div class="sec-head">
+      <span class="idx">01</span>
+      <h2>课堂实践目录</h2>
+      <span class="note">共 13 个实践作品，按课程进度排列</span>
+    </div>
+
+    <div class="card-list">
+      <a class="card" href="./2-1.html" target="_blank" rel="noopener">
+        <div class="top"><span class="lesson">LESSON 2-1</span><span class="fname">2-1.html</span></div>
+        <h3>HTML 基础：标签与结构</h3>
+        <p>开始标签 + 内容 + 结束标记，内容与样式分离；《山居秋暝》诗句与 93 阅兵武器列表；div 盒子与「赵壁文」三色姓名扩展。</p>
+        <div class="tags"><i>HTML</i><i>列表</i><i>div 盒子</i></div>
+        <span class="go">打开作品</span>
+      </a>
+
+      <a class="card" href="./2-2.html" target="_blank" rel="noopener">
+        <div class="top"><span class="lesson">LESSON 2-2</span><span class="fname">2-2.html</span></div>
+        <h3>超链接与图片</h3>
+        <p>超链接的三种写法（环球网 / 百度 / 相对路径）；图片标签与 alt、title、width 属性；图片超链接；「大国重器」三行表格。</p>
+        <div class="tags"><i>超链接</i><i>图片</i><i>表格</i></div>
+        <span class="go">打开作品</span>
+      </a>
+
+      <a class="card" href="./3-1%20form.html" target="_blank" rel="noopener">
+        <div class="top"><span class="lesson">LESSON 3-1</span><span class="fname">3-1 form.html</span></div>
+        <h3>表单 form</h3>
+        <p>用户名、密码、单选、复选、下拉选择、文本域、日期、多文件上传，以及普通、提交、重置三类按钮的完整表单练习。</p>
+        <div class="tags"><i>form</i><i>input</i><i>select</i></div>
+        <span class="go">打开作品</span>
+      </a>
+
+      <a class="card" href="./3-2%20css.html" target="_blank" rel="noopener">
+        <div class="top"><span class="lesson">LESSON 3-2</span><span class="fname">3-2 css.html</span></div>
+        <h3>层叠样式表</h3>
+        <p>内嵌样式与 CSS 选择器：黑体白字标题、三色姓名、白色「选择器」文字，以及学号盒子 24001010109。</p>
+        <div class="tags"><i>CSS</i><i>选择器</i><i>盒子</i></div>
+        <span class="go">打开作品</span>
+      </a>
+
+      <a class="card" href="./4-1%20css.html" target="_blank" rel="noopener">
+        <div class="top"><span class="lesson">LESSON 4-1</span><span class="fname">4-1 css.html</span></div>
+        <h3>群组与后代选择器</h3>
+        <p>群组选择器统一重置 h2/h3/p 内外边距；后代选择器控制 #box 内文字样式；学号、姓名、班级的蓝色加粗信息行。</p>
+        <div class="tags"><i>群组选择器</i><i>后代选择器</i></div>
+        <span class="go">打开作品</span>
+      </a>
+
+      <a class="card" href="./5-1%20%E5%B1%82%E5%8F%A0%E4%B8%8E%E7%BB%A7%E6%89%BF.html" target="_blank" rel="noopener">
+        <div class="top"><span class="lesson">LESSON 5-1</span><span class="fname">5-1 层叠与继承.html</span></div>
+        <h3>层叠与继承</h3>
+        <p>CSS 优先级规则 id &gt; class &gt; 标签，!important 的作用，以及外部样式表 css.css 与内嵌样式的组合应用。</p>
+        <div class="tags"><i>层叠</i><i>继承</i><i>优先级</i></div>
+        <span class="go">打开作品</span>
+      </a>
+
+      <a class="card" href="./5-2%20%E7%9B%92%E6%A8%A1%E5%9E%8B.html" target="_blank" rel="noopener">
+        <div class="top"><span class="lesson">LESSON 5-2</span><span class="fname">5-2 盒模型.html</span></div>
+        <h3>盒模型 box model</h3>
+        <p>三个 div 盒子演示边框、内边距与外边距：dotted / dashed 边框、padding 上右下左、margin auto 水平居中，以及盒子高度组成。</p>
+        <div class="tags"><i>盒模型</i><i>padding</i><i>margin</i></div>
+        <span class="go">打开作品</span>
+      </a>
+
+      <a class="card" href="./6-1%20flex.html" target="_blank" rel="noopener">
+        <div class="top"><span class="lesson">LESSON 6-1</span><span class="fname">6-1 flex.html</span></div>
+        <h3>Flex 弹性布局</h3>
+        <p>四个圆角卡片容器展示 Flex 典型排布：单块居中、纵向排列、2×2 四格、上长条下两格，带悬浮上浮动效与底部署名。</p>
+        <div class="tags"><i>Flex</i><i>justify-content</i><i>hover</i></div>
+        <span class="go">打开作品</span>
+      </a>
+
+      <a class="card" href="./6-2%20%E4%B8%80%E5%B7%A6%E4%B8%80%E5%8F%B3.html" target="_blank" rel="noopener">
+        <div class="top"><span class="lesson">LESSON 6-2</span><span class="fname">6-2 一左一右.html</span></div>
+        <h3>一左一右标题行</h3>
+        <p>标题与「更多」链接左右布局的三种写法：flex space-between 两端对齐、flex-grow 占满剩余空间、绝对定位贴靠右侧。</p>
+        <div class="tags"><i>Flex</i><i>绝对定位</i><i>更多链接</i></div>
+        <span class="go">打开作品</span>
+      </a>
+
+      <a class="card" href="./7-1%20%E4%B8%8A%E5%9B%BE%E4%B8%8B%E6%96%87.html" target="_blank" rel="noopener">
+        <div class="top"><span class="lesson">LESSON 7-1</span><span class="fname">7-1 上图下文.html</span></div>
+        <h3>上图下文</h3>
+        <p>三张图片等宽横排，标题文字以绝对定位叠加在图片底部的半透明条上，li 相对定位、flex-grow 均分宽度。</p>
+        <div class="tags"><i>图片列表</i><i>绝对定位</i><i>叠加文字</i></div>
+        <span class="go">打开作品</span>
+      </a>
+
+      <a class="card" href="./7-2%20%E5%B7%A6%E5%9B%BE%E5%8F%B3%E6%96%87.html" target="_blank" rel="noopener">
+        <div class="top"><span class="lesson">LESSON 7-2</span><span class="fname">7-2 左图右文.html</span></div>
+        <h3>左图右文列表</h3>
+        <p>每条列表左图右文：左侧 100px 缩略图，右侧标题、作者与日期，Flex 换行排列，条目之间以虚线分隔。</p>
+        <div class="tags"><i>左图右文</i><i>Flex</i><i>列表</i></div>
+        <span class="go">打开作品</span>
+      </a>
+
+      <a class="card" href="./8-1%20css3%20%E9%80%89%E6%8B%A9%E5%99%A8.html" target="_blank" rel="noopener">
+        <div class="top"><span class="lesson">LESSON 8-1</span><span class="fname">8-1 css3 选择器.html</span></div>
+        <h3>CSS3 高级选择器</h3>
+        <p>12 个盒子的伪类与结构选择器综合演示：:first-child / :nth-child / :nth-of-type、相邻兄弟选择器 + ~，结合 :hover 实现背景、圆角、阴影、渐变与 transform 动效，并含偶数与 3n 扩展效果。</p>
+        <div class="tags"><i>CSS3</i><i>伪类选择器</i><i>结构选择器</i></div>
+        <span class="go">打开作品</span>
+      </a>
+
+      <a class="card" href="./9-1%20transition.html" target="_blank" rel="noopener">
+        <div class="top"><span class="lesson">LESSON 9-1</span><span class="fname">9-1 transition.html</span></div>
+        <h3>transition 过渡动画</h3>
+        <p>九张图片的图文列表：文字以绝对定位叠加在图片底部的半透明条上，hover 时分别触发图片放大、文字条展开等过渡动画效果。</p>
+        <div class="tags"><i>transition</i><i>hover</i><i>图文列表</i></div>
+        <span class="go">打开作品</span>
+      </a>
+    </div>
+
+    <p class="footnote">说明：目录下另有共享样式表 <span class="mono">CSS.css</span>（非网页），被「5-1 层叠与继承」页面引用。</p>
+  </section>
+
+  <!-- ===== 原始需求 ===== -->
+  <section class="section" id="prompt">
+    <div class="sec-head">
+      <span class="idx">02</span>
+      <h2>原始需求</h2>
+      <span class="note">本页面的创建提示词</span>
+    </div>
+    <div class="prompt">
+      <p class="label">// 本提示词 · ORIGINAL PROMPT</p>
+      <h2>页面需求原文</h2>
+      <blockquote>
+        创建一个新页面，包括本目录下的所有网页的超链接，使用原生代码，不使用 cdn，新页面名称为 <span class="mono">index.html</span>，主题为<span class="mono">赵壁文的《高级网页设计》课堂实践</span>，美化页面，页面中包括本提示词。
+      </blockquote>
+      <p class="meta">本页面即按照上述提示词要求完成：原生 HTML/CSS 实现、无任何 CDN 或外部资源、文件名为 index.html、包含全部作品超链接与提示词原文。</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="row">
+    <span>课程：高级网页设计</span>
+    <span>学生：赵壁文（109 · 计算机24001班）</span>
+    <span>2026</span>
+    <a href="#top">返回顶部 ↑</a>
+  </div>
+  <p>全部作品均为课堂实践的原生代码，双击对应页面即可在浏览器中打开。</p>
+</footer>
+
+</body>
+</html>

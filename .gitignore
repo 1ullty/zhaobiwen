@@ -1,0 +1,17 @@
+node_modules/
+
+opencode
+opencode.ps1
+pn
+pn.ps1
+pnpm
+pnpm.ps1
+pnpx
+pnpx.ps1
+pnx
+pnx.ps1
+cnpm
+cnpm.cmd
+cnpm.ps1
+
+.DS_Store

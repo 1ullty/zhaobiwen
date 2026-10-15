@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>109 赵壁文</title>
+    <style>
+        /* 扩展1：黑体白字 - 应用于主标题 */
+        h2{
+            font-family: "SimHei", "黑体", sans-serif;
+            color: #fff;
+            background-color: #333;
+            padding: 8px 12px;
+            display: inline-block;
+        }
+        h3{
+            color: rgb(51, 157, 127);
+        }
+        p{
+            color: rgb(40, 40, 133);
+        }
+        #box{
+            width: 200px;
+            height: 200px;
+            background-color: rgb(98, 66, 184);
+            padding: 10px;
+        }
+        /* 扩展3：选择器三个字设为白色 */
+        .text-white{
+            color: #fff;
+        }
+        /* 扩展2：名字每个字不同颜色 */
+        .name-1{
+            color: #e74c3c; /* 赵：红色 */
+        }
+        .name-2{
+            color: #f1c40f; /* 壁：黄色 */
+        }
+        .name-3{
+            color: #2ecc71; /* 文：绿色 */
+        }
+        /* 扩展4：新加的学号盒子 */
+        #stu-box{
+            width: 260px;
+            height: 70px;
+            background-color: #2c3e50;
+            margin-top: 15px;
+            /* 文字居中+黑体白字 */
+            color: #fff;
+            font-family: "SimHei", "黑体", sans-serif;
+            line-height: 70px;
+            text-align: center;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h2>层叠样式表</h2>
+    <div id="box">
+        <h3>CSS<span class="text-white">选择器</span></h3>
+        <p><span class="name-1">赵</span><span class="name-2">壁</span><span class="name-3">文</span></p>
+        <p>CSS属性</p>
+    </div>
+    <!-- 扩展4：学号盒子 -->
+    <div id="stu-box">24001010109</div>
+    <!-- 扩展：
+     1.黑体白字
+     2.你的名字每个字不同颜色，在同一行
+     3.选择器三个字是白色
+     4，新加一个盒子，盒子里的文字是你的学号（24001010109），盒子有宽有背景
+      -->
+</body>
+</html>

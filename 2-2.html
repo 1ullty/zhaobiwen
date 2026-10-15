@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>109 赵壁文</title>
+</head>
+<body>
+    <!-- 超链接 -->
+    <a href="https://www.huanqiu.com">环球网</a>
+    <a href="https://www.baidu.com" target="_blank">百度</a>
+    <a href="./2-1.html" target="_blank">相对路径</a>
+    <!-- ./表示当前目录，..表示上一级目录 -->
+    <!-- 多个html属性中间用空格分隔 -->
+
+    <!-- 图片img -->
+    <img src="./img/1.jpg">
+    <img src="./img/2.jpg" title="seo用，搜索引擎优化">
+    <!-- 只设置宽度，不设置高度，图片会自动等比例缩放 -->
+    <img src="./img/3.jpg" width="300">
+
+    <!-- 小扩展：图片超链接 把img放到a标签内部，点击图片跳转网页 -->
+    <a href="https://www.baidu.com" target="_blank">
+        <img src="./img/1.jpg" width="200" alt="百度图片链接">
+    </a>
+
+    <!-- 大拓展：表格，大国重器，四行三列的表格，有表头 -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>设备名称</th>
+                <th>研发单位</th>
+                <th>用途</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>蛟龙号</td>
+                <td>中国船舶</td>
+                <td>深海探测</td>
+            </tr>
+            <tr>
+                <td>复兴号</td>
+                <td>中车集团</td>
+                <td>高速轨道交通</td>
+            </tr>
+            <tr>
+                <td>天眼FAST</td>
+                <td>国家天文台</td>
+                <td>天文观测</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

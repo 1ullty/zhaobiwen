@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>11-1 Web 前端长度单位</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --ink: #0b2545;
+      --ink-2: #0f3460;
+      --blue: #1d5fad;
+      --blue-soft: #e4eef9;
+      --paper: #f1f5fa;
+      --card: #ffffff;
+      --accent: #e8a33d;
+      --accent-soft: #fbeed7;
+      --line: #d6e1ee;
+      --text: #24364a;
+      --muted: #61768c;
+    }
+
+    html, body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--text);
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===== 顶栏 ===== */
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 12px 24px;
+      background: rgba(11, 37, 69, .96); color: #f2f6fb;
+      border-bottom: 1px solid rgba(255, 255, 255, .12);
+    }
+    .topbar .brand { font-weight: 700; letter-spacing: .5px; }
+    .topbar nav { display: flex; gap: 18px; flex-wrap: wrap; }
+    .topbar nav a { color: #cfdcec; text-decoration: none; font-size: 14px; }
+    .topbar nav a:hover { color: #fff; }
+
+    /* ===== Hero ===== */
+    .hero {
+      background: var(--ink); color: #f2f6fb; padding: 60px 24px 68px;
+    }
+    .hero h1 { font-size: clamp(28px, 4.6vw, 46px); font-weight: 800; margin: 0 0 12px; letter-spacing: .5px; }
+    .hero h1 .line { display: block; }
+    .hero .sub { color: #b9cbde; max-width: 640px; font-size: 15.5px; }
+    .hero .kicker {
+      font-family: Consolas, monospace; color: var(--accent);
+      font-size: 14px; letter-spacing: 1px; margin-bottom: 14px;
+    }
+
+    /* ===== 区块 ===== */
+    .section { padding: 52px 0 8px; }
+    .sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; }
+    .sec-head .idx { font-family: Consolas, monospace; color: var(--blue); font-weight: 700; }
+    .sec-head h2 { font-size: 24px; font-weight: 800; color: var(--ink); letter-spacing: .5px; }
+    .sec-head .note { font-size: 13px; color: var(--muted); }
+    .desc { font-size: 15px; color: var(--muted); margin: 0 0 24px; max-width: 760px; }
+
+    /* ===== 卡片 ===== */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+    .card {
+      background: var(--card); border: 1px solid var(--line);
+      border-left: 5px solid var(--blue); border-radius: 10px;
+      padding: 18px 20px;
+    }
+    .card h3 { margin: 0 0 4px; font-size: 17px; color: var(--ink); font-weight: 700; }
+    .card h3 code {
+      font-family: Consolas, monospace; font-size: 15px; color: var(--blue);
+      background: var(--blue-soft); padding: 1px 7px; border-radius: 5px;
+    }
+    .card p { margin: 6px 0 0; font-size: 13.5px; color: var(--muted); }
+    .demo { margin-top: 14px; }
+
+    /* 单位演示条 */
+    .bar {
+      height: 22px; border-radius: 5px; margin: 5px 0 12px;
+      background: linear-gradient(90deg, var(--accent), #f3c069);
+      position: relative;
+    }
+    .bar::after {
+      content: attr(data-label); position: absolute; left: 8px; top: 50%;
+      transform: translateY(-50%); font-family: Consolas, monospace;
+      font-size: 11.5px; color: #3a2a08; white-space: nowrap;
+    }
+    .bar.w-px { width: 200px; }
+    .bar.w-em { width: 12.5em; }        /* 父级 16px */
+    .bar.w-rem { width: 12.5rem; }       /* 根元素 16px */
+    .bar.w-pct { width: 60%; }
+    .bar.w-vw { width: 40vw; }
+    .bar.w-vh { height: 12vh; }
+    .bar.w-vmin { width: 30vmin; }
+    .bar.w-vmax { width: 20vmax; }
+    .bar.w-ch { width: 20ch; }
+
+    /* em vs rem 对照 */
+    .emrem {
+      border: 1px dashed var(--line); border-radius: 8px; padding: 16px;
+      background: #fbfcfe;
+    }
+    .emrem .parent { font-size: 24px; margin-bottom: 10px; }
+    .emrem .box {
+      height: 18px; border-radius: 4px; margin: 4px 0;
+    }
+    .emrem .em-box { width: 10em; background: var(--blue); }
+    .emrem .rem-box { width: 10rem; background: var(--accent); }
+
+    /* 视口单位大块 */
+    .viewport-demo {
+      background: var(--ink); border-radius: 10px; padding: 22px;
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      gap: 22px; flex-wrap: wrap;
+    }
+    .vp {
+      border: 1px dashed rgba(255, 255, 255, .35); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: Consolas, monospace; font-size: 13px; text-align: center;
+      padding: 14px;
+    }
+    .vp-50vw { width: 50vw; max-width: 460px; height: 70px; background: rgba(29, 95, 173, .35); }
+    .vp-50vh { width: 220px; height: 50vh; min-height: 120px; background: rgba(232, 163, 61, .3); }
+    .vp-vmin { width: 30vmin; height: 30vmin; background: rgba(53, 201, 139, .3); }
+
+    /* 对照表 */
+    table {
+      width: 100%; border-collapse: collapse; font-size: 14px;
+      background: var(--card); border-radius: 10px; overflow: hidden;
+      border: 1px solid var(--line); margin-top: 4px;
+    }
+    th, td { padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--line); }
+    th { background: var(--ink); color: #f2f6fb; font-weight: 700; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:nth-child(even) { background: #f8fbfe; }
+    td code { font-family: Consolas, monospace; color: var(--blue); }
+
+    footer {
+      margin-top: 56px; border-top: 1px solid var(--line);
+      background: var(--card); color: var(--muted);
+      font-size: 13px; padding: 24px; text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      .hero { padding: 44px 18px 52px; }
+      .grid { grid-template-columns: 1fr; }
+      .vp-50vw { width: 80vw; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">高级网页设计 · 课堂实践</div>
+    <nav>
+      <a href="#abs">绝对单位</a>
+      <a href="#font">字体相对</a>
+      <a href="#vp">视口相对</a>
+      <a href="#table">单位对照</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="wrap">
+      <p class="kicker">// LESSON 11-1 · CSS LENGTH UNITS</p>
+      <h1><span class="line">Web 前端长度单位</span></h1>
+      <p class="sub">CSS 中描述尺寸的方式：绝对单位、相对字体单位、视口单位与百分比。本页面用可视化盒子逐一演示 px、em、rem、%、vw、vh、vmin、vmax、ch 等的实际效果。</p>
+    </div>
+  </section>
+
+  <main class="wrap">
+
+    <!-- ===== 绝对单位 ===== -->
+    <section class="section" id="abs">
+      <div class="sec-head">
+        <span class="idx">01</span>
+        <h2>绝对长度单位</h2>
+        <span class="note">固定物理/像素尺寸，不随环境变化</span>
+      </div>
+      <p class="desc">以 px（像素）为网页最常用的绝对单位；in / cm / mm / pt / pc 属印刷单位，在屏幕上会按 96dpi 换算（1in = 96px，1cm ≈ 37.8px）。</p>
+      <div class="grid">
+        <div class="card">
+          <h3><code>px</code> 像素</h3>
+          <p>网页基准单位，1px 表示一个屏幕像素点（CSS 逻辑像素）。</p>
+          <div class="demo"><div class="bar w-px" data-label="width: 200px"></div></div>
+        </div>
+        <div class="card">
+          <h3><code>in / cm / mm</code></h3>
+          <p>英寸 / 厘米 / 毫米，屏幕按 96dpi 换算，常用于打印样式 @page。</p>
+          <div class="demo"><div class="bar w-px" data-label="1in = 96px · 1cm ≈ 37.8px"></div></div>
+        </div>
+        <div class="card">
+          <h3><code>pt / pc</code></h3>
+          <p>点（1pt = 1/72in）与派卡（1pc = 12pt），源自印刷排版。</p>
+          <div class="demo"><div class="bar w-px" data-label="1pt ≈ 1.33px · 1pc = 16px"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 相对字体单位 ===== -->
+    <section class="section" id="font">
+      <div class="sec-head">
+        <span class="idx">02</span>
+        <h2>相对字体单位 em / rem</h2>
+        <span class="note">随字号缩放，是弹性排版的核心</span>
+      </div>
+      <p class="desc"><b>em</b> 相对「当前元素继承到的父级字号」；<b>rem</b> 相对「根元素 html 的字号」，不受嵌套影响，更适合做统一比例。下列对照中父级字号设为 24px，根字号为 16px。</p>
+      <div class="grid">
+        <div class="card">
+          <h3><code>em</code> 相对父级</h3>
+          <p>10em = 10 × 父级字号。嵌套时每一层都会叠加，容易「倍数放大」。</p>
+          <div class="demo emrem">
+            <div class="parent">父级 font-size: 24px</div>
+            <div class="box em-box"></div>
+            <p style="font-family:Consolas,monospace">width: 10em → 10 × 24px = 240px</p>
+          </div>
+        </div>
+        <div class="card">
+          <h3><code>rem</code> 相对根元素</h3>
+          <p>10rem = 10 × 根字号（默认 16px）。全局统一，适合定义间距与字号比例。</p>
+          <div class="demo emrem">
+            <div class="parent" style="font-size:16px">根元素 font-size: 16px</div>
+            <div class="box rem-box"></div>
+            <p style="font-family:Consolas,monospace">width: 10rem → 10 × 16px = 160px</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 视口单位 ===== -->
+    <section class="section" id="vp">
+      <div class="sec-head">
+        <span class="idx">03</span>
+        <h2>视口单位 vw / vh / vmin / vmax</h2>
+        <span class="note">相对浏览器窗口大小，适合全屏与自适应布局</span>
+      </div>
+      <p class="desc">1vw = 视口宽度的 1%，1vh = 视口高度的 1%，vmin/vmax 取宽高中较小/较大的那一项。窗口缩放时元素会随之变化，是响应式布局的利器。</p>
+      <div class="viewport-demo">
+        <div class="vp vp-50vw">width: 50vw</div>
+        <div class="vp vp-50vh">height: 50vh</div>
+        <div class="vp vp-vmin">30vmin × 30vmin</div>
+      </div>
+    </section>
+
+    <!-- ===== 百分比与 ch ===== -->
+    <section class="section">
+      <div class="sec-head">
+        <span class="idx">04</span>
+        <h2>百分比 % 与字符单位 ch</h2>
+        <span class="note">相对父容器，以及按字符宽度度量</span>
+      </div>
+      <p class="desc">% 相对父元素的对应尺寸；ch 表示「0」字符的宽度，常用于限制文本行宽（如 max-width: 65ch）提升可读性。</p>
+      <div class="grid">
+        <div class="card">
+          <h3><code>%</code> 百分比</h3>
+          <p>相对父容器宽度/高度。此处父容器为卡片内容区，60% 即约六成宽。</p>
+          <div class="demo"><div class="bar w-pct" data-label="width: 60%"></div></div>
+        </div>
+        <div class="card">
+          <h3><code>ch</code> 字符单位</h3>
+          <p>20ch = 20 个「0」字符的宽度，常用于排版正文列宽。</p>
+          <div class="demo"><div class="bar w-ch" data-label="width: 20ch"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 单位对照表 ===== -->
+    <section class="section" id="table">
+      <div class="sec-head">
+        <span class="idx">05</span>
+        <h2>单位速查表</h2>
+      </div>
+      <table>
+        <thead>
+          <tr><th>单位</th><th>名称</th><th>相对对象</th><th>典型用途</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>px</code></td><td>像素</td><td>固定（逻辑像素）</td><td>边框、间距、精确尺寸</td></tr>
+          <tr><td><code>em</code></td><td>相对父级字号</td><td>父元素 font-size</td><td>组件内局部缩放、行高</td></tr>
+          <tr><td><code>rem</code></td><td>相对根字号</td><td>html font-size</td><td>全局字号、间距、响应式根缩放</td></tr>
+          <tr><td><code>%</code></td><td>百分比</td><td>父元素对应尺寸</td><td>流式布局、宽度自适应</td></tr>
+          <tr><td><code>vw / vh</code></td><td>视口宽 / 高</td><td>浏览器窗口 1%</td><td>全屏区块、大屏排版</td></tr>
+          <tr><td><code>vmin / vmax</code></td><td>视口较小 / 较大边</td><td>视口宽高中的极值</td><td>保持比例的响应式元素</td></tr>
+          <tr><td><code>ch</code></td><td>字符宽度</td><td>「0」字符宽度</td><td>正文列宽 max-width</td></tr>
+          <tr><td><code>in/cm/mm/pt/pc</code></td><td>印刷单位</td><td>固定（96dpi 换算）</td><td>打印样式 @page</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>赵壁文 · 《高级网页设计》课堂实践 · 2026</p>
+    <p>原生 HTML/CSS 实现，无 CDN 或外部资源。</p>
+  </footer>
+
+</body>
+</html>

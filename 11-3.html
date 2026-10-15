@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>11-3 CSS3 3D 动画</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --zhao_ink: #0b2545;
+      --zhao_blue: #1d5fad;
+      --zhao_accent: #e8a33d;
+      --zhao_paper: #f1f5fa;
+      --zhao_card: #ffffff;
+      --zhao_line: #d6e1ee;
+      --zhao_text: #24364a;
+      --zhao_muted: #61768c;
+    }
+
+    html, body {
+      margin: 0;
+      background: var(--zhao_paper);
+      color: var(--zhao_text);
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      line-height: 1.8;
+    }
+
+    .zhao_wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+    .zhao_topbar {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 12px 24px;
+      background: rgba(11, 37, 69, .96); color: #f2f6fb;
+      border-bottom: 1px solid rgba(255, 255, 255, .12);
+    }
+    .zhao_topbar .zhao_brand { font-weight: 700; letter-spacing: .5px; }
+    .zhao_topbar nav { display: flex; gap: 18px; flex-wrap: wrap; }
+    .zhao_topbar nav a { color: #cfdcec; text-decoration: none; font-size: 14px; }
+    .zhao_topbar nav a:hover { color: #fff; }
+
+    .zhao_hero {
+      background: var(--zhao_ink); color: #f2f6fb; padding: 60px 24px 68px;
+    }
+    .zhao_hero h1 { font-size: clamp(28px, 4.6vw, 46px); font-weight: 800; margin: 0 0 12px; }
+    .zhao_hero .zhao_sub { color: #b9cbde; max-width: 640px; font-size: 15.5px; }
+    .zhao_hero .zhao_kicker {
+      font-family: Consolas, monospace; color: var(--zhao_accent);
+      font-size: 14px; letter-spacing: 1px; margin-bottom: 14px;
+    }
+
+    .zhao_section { padding: 52px 0 8px; }
+    .zhao_sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; }
+    .zhao_sec-head .zhao_idx { font-family: Consolas, monospace; color: var(--zhao_blue); font-weight: 700; }
+    .zhao_sec-head h2 { font-size: 24px; font-weight: 800; color: var(--zhao_ink); }
+    .zhao_sec-head .zhao_note { font-size: 13px; color: var(--zhao_muted); }
+    .zhao_desc { font-size: 15px; color: var(--zhao_muted); margin: 0 0 24px; max-width: 760px; }
+
+    .zhao_grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
+    .zhao_card {
+      background: var(--zhao_card); border: 1px solid var(--zhao_line);
+      border-left: 5px solid var(--zhao_blue); border-radius: 10px;
+      padding: 18px 20px;
+    }
+    .zhao_card h3 { margin: 0 0 4px; font-size: 17px; color: var(--zhao_ink); font-weight: 700; }
+    .zhao_card h3 code {
+      font-family: Consolas, monospace; font-size: 15px; color: var(--zhao_blue);
+      background: #e4eef9; padding: 1px 7px; border-radius: 5px;
+    }
+    .zhao_card p { margin: 6px 0 0; font-size: 13.5px; color: var(--zhao_muted); }
+    .zhao_demo {
+      margin-top: 16px; display: flex; align-items: center; justify-content: center;
+      min-height: 240px; background: #f8fbfe; border-radius: 8px; border: 1px dashed var(--zhao_line);
+    }
+
+    .zhao_cube-scene { width: 160px; height: 160px; perspective: 800px; }
+    .zhao_cube {
+      width: 100%; height: 100%; position: relative;
+      transform-style: preserve-3d;
+      animation: zhao_spin 4s linear infinite;
+    }
+    .zhao_cube .zhao_face {
+      position: absolute; width: 160px; height: 160px;
+      border: 2px solid rgba(255,255,255,.5);
+      display: flex; align-items: center; justify-content: center;
+      font-family: Consolas, monospace; font-size: 18px; font-weight: 700;
+      color: #fff;
+    }
+    .zhao_cube .zhao_front  { background: rgba(29,95,173,.92);  transform: translateZ(80px); }
+    .zhao_cube .zhao_back   { background: rgba(232,163,61,.92);  transform: rotateY(180deg) translateZ(80px); }
+    .zhao_cube .zhao_right  { background: rgba(53,201,139,.92);  transform: rotateY(90deg) translateZ(80px); }
+    .zhao_cube .zhao_left   { background: rgba(200,80,80,.92);   transform: rotateY(-90deg) translateZ(80px); }
+    .zhao_cube .zhao_top    { background: rgba(120,80,180,.92);  transform: rotateX(90deg) translateZ(80px); }
+    .zhao_cube .zhao_bottom { background: rgba(60,140,200,.92);  transform: rotateX(-90deg) translateZ(80px); }
+
+    @keyframes zhao_spin {
+      from { transform: rotateX(0deg) rotateY(0deg); }
+      to   { transform: rotateX(360deg) rotateY(360deg); }
+    }
+
+    .zhao_flip-scene { width: 240px; height: 150px; perspective: 800px; cursor: pointer; }
+    .zhao_flip {
+      width: 100%; height: 100%; position: relative;
+      transform-style: preserve-3d;
+      transition: transform .8s ease;
+    }
+    .zhao_flip-scene:hover .zhao_flip { transform: rotateY(180deg); }
+    .zhao_flip .zhao_face {
+      position: absolute; inset: 0; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 20px; color: #fff;
+      backface-visibility: hidden;
+    }
+    .zhao_flip .zhao_front { background: var(--zhao_blue); }
+    .zhao_flip .zhao_back  { background: var(--zhao_accent); transform: rotateY(180deg); }
+
+    .zhao_carousel-scene { width: 300px; height: 200px; perspective: 1000px; }
+    .zhao_carousel {
+      width: 100%; height: 100%; position: relative;
+      transform-style: preserve-3d;
+      animation: zhao_carousel-spin 6s linear infinite;
+    }
+    .zhao_carousel .zhao_slide {
+      position: absolute; width: 140px; height: 200px; left: 80px; top: 0;
+      border-radius: 8px; border: 1px solid var(--zhao_line);
+      display: flex; align-items: center; justify-content: center;
+      font-family: Consolas, monospace; font-size: 16px; font-weight: 700;
+      color: #fff;
+    }
+    .zhao_carousel .zhao_s1 { background: #1d5fad; transform: rotateY(0deg)   translateZ(130px); }
+    .zhao_carousel .zhao_s2 { background: #e8a33d; transform: rotateY(60deg)  translateZ(130px); }
+    .zhao_carousel .zhao_s3 { background: #35c98b; transform: rotateY(120deg) translateZ(130px); }
+    .zhao_carousel .zhao_s4 { background: #c85050; transform: rotateY(180deg) translateZ(130px); }
+    .zhao_carousel .zhao_s5 { background: #7850b4; transform: rotateY(240deg) translateZ(130px); }
+    .zhao_carousel .zhao_s6 { background: #3c8cc8; transform: rotateY(300deg) translateZ(130px); }
+
+    @keyframes zhao_carousel-spin {
+      from { transform: rotateY(0deg); }
+      to   { transform: rotateY(360deg); }
+    }
+
+    .zhao_tilt-scene { width: 240px; height: 160px; perspective: 800px; }
+    .zhao_tilt {
+      width: 100%; height: 100%; border-radius: 10px;
+      background: linear-gradient(135deg, var(--zhao_blue), var(--zhao_accent));
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 18px;
+      animation: zhao_tilt-anim 2.5s ease-in-out infinite;
+    }
+    @keyframes zhao_tilt-anim {
+      0%, 100% { transform: rotateX(0deg) rotateY(0deg); }
+      25%      { transform: rotateX(30deg) rotateY(-25deg); }
+      50%      { transform: rotateX(-20deg) rotateY(30deg); }
+      75%      { transform: rotateX(25deg) rotateY(-20deg); }
+    }
+
+    .zhao_table {
+      width: 100%; border-collapse: collapse; font-size: 14px;
+      background: var(--zhao_card); border-radius: 10px; overflow: hidden;
+      border: 1px solid var(--zhao_line); margin-top: 4px;
+    }
+    .zhao_table th, .zhao_table td { padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--zhao_line); }
+    .zhao_table th { background: var(--zhao_ink); color: #f2f6fb; font-weight: 700; }
+    .zhao_table tbody tr:last-child td { border-bottom: none; }
+    .zhao_table tbody tr:nth-child(even) { background: #f8fbfe; }
+    .zhao_table td code { font-family: Consolas, monospace; color: var(--zhao_blue); }
+
+    footer {
+      margin-top: 56px; border-top: 1px solid var(--zhao_line);
+      background: var(--zhao_card); color: var(--zhao_muted);
+      font-size: 13px; padding: 24px; text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      .zhao_hero { padding: 44px 18px 52px; }
+      .zhao_grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .zhao_cube, .zhao_carousel, .zhao_tilt { animation: none !important; }
+      .zhao_flip { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="zhao_topbar">
+    <div class="zhao_brand">高级网页设计 · 课堂实践</div>
+    <nav>
+      <a href="#zhao_cube-sec">3D 立方体</a>
+      <a href="#zhao_flip-sec">卡片翻转</a>
+      <a href="#zhao_carousel-sec">3D 轮播</a>
+      <a href="#zhao_tilt-sec">倾斜动画</a>
+    </nav>
+  </header>
+
+  <section class="zhao_hero">
+    <div class="zhao_wrap">
+      <p class="zhao_kicker">// LESSON 11-3 · CSS3 3D TRANSFORMS &amp; ANIMATIONS</p>
+      <h1>CSS3 3D 动画</h1>
+      <p class="zhao_sub">利用 <code>transform-style: preserve-3d</code>、<code>perspective</code> 与 <code>@keyframes</code> 在三维空间中创建立方体、翻转卡片、轮播环等动画效果。</p>
+    </div>
+  </section>
+
+  <main class="zhao_wrap">
+
+    <section class="zhao_section" id="zhao_cube-sec">
+      <div class="zhao_sec-head">
+        <span class="zhao_idx">01</span>
+        <h2>3D 立方体</h2>
+        <span class="zhao_note">preserve-3d + rotateX/rotateY</span>
+      </div>
+      <p class="zhao_desc">六个面通过 <code>translateZ</code> 与 <code>rotateX/Y</code> 定位到三维空间，父容器设置 <code>transform-style: preserve-3d</code> 后整体旋转。</p>
+      <div class="zhao_grid">
+        <div class="zhao_card">
+          <h3><code>rotateX + rotateY</code> 旋转立方体</h3>
+          <p>六个面各占一色，持续绕 X/Y 轴旋转。</p>
+          <div class="zhao_demo">
+            <div class="zhao_cube-scene">
+              <div class="zhao_cube">
+                <div class="zhao_face zhao_front">前</div>
+                <div class="zhao_face zhao_back">后</div>
+                <div class="zhao_face zhao_right">右</div>
+                <div class="zhao_face zhao_left">左</div>
+                <div class="zhao_face zhao_top">上</div>
+                <div class="zhao_face zhao_bottom">下</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="zhao_section" id="zhao_flip-sec">
+      <div class="zhao_sec-head">
+        <span class="zhao_idx">02</span>
+        <h2>卡片翻转</h2>
+        <span class="zhao_note">hover 触发 rotateY(180deg)</span>
+      </div>
+      <p class="zhao_desc">正反面叠放，背面预先 <code>rotateY(180deg)</code>，hover 时整体翻转，配合 <code>backface-visibility: hidden</code> 隐藏背面。</p>
+      <div class="zhao_grid">
+        <div class="zhao_card">
+          <h3><code>hover</code> 翻转卡片</h3>
+          <p>鼠标悬停查看翻转效果。</p>
+          <div class="zhao_demo">
+            <div class="zhao_flip-scene">
+              <div class="zhao_flip">
+                <div class="zhao_face zhao_front">正面</div>
+                <div class="zhao_face zhao_back">背面</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="zhao_section" id="zhao_carousel-sec">
+      <div class="zhao_sec-head">
+        <span class="zhao_idx">03</span>
+        <h2>3D 轮播环</h2>
+        <span class="zhao_note">rotateY + translateZ 环形排列</span>
+      </div>
+      <p class="zhao_desc">六张卡片沿环形排列（每张 <code>rotateY(60deg × n) translateZ(130px)</code>），父容器持续旋转形成 3D 轮播。</p>
+      <div class="zhao_grid">
+        <div class="zhao_card">
+          <h3><code>rotateY</code> 环形轮播</h3>
+          <p>卡片绕中心轴持续旋转。</p>
+          <div class="zhao_demo">
+            <div class="zhao_carousel-scene">
+              <div class="zhao_carousel">
+                <div class="zhao_slide zhao_s1">1</div>
+                <div class="zhao_slide zhao_s2">2</div>
+                <div class="zhao_slide zhao_s3">3</div>
+                <div class="zhao_slide zhao_s4">4</div>
+                <div class="zhao_slide zhao_s5">5</div>
+                <div class="zhao_slide zhao_s6">6</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="zhao_section" id="zhao_tilt-sec">
+      <div class="zhao_sec-head">
+        <span class="zhao_idx">04</span>
+        <h2>3D 倾斜动画</h2>
+        <span class="zhao_note">多轴关键帧动画</span>
+      </div>
+      <p class="zhao_desc">通过 <code>@keyframes</code> 在多个关键帧中组合 <code>rotateX</code> 与 <code>rotateY</code>，产生自由的三维倾斜摆动效果。</p>
+      <div class="zhao_grid">
+        <div class="zhao_card">
+          <h3><code>@keyframes</code> 倾斜摆动</h3>
+          <p>渐变卡片在三维空间中来回倾斜。</p>
+          <div class="zhao_demo">
+            <div class="zhao_tilt-scene">
+              <div class="zhao_tilt">3D Tilt</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="zhao_section">
+      <div class="zhao_sec-head">
+        <span class="zhao_idx">05</span>
+        <h2>3D 核心属性速查</h2>
+      </div>
+      <table class="zhao_table">
+        <thead>
+          <tr><th>属性</th><th>作用</th><th>关键值</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>perspective</code></td><td>定义观察者与 z=0 平面的距离，产生透视效果</td><td><code>600px</code>、<code>1000px</code></td></tr>
+          <tr><td><code>transform-style</code></td><td>子元素是否在 3D 空间中定位</td><td><code>preserve-3d</code>、<code>flat</code></td></tr>
+          <tr><td><code>backface-visibility</code></td><td>元素背面是否可见</td><td><code>visible</code>、<code>hidden</code></td></tr>
+          <tr><td><code>rotateX/Y/Z</code></td><td>绕指定轴旋转</td><td><code>rotateY(180deg)</code></td></tr>
+          <tr><td><code>translateZ</code></td><td>沿 Z 轴移动（靠近/远离观察者）</td><td><code>translateZ(60px)</code></td></tr>
+          <tr><td><code>@keyframes</code></td><td>定义动画关键帧序列</td><td><code>from / to</code> 或百分比</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>赵壁文 · 《高级网页设计》课堂实践 · 2026</p>
+    <p>原生 HTML/CSS 实现，无 CDN 或外部资源。</p>
+  </footer>
+
+</body>
+</html>
