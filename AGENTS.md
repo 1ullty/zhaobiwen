@@ -16,14 +16,17 @@ installs or treat this as a Node project.
 - `_shots/` — reference screenshots `index_desktop.png`, `index_mobile.png`.
 
 ## Project Rules
-- **命名规则**：所有 CSS 类名、id 名、JS 变量名都必须以 `zhao_` 开头。
+- **命名规则**：所有 CSS 类名、id 名、JS 变量名都必须以 `zbw_` 开头。
+- **页面注释**：每个 HTML 页面顶部必须包含注释，格式为：`<!-- 姓名：赵壁文，日期：YYYY-MM-DD -->`。
+- **技术栈**：原生 HTML、CSS、JavaScript，不使用任何第三方库和 CDN。
+- **图标**：统一使用 `font/` 目录下的 iconfont 图标。
+- **数据获取**：使用原生 `fetch` API 获取服务器端数据。
 - **提示词存档**：执行任何任务前，先把本次提示词以**追加**方式写入 `zhao_prompt.md`（不覆盖已有内容）。写入内容包含：
   - 时间（格式 `yyyy-mm-dd-hh-mm`）
   - 使用的模型
   - 提示词原文
 
 ## Conventions
-- Native HTML/CSS only; no CDN or external resources (the page's original prompt requires this). Keep pages self-contained.
 - Lesson filenames contain spaces and Chinese characters. In `index.html` every `href` must stay URL-encoded (`%20`, percent-encoded CJK). Do not rename files or "fix" the encoding.
 - All files are UTF-8. Chinese can show as mojibake in some terminals; the files themselves are fine.
 

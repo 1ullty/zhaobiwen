@@ -1,0 +1,325 @@
+<!-- 姓名：赵壁文，日期：2026-10-22 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>14-2 JavaScript 六种基础数据类型</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .zbw_container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .zbw_header {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 40px;
+        }
+
+        .zbw_header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .zbw_header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .zbw_card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .zbw_card:hover {
+            transform: translateY(-2px);
+        }
+
+        .zbw_card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .zbw_card-desc {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .zbw_code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 14px 16px;
+            border-radius: 8px;
+            font-family: "Consolas", "Courier New", monospace;
+            font-size: 0.88rem;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+
+        .zbw_code .zbw_keyword {
+            color: #ff79c6;
+        }
+
+        .zbw_code .zbw_string {
+            color: #f1fa8c;
+        }
+
+        .zbw_code .zbw_number {
+            color: #bd93f9;
+        }
+
+        .zbw_code .zbw_comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+
+        .zbw_result {
+            margin-top: 12px;
+            padding: 12px 14px;
+            background: #f0f9ff;
+            border-left: 4px solid #667eea;
+            border-radius: 4px;
+            font-family: "Consolas", "Courier New", monospace;
+            font-size: 0.88rem;
+        }
+
+        .zbw_result-label {
+            font-weight: bold;
+            color: #667eea;
+            margin-right: 6px;
+        }
+
+        .zbw_result-val {
+            color: #333;
+        }
+
+        .zbw_result-type {
+            color: #764ba2;
+            margin-left: 10px;
+            font-size: 0.82rem;
+        }
+
+        .zbw_summary {
+            margin-top: 30px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .zbw_summary h2 {
+            font-size: 1.4rem;
+            margin-bottom: 14px;
+            color: #333;
+        }
+
+        .zbw_table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .zbw_table th,
+        .zbw_table td {
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+
+        .zbw_table th {
+            background: #667eea;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .zbw_table tr:hover {
+            background: #f8f9ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="zbw_container">
+        <div class="zbw_header">
+            <h1>JavaScript 六种基础数据类型</h1>
+            <p>String · Number · Boolean · Null · Undefined · Symbol</p>
+        </div>
+
+        <div id="zbw_cards"></div>
+
+        <div class="zbw_summary">
+            <h2>数据类型汇总表</h2>
+            <table class="zbw_table">
+                <thead>
+                    <tr>
+                        <th>类型</th>
+                        <th>typeof 结果</th>
+                        <th>示例值</th>
+                        <th>说明</th>
+                    </tr>
+                </thead>
+                <tbody id="zbw_summary_body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        var zbw_types = [
+            {
+                title: "1. String 字符串",
+                desc: "由单引号、双引号或反引号包裹的文本。",
+                code: 'var zbw_str1 = <span class="zbw_string">\'Hello\'</span>;\nvar zbw_str2 = <span class="zbw_string">"世界"</span>;\nvar zbw_str3 = <span class="zbw_string">`模板字符串`</span>;',
+                run: function() {
+                    var zbw_str1 = 'Hello';
+                    var zbw_str2 = "世界";
+                    var zbw_str3 = `模板字符串`;
+                    return [
+                        { label: "zbw_str1", val: zbw_str1 },
+                        { label: "zbw_str2", val: zbw_str2 },
+                        { label: "zbw_str3", val: zbw_str3 }
+                    ];
+                },
+                typeof_check: 'string',
+                sample: '"你好"'
+            },
+            {
+                title: "2. Number 数字",
+                desc: "整数、浮点数、以及特殊值 NaN、Infinity。",
+                code: 'var zbw_int = <span class="zbw_number">42</span>;\nvar zbw_float = <span class="zbw_number">3.14</span>;\nvar zbw_nan = <span class="zbw_keyword">NaN</span>;\nvar zbw_inf = <span class="zbw_keyword">Infinity</span>;',
+                run: function() {
+                    var zbw_int = 42;
+                    var zbw_float = 3.14;
+                    var zbw_nan = NaN;
+                    var zbw_inf = Infinity;
+                    return [
+                        { label: "zbw_int", val: zbw_int },
+                        { label: "zbw_float", val: zbw_float },
+                        { label: "zbw_nan", val: zbw_nan },
+                        { label: "zbw_inf", val: zbw_inf }
+                    ];
+                },
+                typeof_check: 'number',
+                sample: '42 / 3.14'
+            },
+            {
+                title: "3. Boolean 布尔",
+                desc: "只有两个值：true（真）或 false（假）。",
+                code: 'var zbw_true = <span class="zbw_keyword">true</span>;\nvar zbw_false = <span class="zbw_keyword">false</span>;\nvar zbw_compare = <span class="zbw_number">10</span> > <span class="zbw_number">5</span>;',
+                run: function() {
+                    var zbw_true = true;
+                    var zbw_false = false;
+                    var zbw_compare = 10 > 5;
+                    return [
+                        { label: "zbw_true", val: zbw_true },
+                        { label: "zbw_false", val: zbw_false },
+                        { label: "zbw_compare", val: zbw_compare }
+                    ];
+                },
+                typeof_check: 'boolean',
+                sample: 'true / false'
+            },
+            {
+                title: "4. Null 空值",
+                desc: "表示刻意的空值或无对象。注意 typeof null 返回 'object'。",
+                code: 'var zbw_empty = <span class="zbw_keyword">null</span>;\n<span class="zbw_comment">// typeof null === 'object'</span>',
+                run: function() {
+                    var zbw_empty = null;
+                    return [
+                        { label: "zbw_empty", val: zbw_empty },
+                        { label: "typeof zbw_empty", val: typeof zbw_empty }
+                    ];
+                },
+                typeof_check: 'object（历史遗留）',
+                sample: 'null'
+            },
+            {
+                title: "5. Undefined 未定义",
+                desc: "变量已声明但未赋值时的默认值。",
+                code: 'var zbw_undef;\n<span class="zbw_comment">// 变量声明后未赋值</span>',
+                run: function() {
+                    var zbw_undef;
+                    return [
+                        { label: "zbw_undef", val: zbw_undef },
+                        { label: "typeof zbw_undef", val: typeof zbw_undef }
+                    ];
+                },
+                typeof_check: 'undefined',
+                sample: 'undefined'
+            },
+            {
+                title: "6. Symbol 符号",
+                desc: "ES6 新增，创建唯一且不可变的标识符，用作对象属性键。",
+                code: 'var zbw_sym1 = <span class="zbw_keyword">Symbol</span>(<span class="zbw_string">"id"</span>);\nvar zbw_sym2 = <span class="zbw_keyword">Symbol</span>(<span class="zbw_string">"id"</span>);\n<span class="zbw_comment">// 两个 Symbol 永不相等</span>',
+                run: function() {
+                    var zbw_sym1 = Symbol("id");
+                    var zbw_sym2 = Symbol("id");
+                    return [
+                        { label: "zbw_sym1", val: zbw_sym1.toString() },
+                        { label: "zbw_sym2", val: zbw_sym2.toString() },
+                        { label: "zbw_sym1 === zbw_sym2", val: zbw_sym1 === zbw_sym2 }
+                    ];
+                },
+                typeof_check: 'symbol',
+                sample: 'Symbol("id")'
+            }
+        ];
+
+        var zbw_cardsDiv = document.getElementById("zbw_cards");
+        var zbw_summaryBody = document.getElementById("zbw_summary_body");
+
+        zbw_types.forEach(function(zbw_t) {
+            var zbw_card = document.createElement("div");
+            zbw_card.className = "zbw_card";
+            zbw_card.innerHTML =
+                '<div class="zbw_card-title">' + zbw_t.title + '</div>' +
+                '<div class="zbw_card-desc">' + zbw_t.desc + '</div>' +
+                '<div class="zbw_code">' + zbw_t.code + '</div>';
+
+            var zbw_results = zbw_t.run();
+            zbw_results.forEach(function(zbw_r) {
+                var zbw_div = document.createElement("div");
+                zbw_div.className = "zbw_result";
+                var zbw_typeof = typeof zbw_r.val;
+                if (zbw_r.val === null) zbw_typeof = "object";
+                zbw_div.innerHTML =
+                    '<span class="zbw_result-label">' + zbw_r.label + '</span>' +
+                    '<span class="zbw_result-val">' + zbw_r.val + '</span>' +
+                    '<span class="zbw_result-type">typeof → ' + zbw_typeof + '</span>';
+                zbw_card.appendChild(zbw_div);
+            });
+
+            zbw_cardsDiv.appendChild(zbw_card);
+
+            var zbw_tr = document.createElement("tr");
+            zbw_tr.innerHTML =
+                '<td>' + zbw_t.title.split(". ")[1].split(" ")[0] + '</td>' +
+                '<td>' + zbw_t.typeof_check + '</td>' +
+                '<td><code>' + zbw_t.sample + '</code></td>' +
+                '<td>' + zbw_t.desc + '</td>';
+            zbw_summaryBody.appendChild(zbw_tr);
+        });
+    </script>
+</body>
+</html>
