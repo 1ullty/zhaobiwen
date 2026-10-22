@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13-2 Lucide SVG 图标</title>
+    <script src="cdn/lucide.min.js"></script>
+    <style>
+        .zhao_body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background: #f0f4f8;
+            margin: 0;
+            padding: 40px;
+        }
+        .zhao_container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .zhao_title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .zhao_subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 14px;
+        }
+        .zhao_section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .zhao_section-title {
+            font-size: 20px;
+            color: #34495e;
+            border-left: 4px solid #e74c3c;
+            padding-left: 12px;
+            margin-bottom: 20px;
+        }
+        .zhao_grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 20px;
+        }
+        .zhao_card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 10px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            background: #fafbfc;
+            border: 1px solid #e8ecf0;
+        }
+        .zhao_card:hover {
+            background: #fdf0ef;
+            border-color: #e74c3c;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(231,76,60,0.15);
+        }
+        .zhao_icon {
+            margin-bottom: 10px;
+        }
+        .zhao-label {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+        }
+        .zhao-size-demo {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            flex-wrap: wrap;
+            padding: 20px;
+            background: #fafbfc;
+            border-radius: 10px;
+        }
+        .zhao-size-item {
+            text-align: center;
+        }
+        .zhao-btn-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .zhao-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            color: #fff;
+            transition: all 0.2s;
+        }
+        .zhao-btn:hover { opacity: 0.85; transform: scale(1.03); }
+        .zhao-btn-primary { background: #e74c3c; }
+        .zhao-btn-success { background: #27ae60; }
+        .zhao-btn-warning { background: #f39c12; }
+        .zhao-btn-danger { background: #c0392b; }
+        .zhao-btn-dark { background: #34495e; }
+        .zhao-badge-demo {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .zhao-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #fff;
+        }
+        .zhao-badge span {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        .zhao-tech {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body class="zhao_body">
+    <div class="zhao_container">
+        <h1 class="zhao_title">Lucide SVG 图标</h1>
+        <p class="zhao_subtitle">Lucide · SVG 图标形式 · 通过 JavaScript 动态生成内联 SVG，支持 stroke 风格自定义</p>
+
+        <div class="zhao_section">
+            <h2 class="zhao_section-title">基础图标</h2>
+            <div class="zhao-grid">
+                <div class="zhao-card"><i data-lucide="home" class="zhao-icon" width="36" height="36" stroke="#2196F3"></i><span class="zhao-label">home</span></div>
+                <div class="zhao-card"><i data-lucide="user" class="zhao-icon" width="36" height="36" stroke="#4CAF50"></i><span class="zhao-label">user</span></div>
+                <div class="zhao-card"><i data-lucide="heart" class="zhao-icon" width="36" height="36" stroke="#f44336"></i><span class="zhao-label">heart</span></div>
+                <div class="zhao-card"><i data-lucide="star" class="zhao-icon" width="36" height="36" stroke="#FF9800"></i><span class="zhao-label">star</span></div>
+                <div class="zhao-card"><i data-lucide="search" class="zhao-icon" width="36" height="36" stroke="#9C27B0"></i><span class="zhao-label">search</span></div>
+                <div class="zhao-card"><i data-lucide="mail" class="zhao-icon" width="36" height="36" stroke="#009688"></i><span class="zhao-label">mail</span></div>
+                <div class="zhao-card"><i data-lucide="settings" class="zhao-icon" width="36" height="36" stroke="#607D8B"></i><span class="zhao-label">settings</span></div>
+                <div class="zhao-card"><i data-lucide="camera" class="zhao-icon" width="36" height="36" stroke="#795548"></i><span class="zhao-label">camera</span></div>
+                <div class="zhao-card"><i data-lucide="music" class="zhao-icon" width="36" height="36" stroke="#E91E63"></i><span class="zhao-label">music</span></div>
+                <div class="zhao-card"><i data-lucide="shopping-cart" class="zhao-icon" width="36" height="36" stroke="#FF5722"></i><span class="zhao-label">shopping-cart</span></div>
+                <div class="zhao-card"><i data-lucide="thumbs-up" class="zhao-icon" width="36" height="36" stroke="#3F51B5"></i><span class="zhao-label">thumbs-up</span></div>
+                <div class="zhao-card"><i data-lucide="bell" class="zhao-icon" width="36" height="36" stroke="#FFC107"></i><span class="zhao-label">bell</span></div>
+                <div class="zhao-card"><i data-lucide="trash-2" class="zhao-icon" width="36" height="36" stroke="#f44336"></i><span class="zhao-label">trash-2</span></div>
+                <div class="zhao-card"><i data-lucide="edit" class="zhao-icon" width="36" height="36" stroke="#2196F3"></i><span class="zhao-label">edit</span></div>
+                <div class="zhao-card"><i data-lucide="bookmark" class="zhao-icon" width="36" height="36" stroke="#9C27B0"></i><span class="zhao-label">bookmark</span></div>
+            </div>
+        </div>
+
+        <div class="zhao_section">
+            <h2 class="zhao_section-title">箭头与方向</h2>
+            <div class="zhao-grid">
+                <div class="zhao-card"><i data-lucide="arrow-right" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">arrow-right</span></div>
+                <div class="zhao-card"><i data-lucide="arrow-left" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">arrow-left</span></div>
+                <div class="zhao-card"><i data-lucide="chevron-up" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">chevron-up</span></div>
+                <div class="zhao-card"><i data-lucide="chevron-down" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">chevron-down</span></div>
+                <div class="zhao-card"><i data-lucide="external-link" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">external-link</span></div>
+                <div class="zhao-card"><i data-lucide="maximize" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">maximize</span></div>
+                <div class="zhao-card"><i data-lucide="minimize" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">minimize</span></div>
+                <div class="zhao-card"><i data-lucide="corner-up-right" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">corner-up-right</span></div>
+                <div class="zhao-card"><i data-lucide="navigation" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">navigation</span></div>
+                <div class="zhao-card"><i data-lucide="map-pin" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">map-pin</span></div>
+                <div class="zhao-card"><i data-lucide="compass" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">compass</span></div>
+                <div class="zhao-card"><i data-lucide="move" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">move</span></div>
+            </div>
+        </div>
+
+        <div class="zhao_section">
+            <h2 class="zhao_section-title">媒体与文件</h2>
+            <div class="zhao-grid">
+                <div class="zhao-card"><i data-lucide="image" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">image</span></div>
+                <div class="zhao-card"><i data-lucide="video" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">video</span></div>
+                <div class="zhao-card"><i data-lucide="file-text" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">file-text</span></div>
+                <div class="zhao-card"><i data-lucide="folder" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">folder</span></div>
+                <div class="zhao-card"><i data-lucide="download" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">download</span></div>
+                <div class="zhao-card"><i data-lucide="upload" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">upload</span></div>
+                <div class="zhao-card"><i data-lucide="paperclip" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">paperclip</span></div>
+                <div class="zhao-card"><i data-lucide="mic" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">mic</span></div>
+                <div class="zhao-card"><i data-lucide="headphones" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">headphones</span></div>
+                <div class="zhao-card"><i data-lucide="volume-2" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">volume-2</span></div>
+                <div class="zhao-card"><i data-lucide="play" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">play</span></div>
+                <div class="zhao-card"><i data-lucide="pause" class="zhao-icon" width="36" height="36" stroke="#333"></i><span class="zhao-label">pause</span></div>
+            </div>
+        </div>
+
+        <div class="zhao_section">
+            <h2 class="zhao_section-title">尺寸控制（width / height 属性）</h2>
+            <div class="zhao-size-demo">
+                <div class="zhao-size-item"><i data-lucide="star" width="16" height="16" stroke="#FF9800"></i><p class="zhao-label">16px</p></div>
+                <div class="zhao-size-item"><i data-lucide="star" width="24" height="24" stroke="#FF9800"></i><p class="zhao-label">24px</p></div>
+                <div class="zhao-size-item"><i data-lucide="star" width="32" height="32" stroke="#FF9800"></i><p class="zhao-label">32px</p></div>
+                <div class="zhao-size-item"><i data-lucide="star" width="48" height="48" stroke="#FF9800"></i><p class="zhao-label">48px</p></div>
+                <div class="zhao-size-item"><i data-lucide="star" width="64" height="64" stroke="#FF9800"></i><p class="zhao-label">64px</p></div>
+                <div class="zhao-size-item"><i data-lucide="star" width="96" height="96" stroke="#FF9800"></i><p class="zhao-label">96px</p></div>
+            </div>
+        </div>
+
+        <div class="zhao_section">
+            <h2 class="zhao_section-title">描边样式（stroke-width 属性）</h2>
+            <div class="zhao-size-demo">
+                <div class="zhao-size-item"><i data-lucide="heart" width="48" height="48" stroke="#e74c3c" stroke-width="1"></i><p class="zhao-label">stroke-width: 1</p></div>
+                <div class="zhao-size-item"><i data-lucide="heart" width="48" height="48" stroke="#e74c3c" stroke-width="2"></i><p class="zhao-label">stroke-width: 2</p></div>
+                <div class="zhao-size-item"><i data-lucide="heart" width="48" height="48" stroke="#e74c3c" stroke-width="3"></i><p class="zhao-label">stroke-width: 3</p></div>
+                <div class="zhao-size-item"><i data-lucide="heart" width="48" height="48" stroke="#e74c3c" stroke-width="4"></i><p class="zhao-label">stroke-width: 4</p></div>
+            </div>
+            <h3 style="color:#666; margin: 20px 0 10px;">填充模式（fill 属性）</h3>
+            <div class="zhao-size-demo">
+                <div class="zhao-size-item"><i data-lucide="heart" width="48" height="48" stroke="#e74c3c" fill="#e74c3c"></i><p class="zhao-label">fill + stroke</p></div>
+                <div class="zhao-size-item"><i data-lucide="star" width="48" height="48" stroke="#f39c12" fill="#f39c12"></i><p class="zhao-label">fill + stroke</p></div>
+                <div class="zhao-size-item"><i data-lucide="bookmark" width="48" height="48" stroke="#9C27B0" fill="#9C27B0"></i><p class="zhao-label">fill + stroke</p></div>
+            </div>
+        </div>
+
+        <div class="zhao_section">
+            <h2 class="zhao_section-title">图标按钮与徽章</h2>
+            <h3 style="color:#666; margin: 15px 0 10px;">圆角按钮</h3>
+            <div class="zhao-btn-group">
+                <button class="zhao-btn zhao-btn-primary"><i data-lucide="download" width="18" height="18"></i> 下载</button>
+                <button class="zhao-btn zhao-btn-success"><i data-lucide="check" width="18" height="18"></i> 确认</button>
+                <button class="zhao-btn zhao-btn-warning"><i data-lucide="alert-triangle" width="18" height="18"></i> 警告</button>
+                <button class="zhao-btn zhao-btn-danger"><i data-lucide="trash-2" width="18" height="18"></i> 删除</button>
+                <button class="zhao-btn zhao-btn-dark"><i data-lucide="settings" width="18" height="18"></i> 设置</button>
+            </div>
+            <h3 style="color:#666; margin: 25px 0 10px;">圆形图标按钮</h3>
+            <div class="zhao-btn-group">
+                <button class="zhao-btn zhao-btn-primary" style="border-radius: 50%; width: 50px; height: 50px; padding: 0; justify-content: center;"><i data-lucide="plus" width="22" height="22"></i></button>
+                <button class="zhao-btn zhao-btn-success" style="border-radius: 50%; width: 50px; height: 50px; padding: 0; justify-content: center;"><i data-lucide="check" width="22" height="22"></i></button>
+                <button class="zhao-btn zhao-btn-danger" style="border-radius: 50%; width: 50px; height: 50px; padding: 0; justify-content: center;"><i data-lucide="heart" width="22" height="22"></i></button>
+                <button class="zhao-btn zhao-btn-warning" style="border-radius: 50%; width: 50px; height: 50px; padding: 0; justify-content: center;"><i data-lucide="bell" width="22" height="22"></i></button>
+            </div>
+            <h3 style="color:#666; margin: 25px 0 10px;">通知徽章</h3>
+            <div class="zhao-badge-demo">
+                <span class="zhao-badge" style="background:#e74c3c"><i data-lucide="mail" width="16" height="16"></i><span>邮件</span><span style="background:#fff;color:#e74c3c;border-radius:10px;padding:1px 7px;font-size:12px;">8</span></span>
+                <span class="zhao-badge" style="background:#27ae60"><i data-lucide="bell" width="16" height="16"></i><span>通知</span><span style="background:#fff;color:#27ae60;border-radius:10px;padding:1px 7px;font-size:12px;">3</span></span>
+                <span class="zhao-badge" style="background:#f39c12"><i data-lucide="message-circle" width="16" height="16"></i><span>消息</span><span style="background:#fff;color:#f39c12;border-radius:10px;padding:1px 7px;font-size:12px;">99+</span></span>
+                <span class="zhao-badge" style="background:#34495e"><i data-lucide="settings" width="16" height="16"></i><span>设置</span><span style="background:#fff;color:#34495e;border-radius:10px;padding:1px 7px;font-size:12px;">1</span></span>
+            </div>
+        </div>
+
+        <div class="zhao-section">
+            <h2 class="zhao-section-title">技术原理</h2>
+            <div class="zhao-tech">
+                <span style="color:#e74c3c;">&lt;i</span> <span style="color:#f39c12;">data-lucide</span>=<span style="color:#2ecc71;">"heart"</span>
+                <span style="color:#f39c12;">stroke</span>=<span style="color:#2ecc71;">"#e74c3c"</span>
+                <span style="color:#f39c12;">stroke-width</span>=<span style="color:#2ecc71;">"2"</span>
+                <span style="color:#f39c12;">width</span>=<span style="color:#2ecc71;">"36"</span>
+                <span style="color:#f39c12;">height</span>=<span style="color:#2ecc71;">"36"</span><span style="color:#e74c3c;">&gt;&lt;/i&gt;</span><br><br>
+                <span style="color:#95a5a6;">// JavaScript 将其替换为内联 SVG：</span><br>
+                <span style="color:#e74c3c;">&lt;svg</span> <span style="color:#f39c12;">xmlns</span>=<span style="color:#2ecc71;">"http://www.w3.org/2000/svg"</span><br>
+                &nbsp;&nbsp;<span style="color:#f39c12;">width</span>=<span style="color:#2ecc71;">"36"</span> <span style="color:#f39c12;">height</span>=<span style="color:#2ecc71;">"36"</span><br>
+                &nbsp;&nbsp;<span style="color:#f39c12;">viewBox</span>=<span style="color:#2ecc71;">"0 0 24 24"</span><br>
+                &nbsp;&nbsp;<span style="color:#f39c12;">fill</span>=<span style="color:#2ecc71;">"none"</span><br>
+                &nbsp;&nbsp;<span style="color:#f39c12;">stroke</span>=<span style="color:#2ecc71;">"#e74c3c"</span><br>
+                &nbsp;&nbsp;<span style="color:#f39c12;">stroke-width</span>=<span style="color:#2ecc71;">"2"</span><br>
+                &nbsp;&nbsp;<span style="color:#f39c12;">stroke-linecap</span>=<span style="color:#2ecc71;">"round"</span><br>
+                &nbsp;&nbsp;<span style="color:#f39c12;">stroke-linejoin</span>=<span style="color:#2ecc71;">"round"</span><span style="color:#e74c3c;">&gt;</span><br>
+                &nbsp;&nbsp;<span style="color:#e74c3c;">&lt;path</span> <span style="color:#f39c12;">d</span>=<span style="color:#2ecc71;">"M19 14c1.49..."</span><span style="color:#e74c3c;">/&gt;</span><br>
+                <span style="color:#e74c3c;">&lt;/svg&gt;</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

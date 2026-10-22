@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13-1 Font Awesome 字体图标</title>
+    <link rel="stylesheet" href="cdn/css/all.min.css">
+    <style>
+        .zhao_body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background: #f0f4f8;
+            margin: 0;
+            padding: 40px;
+        }
+        .zhao_container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        .zhao_title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .zhao_subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 14px;
+        }
+        .zhao_section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .zhao_section_title {
+            font-size: 20px;
+            color: #34495e;
+            border-left: 4px solid #3498db;
+            padding-left: 12px;
+            margin-bottom: 20px;
+        }
+        .zhao_grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 20px;
+        }
+        .zhao_card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 10px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            background: #fafbfc;
+            border: 1px solid #e8ecf0;
+        }
+        .zhao_card:hover {
+            background: #eaf4fd;
+            border-color: #3498db;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(52,152,219,0.15);
+        }
+        .zhao_icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .zhao_label {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            word-break: break-all;
+        }
+        .zhao_color_blue { color: #2196F3; }
+        .zhao_color_green { color: #4CAF50; }
+        .zhao_color_orange { color: #FF9800; }
+        .zhao_color_red { color: #f44336; }
+        .zhao_color_purple { color: #9C27B0; }
+        .zhao_color_teal { color: #009688; }
+        .zhao_size_demo {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            padding: 20px;
+            background: #fafbfc;
+            border-radius: 10px;
+        }
+        .zhao_size_item {
+            text-align: center;
+        }
+        .zhao_badge_demo {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .zhao_badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #fff;
+        }
+        .zhao_badge_blue { background: #2196F3; }
+        .zhao_badge_green { background: #4CAF50; }
+        .zhao_badge_red { background: #f44336; }
+        .zhao_badge_dark { background: #34495e; }
+        .zhao_badge span {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        .zhao_btn_group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .zhao_btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            color: #fff;
+            transition: all 0.2s;
+        }
+        .zhao_btn:hover { opacity: 0.85; transform: scale(1.03); }
+        .zhao_btn_primary { background: #2196F3; }
+        .zhao_btn_success { background: #4CAF50; }
+        .zhao_btn_warning { background: #FF9800; }
+        .zhao_btn_danger { background: #f44336; }
+        .zhao_list {
+            font-size: 16px;
+            line-height: 2.2;
+        }
+        .zhao_code_block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body class="zhao_body">
+    <div class="zhao_container">
+        <h1 class="zhao_title">Font Awesome 字体图标</h1>
+        <p class="zhao_subtitle">Font Awesome 6.5.1 · 字体图标形式 · 通过 @font-face 加载 woff2 字体文件，用 CSS content 编码渲染图标</p>
+
+        <div class="zhao_section">
+            <h2 class="zhao_section_title">基础图标（fa-solid）</h2>
+            <div class="zhao_grid">
+                <div class="zhao_card"><i class="fa-solid fa-house zhao_icon zhao_color_blue"></i><span class="zhao_label">fa-house</span></div>
+                <div class="zhao_card"><i class="fa-solid fa-user zhao_icon zhao_color_green"></i><span class="zhao_label">fa-user</span></div>
+                <div class="zhao_card"><i class="fa-solid fa-heart zhao_icon zhao_color_red"></i><span class="zhao_label">fa-heart</span></div>
+                <div class="zhao_card"><i class="fa-solid fa-star zhao_icon zhao_color_orange"></i><span class="zhao_label">fa-star</span></div>
+                <div class="zhao_card"><i class="fa-solid fa-magnifying-glass zhao_icon zhao_color_purple"></i><span class="zhao_label">fa-magnifying-glass</span></div>
+                <div class="zhao_card"><i class="fa-solid fa-envelope zhao_icon zhao_color_teal"></i><span class="zhao_label">fa-envelope</span></div>
+                <div class="zhao_card"><i class="fa-solid fa-gear zhao_icon zhao_color_blue"></i><span class="zhao_label">fa-gear</span></div>
+                <div class="zhao_card"><i class="fa-solid fa-camera zhao_icon zhao_color_green"></i><span class="zhao_label">fa-camera</span></div>
+                <div class="zhao_card"><i class="fa-solid fa-music zhao_icon zhao_color_red"></i><span class="zhao_label">fa-music</span></div>
+                <div class="zhao_card"><i class="fa-solid fa-cart-shopping zhao_icon zhao_color_orange"></i><span class="zhao_label">fa-cart-shopping</span></div>
+                <div class="zhao_card"><i class="fa-solid fa-thumbs-up zhao_icon zhao_color_purple"></i><span class="zhao_label">fa-thumbs-up</span></div>
+                <div class="zhao_card"><i class="fa-solid fa-bell zhao_icon zhao_color_teal"></i><span class="zhao_label">fa-bell</span></div>
+            </div>
+        </div>
+
+        <div class="zhao_section">
+            <h2 class="zhao_section_title">品牌图标（fa-brands）</h2>
+            <div class="zhao_grid">
+                <div class="zhao_card"><i class="fa-brands fa-github zhao_icon zhao_color_blue"></i><span class="zhao_label">fa-github</span></div>
+                <div class="zhao_card"><i class="fa-brands fa-weixin zhao_icon zhao_color_green"></i><span class="zhao_label">fa-weixin</span></div>
+                <div class="zhao_card"><i class="fa-brands fa-weibo zhao_icon zhao_color_red"></i><span class="zhao_label">fa-weibo</span></div>
+                <div class="zhao_card"><i class="fa-brands fa-qq zhao_icon zhao_color_orange"></i><span class="zhao_label">fa-qq</span></div>
+                <div class="zhao_card"><i class="fa-brands fa-android zhao_icon zhao_color_green"></i><span class="zhao_label">fa-android</span></div>
+                <div class="zhao_card"><i class="fa-brands fa-apple zhao_icon zhao_color_blue"></i><span class="zhao_label">fa-apple</span></div>
+                <div class="zhao_card"><i class="fa-brands fa-chrome zhao_icon zhao_color_purple"></i><span class="zhao_label">fa-chrome</span></div>
+                <div class="zhao_card"><i class="fa-brands fa-firefox zhao_icon zhao_color_orange"></i><span class="zhao_label">fa-firefox</span></div>
+                <div class="zhao_card"><i class="fa-brands fa-twitter zhao_icon zhao_color_teal"></i><span class="zhao_label">fa-twitter</span></div>
+                <div class="zhao_card"><i class="fa-brands fa-facebook zhao_icon zhao_color_blue"></i><span class="zhao_label">fa-facebook</span></div>
+                <div class="zhao_card"><i class="fa-brands fa-linkedin zhao_icon zhao_color_green"></i><span class="zhao_label">fa-linkedin</span></div>
+                <div class="zhao_card"><i class="fa-brands fa-youtube zhao_icon zhao_color_red"></i><span class="zhao_label">fa-youtube</span></div>
+            </div>
+        </div>
+
+        <div class="zhao_section">
+            <h2 class="zhao_section_title">尺寸控制（fa-xs / fa-lg / fa-2x ... fa-10x）</h2>
+            <div class="zhao_size_demo">
+                <div class="zhao_size_item"><i class="fa-solid fa-star fa-xs zhao_color_orange"></i><p class="zhao_label">fa-xs</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-star fa-sm zhao_color_orange"></i><p class="zhao_label">fa-sm</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-star fa-lg zhao_color_orange"></i><p class="zhao_label">fa-lg</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-star fa-2x zhao_color_orange"></i><p class="zhao_label">fa-2x</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-star fa-3x zhao_color_orange"></i><p class="zhao_label">fa-3x</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-star fa-5x zhao_color_orange"></i><p class="zhao_label">fa-5x</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-star fa-7x zhao_color_orange"></i><p class="zhao_label">fa-7x</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-star fa-10x zhao_color_orange"></i><p class="zhao_label">fa-10x</p></div>
+            </div>
+        </div>
+
+        <div class="zhao_section">
+            <h2 class="zhao_section_title">旋转与动画（fa-spin / fa-pulse）</h2>
+            <div class="zhao_size_demo">
+                <div class="zhao_size_item"><i class="fa-solid fa-circle-notch fa-spin fa-3x zhao_color_blue"></i><p class="zhao_label">fa-spin</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-cog fa-spin fa-3x zhao_color_green"></i><p class="zhao_label">fa-cog fa-spin</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-sync fa-spin fa-3x zhao_color_orange"></i><p class="zhao_label">fa-sync fa-spin</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-heart fa-pulse fa-3x zhao_color_red"></i><p class="zhao_label">fa-pulse</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-spinner fa-pulse fa-3x zhao_color_purple"></i><p class="zhao_label">fa-spinner fa-pulse</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-bell fa-shake fa-3x zhao_color_teal"></i><p class="zhao_label">fa-shake</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-envelope fa-bounce fa-3x zhao_color_orange"></i><p class="zhao_label">fa-bounce</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-frog fa-flip fa-3x zhao_color_green"></i><p class="zhao_label">fa-flip</p></div>
+            </div>
+        </div>
+
+        <div class="zhao_section">
+            <h2 class="zhao_section_title">固定宽度与边框（fa-fw / fa-border）</h2>
+            <div class="zhao_size_demo">
+                <div class="zhao_size_item"><i class="fa-solid fa-check fa-fw fa-2x zhao_color_green"></i><p class="zhao_label">fa-fw 定宽</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-check fa-fw fa-border fa-2x zhao_color_green"></i><p class="zhao_label">fa-fw + fa-border</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-list fa-ul fa-2x zhao_color_blue"></i><p class="zhao_label">fa-ul 列表</p></div>
+                <div class="zhao_size_item"><i class="fa-solid fa-square fa-li fa-2x zhao_color_orange"></i><p class="zhao_label">fa-li 列表项</p></div>
+            </div>
+        </div>
+
+        <div class="zhao_section">
+            <h2 class="zhao_section_title">图标按钮与徽章</h2>
+            <h3 style="color:#666; margin: 15px 0 10px;">圆角按钮</h3>
+            <div class="zhao_btn_group">
+                <button class="zhao_btn zhao_btn_primary"><i class="fa-solid fa-download"></i> 下载</button>
+                <button class="zhao_btn zhao_btn_success"><i class="fa-solid fa-check"></i> 确认</button>
+                <button class="zhao_btn zhao_btn_warning"><i class="fa-solid fa-triangle-exclamation"></i> 警告</button>
+                <button class="zhao_btn zhao_btn_danger"><i class="fa-solid fa-trash-can"></i> 删除</button>
+            </div>
+            <h3 style="color:#666; margin: 25px 0 10px;">圆形图标</h3>
+            <div class="zhao_btn_group">
+                <button class="zhao_btn zhao_btn_primary" style="border-radius: 50%; width: 50px; height: 50px; padding: 0; justify-content: center;"><i class="fa-solid fa-plus"></i></button>
+                <button class="zhao_btn zhao_btn_success" style="border-radius: 50%; width: 50px; height: 50px; padding: 0; justify-content: center;"><i class="fa-solid fa-check"></i></button>
+                <button class="zhao_btn zhao_btn_danger" style="border-radius: 50%; width: 50px; height: 50px; padding: 0; justify-content: center;"><i class="fa-solid fa-heart"></i></button>
+                <button class="zhao_btn zhao_btn_warning" style="border-radius: 50%; width: 50px; height: 50px; padding: 0; justify-content: center;"><i class="fa-solid fa-bell"></i></button>
+            </div>
+            <h3 style="color:#666; margin: 25px 0 10px;">通知徽章</h3>
+            <div class="zhao_badge_demo">
+                <span class="zhao_badge zhao_badge_blue"><i class="fa-solid fa-envelope"></i><span>邮件</span><span style="background:#fff;color:#2196F3;border-radius:10px;padding:1px 7px;font-size:12px;">12</span></span>
+                <span class="zhao_badge zhao_badge_green"><i class="fa-solid fa-bell"></i><span>通知</span><span style="background:#fff;color:#4CAF50;border-radius:10px;padding:1px 7px;font-size:12px;">5</span></span>
+                <span class="zhao_badge zhao_badge_red"><i class="fa-solid fa-comment-dots"></i><span>消息</span><span style="background:#fff;color:#f44336;border-radius:10px;padding:1px 7px;font-size:12px;">99+</span></span>
+                <span class="zhao_badge zhao_badge_dark"><i class="fa-solid fa-gear"></i><span>设置</span><span style="background:#fff;color:#34495e;border-radius:10px;padding:1px 7px;font-size:12px;">3</span></span>
+            </div>
+        </div>
+
+        <div class="zhao_section">
+            <h2 class="zhao_section_title">堆叠图标（fa-stack）</h2>
+            <div class="zhao_size_demo">
+                <div class="zhao_size_item">
+                    <span class="fa-stack fa-2x">
+                        <i class="fa-solid fa-square fa-stack-2x" style="color:#2196F3"></i>
+                        <i class="fa-solid fa-user fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <p class="zhao_label">用户</p>
+                </div>
+                <div class="zhao_size_item">
+                    <span class="fa-stack fa-2x">
+                        <i class="fa-solid fa-circle fa-stack-2x" style="color:#f44336"></i>
+                        <i class="fa-solid fa-heart fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <p class="zhao_label">喜欢</p>
+                </div>
+                <div class="zhao_size_item">
+                    <span class="fa-stack fa-2x">
+                        <i class="fa-solid fa-camera fa-stack-2x" style="color:#FF9800"></i>
+                        <i class="fa-solid fa-bolt fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <p class="zhao_label">闪拍</p>
+                </div>
+                <div class="zhao_size_item">
+                    <span class="fa-stack fa-2x">
+                        <i class="fa-solid fa-database fa-stack-2x" style="color:#4CAF50"></i>
+                        <i class="fa-solid fa-shield-halved fa-stack-1x fa-inverse"></i>
+                    </span>
+                    <p class="zhao_label">安全</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="zhao_section">
+            <h2 class="zhao_section_title">列表图标（fa-ul）</h2>
+            <ul class="fa-ul zhao_list">
+                <li><span class="fa-li"><i class="fa-solid fa-check zhao_color_green"></i></span>支持 woff2 字体格式，加载速度快</li>
+                <li><span class="fa-li"><i class="fa-solid fa-check zhao_color_green"></i></span>图标即字体，可用 CSS 自由控制颜色和大小</li>
+                <li><span class="fa-li"><i class="fa-solid fa-check zhao_color_green"></i></span>支持旋转、动画、堆叠等高级用法</li>
+                <li><span class="fa-li"><i class="fa-solid fa-check zhao_color_green"></i></span>提供 solid / regular / brands 三种风格</li>
+                <li><span class="fa-li"><i class="fa-solid fa-check zhao_color_green"></i></span>超过 2000 个免费图标可供选择</li>
+            </ul>
+        </div>
+
+        <div class="zhao_section">
+            <h2 class="zhao_section_title">技术原理</h2>
+            <div class="zhao_code_block">
+                <span style="color:#e74c3c;">@font-face</span> {<br>
+                &nbsp;&nbsp;<span style="color:#f39c12;">font-family</span>: <span style="color:#2ecc71;">"Font Awesome 6 Free"</span>;<br>
+                &nbsp;&nbsp;<span style="color:#f39c12;">src</span>: <span style="color:#3498db;">url</span>(<span style="color:#2ecc71;">"../webfonts/fa-solid-900.woff2"</span>);<br>
+                }<br><br>
+                <span style="color:#e74c3c;">.fa-house::before</span> {<br>
+                &nbsp;&nbsp;<span style="color:#f39c12;">content</span>: <span style="color:#2ecc71;">"\f015"</span>;  <span style="color:#95a5a6;">/* Unicode 私有区 */</span><br>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+</html>

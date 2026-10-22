@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>13-3 iconfont 字体图标 - 底部导航</title>
+    <link rel="stylesheet" href="cdn/iconfont/iconfont.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        .zhao_body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: #f5f6fa;
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+        .zhao_header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            text-align: center;
+            color: #fff;
+        }
+        .zhao_header h1 { font-size: 20px; margin-bottom: 8px; }
+        .zhao_header p { font-size: 13px; opacity: 0.85; }
+        .zhao_content {
+            padding: 20px;
+        }
+        .zhao_card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .zhao_card h3 {
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .zhao_card p {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.8;
+        }
+        .zhao_nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            background: #fff;
+            display: flex;
+            border-top: 1px solid #e8e8e8;
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 999;
+        }
+        .zhao_nav_item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 0 6px;
+            text-decoration: none;
+            color: #999;
+            position: relative;
+            transition: color 0.2s;
+        }
+        .zhao_nav_item_active {
+            color: #667eea;
+        }
+        .zhao_nav_icon_wrap {
+            position: relative;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .zhao_nav_icon {
+            font-size: 24px;
+            line-height: 1;
+        }
+        .zhao_nav_text {
+            font-size: 11px;
+            margin-top: 3px;
+        }
+        .zhao_nav_badge {
+            position: absolute;
+            top: -4px;
+            right: -12px;
+            background: #ff4757;
+            color: #fff;
+            font-size: 10px;
+            min-width: 16px;
+            height: 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+            font-style: normal;
+            line-height: 1;
+        }
+        .zhao_nav_dot {
+            position: absolute;
+            top: -2px;
+            right: -4px;
+            width: 8px;
+            height: 8px;
+            background: #ff4757;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="zhao_body">
+    <div class="zhao_header">
+        <h1>iconfont 字体图标</h1>
+        <p>固定底部导航 · 数字徽章 · 红点提醒</p>
+    </div>
+
+    <div class="zhao_content">
+        <div class="zhao_card">
+            <h3>技术方案</h3>
+            <p>使用 iconfont 字体图标方案，通过 @font-face 加载 woff2/woff/ttf 字体文件，图标以字符形式渲染。底部导航固定定位，四项等分全屏宽度。</p>
+        </div>
+        <div class="zhao_card">
+            <h3>功能说明</h3>
+            <p>导航项包含：数字徽章（显示未读数量）、右上角红点（新消息提醒）。支持点击切换高亮状态，适配移动端安全区域。</p>
+        </div>
+        <div class="zhao_card">
+            <h3>图标来源</h3>
+            <p>图标来自 font 目录下的 iconfont 项目（zbw2026），包含首页、商城、消息、我的四个导航图标。</p>
+        </div>
+    </div>
+
+    <nav class="zhao_nav">
+        <a href="#" class="zhao_nav_item zhao_nav_item_active">
+            <div class="zhao_nav_icon_wrap">
+                <span class="iconfont icon-shouye zhao_nav_icon"></span>
+            </div>
+            <span class="zhao_nav_text">首页</span>
+        </a>
+        <a href="#" class="zhao_nav_item">
+            <div class="zhao_nav_icon_wrap">
+                <span class="iconfont icon-shangcheng zhao_nav_icon"></span>
+                <i class="zhao_nav_badge">3</i>
+            </div>
+            <span class="zhao_nav_text">商城</span>
+        </a>
+        <a href="#" class="zhao_nav_item">
+            <div class="zhao_nav_icon_wrap">
+                <span class="iconfont icon-xiaoxi zhao_nav_icon"></span>
+                <i class="zhao_nav_badge">12</i>
+            </div>
+            <span class="zhao_nav_text">消息</span>
+        </a>
+        <a href="#" class="zhao_nav_item">
+            <div class="zhao_nav_icon_wrap">
+                <span class="iconfont icon-wode zhao_nav_icon"></span>
+                <i class="zhao_nav_dot"></i>
+            </div>
+            <span class="zhao_nav_text">我的</span>
+        </a>
+    </nav>
+</body>
+</html>
