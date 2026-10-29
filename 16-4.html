@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<!-- 姓名：赵壁文，日期：2026-10-29 -->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>16-4 新闻选项卡</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", SimSun, sans-serif;
+      background: #f4f5f7;
+      min-height: 100vh;
+      padding: 40px 16px 60px;
+      color: #111;
+    }
+
+    /* ===== 选项卡组件 ===== */
+    .zbw_card {
+      max-width: 520px;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid #e3e3e3;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .zbw_tabs { display: flex; list-style: none; border-bottom: 1px solid #e3e3e3; }
+
+    .zbw_tab {
+      flex: 1;
+      text-align: center;
+      font-size: 15px;
+      font-weight: bold;
+      padding: 12px 0;
+      cursor: pointer;
+      color: #333;
+      background: #fafafa;
+      border-right: 1px solid #e3e3e3;
+      transition: background .2s, color .2s;
+      user-select: none;
+    }
+
+    .zbw_tab:last-child { border-right: none; }
+
+    .zbw_tab:hover { color: #d20000; }
+
+    .zbw_tab.zbw_on { background: #d20000; color: #fff; }
+
+    .zbw_panels { position: relative; }
+
+    .zbw_panel {
+      display: none;
+      padding: 14px 22px 18px;
+      animation: zbw_fade .35s ease;
+    }
+
+    .zbw_panel.zbw_on { display: block; }
+
+    @keyframes zbw_fade {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .zbw_news { list-style: none; }
+
+    .zbw_news li {
+      font-family: SimSun, "宋体", serif;
+      font-size: 14px;
+      line-height: 2.1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .zbw_news li::before {
+      content: "";
+      display: inline-block;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #111;
+      margin-right: 9px;
+      vertical-align: 3px;
+    }
+
+    .zbw_news a { color: #111; text-decoration: none; }
+    .zbw_news a:hover { color: #d20000; text-decoration: underline; }
+
+    /* ===== 参考原图 ===== */
+    .zbw_refs {
+      max-width: 860px;
+      margin: 34px auto 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .zbw_refs figure {
+      background: #fff;
+      border: 1px solid #e3e3e3;
+      border-radius: 6px;
+      padding: 10px;
+      width: 260px;
+      text-align: center;
+    }
+
+    .zbw_refs img { width: 100%; display: block; border: 1px solid #eee; }
+    .zbw_refs figcaption { font-size: 13px; color: #666; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <section class="zbw_card">
+    <ul class="zbw_tabs" id="zbw_tabs">
+      <li class="zbw_tab zbw_on">最新投诉</li>
+      <li class="zbw_tab">官方回应</li>
+      <li class="zbw_tab">追踪调查</li>
+    </ul>
+    <div class="zbw_panels" id="zbw_panels">
+      <div class="zbw_panel zbw_on">
+        <ul class="zbw_news">
+          <li><a href="#">北京火车站出租车私乱象调查 司机称计价器坏</a></li>
+          <li><a href="#">公园仙人掌遭刻字"毁容" 一棵仙人掌被刻字</a></li>
+          <li><a href="#">昆明再现游客"杀手截图" 网友疯传(组图)</a></li>
+          <li><a href="#">四川一星级公园斥资1年未开放变成"菜楼"</a></li>
+          <li><a href="#">北京北海地坛公园暗藏高端会所 园方称"喝茶"</a></li>
+          <li><a href="#">北京北海金丝楠木柱遭英文手刻"签名"破坏</a></li>
+          <li><a href="#">北京动物园廉价玩偶应景 低价门票遭"雪藏"</a></li>
+          <li><a href="#">女子不满"零购物"投诉旅行社 遭导游冷落</a></li>
+          <li><a href="#">老人参团游权益易受损 旅行社设限对老人</a></li>
+        </ul>
+      </div>
+      <div class="zbw_panel">
+        <ul class="zbw_news">
+          <li><a href="#">大黄鸭、小黄鸭凑热闹 法官解读"山寨鸭"是否侵权</a></li>
+          <li><a href="#">国家旅游局回应涨价："团队游价格基本正常"</a></li>
+          <li><a href="#">国家旅游局回应"新旅游法实施后旅行社团费上涨"</a></li>
+          <li><a href="#">出游遇纠纷可依《旅游法》维权 明确旅游投诉受理</a></li>
+          <li><a href="#">澄清新旅游法三"误传" 扫货购物可安心</a></li>
+          <li><a href="#">《旅游法》将抑制"零负团费"和"门票经济"</a></li>
+          <li><a href="#">文登旅游局指导旅行社规范经营 服务指南发布</a></li>
+          <li><a href="#">天津二季度旅行社服务质量公布 投诉涉及8家</a></li>
+          <li><a href="#">敦煌：国家法定假日所有景区门票免费</a></li>
+        </ul>
+      </div>
+      <div class="zbw_panel">
+        <ul class="zbw_news">
+          <li><a href="#">《旅游法》实施半月 自费景区建正规一日游</a></li>
+          <li><a href="#">迪拜香格里拉旅游"怪象"：涉事导游等已被处理</a></li>
+          <li><a href="#">导游挣钱政府"背锅" 黑旅行社自己担责</a></li>
+          <li><a href="#">九寨沟为何变成"死胡同"？——数千游客滞留</a></li>
+          <li><a href="#">九寨沟为何仍现游客滞留？</a></li>
+          <li><a href="#">旅游之尴尬：导游带客逛博物馆 女士超时想进</a></li>
+          <li><a href="#">记者暗访兵马俑景区：玉器店买玉 过期门票仍用</a></li>
+          <li><a href="#">假冒导游游客借转账 两女子忽悠女大学生</a></li>
+          <li><a href="#">39家旅游单位违法金额1800万 购物店结盟绕行</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="zbw_refs">
+    <figure>
+      <img src="img/tab/1.jpg" alt="最新投诉选项卡参考图">
+      <figcaption>参考原图：最新投诉</figcaption>
+    </figure>
+    <figure>
+      <img src="img/tab/2.jpg" alt="官方回应选项卡参考图">
+      <figcaption>参考原图：官方回应</figcaption>
+    </figure>
+    <figure>
+      <img src="img/tab/3.jpg" alt="追踪调查选项卡参考图">
+      <figcaption>参考原图：追踪调查</figcaption>
+    </figure>
+  </section>
+
+  <script>
+    // 全部变量以 zbw_ 开头
+    var zbw_tabs = document.getElementById('zbw_tabs').children;
+    var zbw_panels = document.getElementById('zbw_panels').children;
+
+    function zbw_switch(zbw_i) {
+      for (var zbw_k = 0; zbw_k < zbw_tabs.length; zbw_k++) {
+        zbw_tabs[zbw_k].className = 'zbw_tab' + (zbw_k === zbw_i ? ' zbw_on' : '');
+        zbw_panels[zbw_k].className = 'zbw_panel' + (zbw_k === zbw_i ? ' zbw_on' : '');
+      }
+    }
+
+    for (var zbw_i = 0; zbw_i < zbw_tabs.length; zbw_i++) {
+      (function (zbw_idx) {
+        zbw_tabs[zbw_idx].onclick = function () { zbw_switch(zbw_idx); };
+      })(zbw_i);
+    }
+  </script>
+</body>
+</html>
