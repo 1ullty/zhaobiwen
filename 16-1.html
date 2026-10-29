@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<!-- 姓名：赵壁文，日期：2026-10-29 -->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>16-1 JavaScript 主要数组方法</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: #0b1220;
+      background-image:
+        radial-gradient(ellipse 800px 400px at 15% -10%, rgba(34, 211, 238, .12), transparent),
+        radial-gradient(ellipse 800px 400px at 85% 0%, rgba(249, 115, 22, .10), transparent);
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    code, .zbw_mono { font-family: Consolas, "Courier New", monospace; }
+
+    .zbw_wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+    /* ===== 头部 ===== */
+    .zbw_head { text-align: center; padding: 46px 16px 30px; }
+    .zbw_head .zbw_kicker { color: #22d3ee; letter-spacing: 2px; font-size: 13px; margin-bottom: 14px; }
+    .zbw_head h1 {
+      font-size: 34px; line-height: 1.35;
+      background: linear-gradient(90deg, #22d3ee, #a78bfa, #f97316);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .zbw_head .zbw_sub { color: #94a3b8; font-size: 14px; margin-top: 14px; }
+    .zbw_head .zbw_sub b { color: #fbbf24; }
+
+    /* ===== 数组舞台 ===== */
+    .zbw_stage_sec {
+      background: #111a2e; border: 1px solid #1e293b; border-radius: 16px;
+      padding: 24px; margin-bottom: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+    }
+    .zbw_arrline { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+    .zbw_arrline .zbw_label {
+      font-size: 12px; color: #0b1220; background: #22d3ee;
+      padding: 3px 10px; border-radius: 20px; font-weight: bold; white-space: nowrap;
+    }
+    .zbw_arrline code { color: #7dd3fc; font-size: 15px; }
+
+    .zbw_stage {
+      display: flex; flex-wrap: wrap; gap: 14px; justify-content: center;
+      min-height: 108px; padding: 14px 6px 34px; align-items: flex-end;
+      border-bottom: 2px dashed #334155; margin-bottom: 4px;
+    }
+    .zbw_box {
+      width: 68px; height: 68px; border-radius: 12px; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: bold; color: #0b1220;
+      background: linear-gradient(145deg, #67e8f9, #22d3ee);
+      box-shadow: 0 6px 14px rgba(34, 211, 238, .25);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .zbw_box:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 12px 22px rgba(34, 211, 238, .45); }
+    .zbw_box .zbw_idx {
+      position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; color: #64748b; font-family: Consolas, monospace;
+    }
+    .zbw_box.zbw_flash { animation: zbw_flash_anim .9s ease; }
+    .zbw_box.zbw_pop { animation: zbw_pop_anim .45s cubic-bezier(.34, 1.56, .64, 1); }
+    .zbw_box.zbw_out { animation: zbw_out_anim .3s ease forwards; }
+
+    @keyframes zbw_flash_anim {
+      0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, .9); background: linear-gradient(145deg, #fde68a, #fbbf24); }
+      70% { box-shadow: 0 0 0 14px rgba(251, 191, 36, 0); }
+      100% { background: linear-gradient(145deg, #67e8f9, #22d3ee); }
+    }
+    @keyframes zbw_pop_anim {
+      0% { transform: scale(0) rotate(-30deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0); opacity: 1; }
+    }
+    @keyframes zbw_out_anim {
+      100% { transform: scale(0) translateY(30px); opacity: 0; }
+    }
+
+    .zbw_stage_tools { display: flex; justify-content: flex-end; margin-top: 30px; }
+    .zbw_reset {
+      background: transparent; color: #94a3b8; border: 1px solid #334155;
+      padding: 7px 16px; border-radius: 8px; cursor: pointer; font-size: 13px;
+      transition: all .2s;
+    }
+    .zbw_reset:hover { color: #fbbf24; border-color: #fbbf24; }
+
+    /* ===== 结果面板 ===== */
+    .zbw_result {
+      background: #111a2e; border: 1px solid #1e293b; border-left: 4px solid #fbbf24;
+      border-radius: 12px; padding: 18px 22px; margin-bottom: 18px;
+    }
+    .zbw_result .zbw_rline { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 6px 0; }
+    .zbw_result .zbw_rlabel { font-size: 12px; color: #64748b; white-space: nowrap; }
+    .zbw_result .zbw_rlabel::before { content: "> "; color: #22d3ee; font-family: Consolas, monospace; }
+    .zbw_result code.zbw_rcode { color: #fbbf24; font-size: 15px; }
+    .zbw_result code.zbw_rret { color: #34d399; font-size: 15px; }
+    .zbw_result code.zbw_rafter { color: #7dd3fc; font-size: 14px; }
+    .zbw_badge {
+      font-size: 12px; padding: 3px 12px; border-radius: 20px; white-space: nowrap; font-weight: bold;
+    }
+    .zbw_badge.zbw_b_mut { background: rgba(249, 115, 22, .15); color: #fb923c; border: 1px solid rgba(249, 115, 22, .5); }
+    .zbw_badge.zbw_b_pure { background: rgba(34, 211, 238, .12); color: #22d3ee; border: 1px solid rgba(34, 211, 238, .45); }
+
+    /* ===== 方法按钮分组 ===== */
+    .zbw_groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 34px; }
+    .zbw_group {
+      background: #111a2e; border: 1px solid #1e293b; border-radius: 14px; padding: 18px;
+      border-top: 3px solid #22d3ee;
+    }
+    .zbw_group.zbw_g_mut { border-top-color: #f97316; }
+    .zbw_group.zbw_g_iter { border-top-color: #34d399; }
+    .zbw_group h3 { font-size: 15px; margin-bottom: 4px; }
+    .zbw_group .zbw_gnote { font-size: 12px; color: #64748b; margin-bottom: 14px; }
+    .zbw_btnrow { display: flex; flex-wrap: wrap; gap: 8px; }
+    .zbw_btn {
+      font-family: Consolas, monospace; font-size: 13px; cursor: pointer;
+      background: #0b1220; color: #e2e8f0; border: 1px solid #334155;
+      padding: 8px 13px; border-radius: 8px; transition: all .18s;
+    }
+    .zbw_btn:hover { transform: translateY(-2px); }
+    .zbw_g_mut .zbw_btn:hover { border-color: #f97316; color: #fb923c; box-shadow: 0 4px 12px rgba(249, 115, 22, .25); }
+    .zbw_group:not(.zbw_g_mut) .zbw_btn:hover { border-color: #22d3ee; color: #67e8f9; box-shadow: 0 4px 12px rgba(34, 211, 238, .25); }
+    .zbw_g_iter .zbw_btn:hover { border-color: #34d399; color: #6ee7b7; box-shadow: 0 4px 12px rgba(52, 211, 153, .25); }
+
+    /* ===== 操作日志 ===== */
+    .zbw_logsec {
+      background: #111a2e; border: 1px solid #1e293b; border-radius: 14px;
+      padding: 18px 22px; margin-bottom: 34px;
+    }
+    .zbw_logsec h3 { font-size: 15px; margin-bottom: 12px; color: #a78bfa; }
+    .zbw_logsec ul { list-style: none; max-height: 220px; overflow-y: auto; }
+    .zbw_logsec li {
+      font-size: 13px; padding: 7px 4px; border-bottom: 1px dashed #1e293b;
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: baseline;
+    }
+    .zbw_logsec li .zbw_lno { color: #475569; font-size: 11px; min-width: 26px; }
+    .zbw_logsec li code { color: #fbbf24; }
+    .zbw_logsec li span { color: #94a3b8; }
+
+    /* ===== 速查表 ===== */
+    .zbw_sheethead { text-align: center; margin-bottom: 20px; }
+    .zbw_sheethead h2 { font-size: 24px; }
+    .zbw_sheethead p { color: #64748b; font-size: 13px; margin-top: 8px; }
+    .zbw_sheet { display: grid; grid-template-columns: repeat(auto-fill, minmax(235px, 1fr)); gap: 14px; }
+    .zbw_scard {
+      background: #111a2e; border: 1px solid #1e293b; border-radius: 12px;
+      padding: 14px 16px; transition: all .2s;
+    }
+    .zbw_scard:hover { transform: translateY(-4px); border-color: #334155; }
+    .zbw_scard.zbw_s_mut { border-top: 3px solid #f97316; }
+    .zbw_scard.zbw_s_pure { border-top: 3px solid #22d3ee; }
+    .zbw_scard.zbw_s_iter { border-top: 3px solid #34d399; }
+    .zbw_scard .zbw_sname { font-family: Consolas, monospace; font-size: 15px; color: #fbbf24; margin-bottom: 6px; }
+    .zbw_scard .zbw_sdesc { font-size: 12.5px; color: #94a3b8; line-height: 1.6; margin-bottom: 10px; }
+    .zbw_scard .zbw_sex { font-size: 12px; color: #64748b; line-height: 1.7; }
+    .zbw_scard .zbw_sex code { color: #7dd3fc; font-size: 11.5px; display: block; }
+    .zbw_scard .zbw_sex .zbw_sres { color: #34d399; }
+    .zbw_scard .zbw_stag { display: inline-block; font-size: 10.5px; padding: 1px 8px; border-radius: 10px; margin-top: 8px; }
+    .zbw_scard .zbw_stag.zbw_t_mut { background: rgba(249, 115, 22, .15); color: #fb923c; }
+    .zbw_scard .zbw_stag.zbw_t_pure { background: rgba(34, 211, 238, .12); color: #22d3ee; }
+
+    /* ===== 底部 ===== */
+    .zbw_foot { text-align: center; color: #475569; font-size: 13px; margin-top: 50px; line-height: 2; }
+    .zbw_foot b { color: #94a3b8; }
+
+    @media (max-width: 600px) {
+      .zbw_head h1 { font-size: 24px; }
+      .zbw_box { width: 52px; height: 52px; font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="zbw_head">
+    <p class="zbw_kicker">// LESSON 16-1 · JAVASCRIPT ARRAY METHODS</p>
+    <h1>JavaScript 主要数组方法可视化演示</h1>
+    <p class="zbw_sub">姓名 <b>赵壁文</b> · 学号 109 · 计算机24001班 —— 点击下方方法按钮，直观查看数组变化、返回值，以及是否改变原数组</p>
+  </header>
+
+  <div class="zbw_wrap">
+
+    <!-- 数组舞台 -->
+    <section class="zbw_stage_sec">
+      <div class="zbw_arrline">
+        <span class="zbw_label">当前数组</span>
+        <code id="zbw_arrcode"></code>
+      </div>
+      <div class="zbw_stage" id="zbw_stage"></div>
+      <div class="zbw_stage_tools">
+        <button class="zbw_reset" id="zbw_btn_reset" type="button">↺ 重置数组</button>
+      </div>
+    </section>
+
+    <!-- 执行结果 -->
+    <section class="zbw_result">
+      <div class="zbw_rline">
+        <span class="zbw_rlabel">执行代码</span>
+        <code class="zbw_rcode" id="zbw_code">点击上方按钮后，这里显示执行的代码</code>
+      </div>
+      <div class="zbw_rline">
+        <span class="zbw_rlabel">返回值</span>
+        <code class="zbw_rret" id="zbw_ret">—</code>
+        <span class="zbw_badge zbw_b_pure" id="zbw_badge">待演示</span>
+      </div>
+      <div class="zbw_rline" id="zbw_afterline" style="display:none">
+        <span class="zbw_rlabel">执行之后</span>
+        <code class="zbw_rafter" id="zbw_after"></code>
+      </div>
+    </section>
+
+    <!-- 方法按钮 -->
+    <section class="zbw_groups" id="zbw_groups"></section>
+
+    <!-- 操作日志 -->
+    <section class="zbw_logsec">
+      <h3>操作日志（最新的在最上面）</h3>
+      <ul id="zbw_log"></ul>
+    </section>
+
+    <!-- 速查表 -->
+    <div class="zbw_sheethead">
+      <h2>数组方法速查表</h2>
+      <p>橙色 = 会改变原数组 · 青色 = 不改变原数组，返回新数组或单个值</p>
+    </div>
+    <section class="zbw_sheet" id="zbw_sheet"></section>
+
+  </div>
+
+  <footer class="zbw_foot">
+    <p><b>赵壁文</b> · 《高级网页设计》课堂实践 · 16-1 JavaScript 数组方法</p>
+    <p>原生 HTML / CSS / JavaScript 实现，无任何第三方库</p>
+  </footer>
+
+  <script>
+    // 全部变量以 zbw_ 开头
+    var zbw_init = [5, 3, 8, 1, 4];
+    var zbw_arr = zbw_init.slice();
+    var zbw_logno = 0;
+
+    /* ---------- 渲染舞台 ---------- */
+    function zbw_refresh(zbw_flash, zbw_pop) {
+      var zbw_stage = document.getElementById('zbw_stage');
+      zbw_stage.innerHTML = '';
+      for (var zbw_i = 0; zbw_i < zbw_arr.length; zbw_i++) {
+        var zbw_box = document.createElement('div');
+        zbw_box.className = 'zbw_box';
+        zbw_box.id = 'zbw_box_' + zbw_i;
+        if (zbw_flash && zbw_flash.indexOf(zbw_i) >= 0) { zbw_box.className += ' zbw_flash'; }
+        if (zbw_pop && zbw_pop.indexOf(zbw_i) >= 0) { zbw_box.className += ' zbw_pop'; }
+        zbw_box.innerHTML = '<span>' + zbw_arr[zbw_i] + '</span><span class="zbw_idx">[' + zbw_i + ']</span>';
+        zbw_stage.appendChild(zbw_box);
+      }
+      document.getElementById('zbw_arrcode').textContent =
+        'zbw_arr = [' + zbw_arr.join(', ') + ']   // 长度 ' + zbw_arr.length;
+    }
+
+    /* ---------- 结果面板 ---------- */
+    function zbw_show_result(zbw_m, zbw_out) {
+      document.getElementById('zbw_code').textContent = zbw_m.code;
+      document.getElementById('zbw_ret').textContent = zbw_out.ret;
+      var zbw_badge = document.getElementById('zbw_badge');
+      if (zbw_m.mut) {
+        zbw_badge.textContent = '会改变原数组';
+        zbw_badge.className = 'zbw_badge zbw_b_mut';
+        document.getElementById('zbw_afterline').style.display = 'flex';
+        document.getElementById('zbw_after').textContent = 'zbw_arr = [' + zbw_arr.join(', ') + ']';
+      } else {
+        zbw_badge.textContent = '不改变原数组';
+        zbw_badge.className = 'zbw_badge zbw_b_pure';
+        document.getElementById('zbw_afterline').style.display = 'none';
+      }
+    }
+
+    /* ---------- 日志 ---------- */
+    function zbw_add_log(zbw_m, zbw_out) {
+      zbw_logno++;
+      var zbw_ul = document.getElementById('zbw_log');
+      var zbw_li = document.createElement('li');
+      zbw_li.innerHTML =
+        '<span class="zbw_lno">' + zbw_logno + '.</span>' +
+        '<code>' + zbw_m.code + '</code>' +
+        '<span>→ ' + zbw_out.ret + '</span>';
+      zbw_ul.insertBefore(zbw_li, zbw_ul.firstChild);
+      while (zbw_ul.children.length > 30) { zbw_ul.removeChild(zbw_ul.lastChild); }
+    }
+
+    /* ---------- 重置 ---------- */
+    function zbw_reset_arr(zbw_silent) {
+      zbw_arr = zbw_init.slice();
+      zbw_refresh();
+      if (!zbw_silent) { zbw_add_log({ code: 'zbw_arr = [5, 3, 8, 1, 4]', ret: '已恢复初始数组' }, { ret: '已恢复初始数组' }); }
+    }
+    document.getElementById('zbw_btn_reset').onclick = function () { zbw_reset_arr(false); };
+
+    /* ---------- 方法定义 ---------- */
+    var zbw_methods = [
+      {
+        title: '① 增删元素', mut: true, note: '从数组头部或尾部添加 / 删除元素（会改变原数组）',
+        items: [
+          { label: 'push(6)', code: 'zbw_arr.push(6)', mut: true,
+            run: function () { var zbw_r = zbw_arr.push(6); return { ret: zbw_r + '（新长度）' }; } },
+          { label: 'pop()', code: 'zbw_arr.pop()', mut: true,
+            rem: function () { return [zbw_arr.length - 1]; },
+            run: function () {
+              if (zbw_arr.length === 0) { zbw_reset_arr(true); return { ret: '数组为空，已重置' }; }
+              var zbw_r = zbw_arr.pop(); return { ret: zbw_r + '（被移除的末尾元素）' };
+            } },
+          { label: 'shift()', code: 'zbw_arr.shift()', mut: true,
+            rem: function () { return [0]; },
+            run: function () {
+              if (zbw_arr.length === 0) { zbw_reset_arr(true); return { ret: '数组为空，已重置' }; }
+              var zbw_r = zbw_arr.shift(); return { ret: zbw_r + '（被移除的开头元素）' };
+            } },
+          { label: 'unshift(0)', code: 'zbw_arr.unshift(0)', mut: true,
+            run: function () { var zbw_r = zbw_arr.unshift(0); return { ret: zbw_r + '（新长度）' }; } },
+          { label: 'splice(2, 1)', code: 'zbw_arr.splice(2, 1)', mut: true,
+            rem: function () { return [2]; },
+            run: function () {
+              if (zbw_arr.length === 0) { zbw_reset_arr(true); return { ret: '数组为空，已重置' }; }
+              var zbw_r = zbw_arr.splice(2, 1);
+              return { ret: zbw_r.length ? '[' + zbw_r.join(', ') + ']（被删除的元素）' : '[]（下标超出范围，未删除）' };
+            } }
+        ]
+      },
+      {
+        title: '② 截取与合并', mut: false, note: 'slice 截取、concat 合并、join 转字符串（都不会改变原数组）',
+        items: [
+          { label: 'slice(1, 4)', code: "zbw_arr.slice(1, 4)", mut: false,
+            run: function () { var zbw_r = zbw_arr.slice(1, 4); return { ret: '[' + zbw_r.join(', ') + ']（截取下标 1 到 3 的新数组）' }; } },
+          { label: 'concat([9, 10])', code: 'zbw_arr.concat([9, 10])', mut: false,
+            run: function () { var zbw_r = zbw_arr.concat([9, 10]); return { ret: '[' + zbw_r.join(', ') + ']（合并后的新数组）' }; } },
+          { label: "join(' · ')", code: "zbw_arr.join(' · ')", mut: false,
+            run: function () { var zbw_r = zbw_arr.join(' · '); return { ret: "'" + zbw_r + "'（连接成的字符串）" }; } }
+        ]
+      },
+      {
+        title: '③ 查找与判断', mut: false, note: 'indexOf / includes / find / some / every（都不会改变原数组）',
+        items: [
+          { label: 'indexOf(3)', code: 'zbw_arr.indexOf(3)', mut: false,
+            run: function () { var zbw_r = zbw_arr.indexOf(3); return { ret: zbw_r + (zbw_r >= 0 ? '（元素 3 的下标）' : '（未找到，返回 -1）') }; } },
+          { label: 'includes(8)', code: 'zbw_arr.includes(8)', mut: false,
+            run: function () { var zbw_r = zbw_arr.includes(8); return { ret: zbw_r + '（是否包含 8）' }; } },
+          { label: 'find(x > 3)', code: 'zbw_arr.find(x => x > 3)', mut: false,
+            run: function () {
+              var zbw_r = zbw_arr.find(function (zbw_x) { return zbw_x > 3; });
+              return { ret: String(zbw_r) + '（第一个大于 3 的元素）' };
+            } },
+          { label: 'findIndex(x > 3)', code: 'zbw_arr.findIndex(x => x > 3)', mut: false,
+            run: function () {
+              var zbw_r = zbw_arr.findIndex(function (zbw_x) { return zbw_x > 3; });
+              return { ret: zbw_r + '（第一个大于 3 元素的下标）' };
+            } },
+          { label: 'some(x > 4)', code: 'zbw_arr.some(x => x > 4)', mut: false,
+            run: function () {
+              var zbw_r = zbw_arr.some(function (zbw_x) { return zbw_x > 4; });
+              return { ret: zbw_r + '（是否有元素大于 4）' };
+            } },
+          { label: 'every(x > 2)', code: 'zbw_arr.every(x => x > 2)', mut: false,
+            run: function () {
+              var zbw_r = zbw_arr.every(function (zbw_x) { return zbw_x > 2; });
+              return { ret: zbw_r + '（是否全部大于 2）' };
+            } }
+        ]
+      },
+      {
+        title: '④ 变换与聚合', mut: false, note: 'map / filter / reduce 生成新数据，sort / reverse 会改变原数组',
+        items: [
+          { label: 'map(x * 10)', code: 'zbw_arr.map(x => x * 10)', mut: false,
+            run: function () {
+              var zbw_r = zbw_arr.map(function (zbw_x) { return zbw_x * 10; });
+              return { ret: '[' + zbw_r.join(', ') + ']（每个元素乘 10 的新数组）' };
+            } },
+          { label: 'filter(奇数)', code: 'zbw_arr.filter(x => x % 2 === 1)', mut: false,
+            run: function () {
+              var zbw_r = zbw_arr.filter(function (zbw_x) { return zbw_x % 2 === 1; });
+              return { ret: '[' + zbw_r.join(', ') + ']（筛选出的奇数新数组）' };
+            } },
+          { label: 'reduce(求和)', code: 'zbw_arr.reduce((a, b) => a + b, 0)', mut: false,
+            run: function () {
+              var zbw_r = zbw_arr.reduce(function (zbw_a, zbw_b) { return zbw_a + zbw_b; }, 0);
+              return { ret: zbw_r + '（所有元素累加的和）' };
+            } },
+          { label: 'forEach(遍历)', code: 'zbw_arr.forEach(x => console.log(x))', mut: false,
+            run: function () {
+              var zbw_seq = zbw_arr.join(' → ');
+              return { ret: 'undefined（无返回值，依次访问：' + zbw_seq + '）' };
+            } },
+          { label: 'sort(降序)', code: 'zbw_arr.sort((a, b) => b - a)', mut: true,
+            run: function () {
+              zbw_arr.sort(function (zbw_a, zbw_b) { return zbw_b - zbw_a; });
+              return { ret: 'zbw_arr 本身（数字降序排列）' };
+            } },
+          { label: 'reverse()', code: 'zbw_arr.reverse()', mut: true,
+            run: function () { zbw_arr.reverse(); return { ret: 'zbw_arr 本身（顺序完全倒转）' }; } }
+        ]
+      }
+    ];
+
+    /* ---------- 执行方法 ---------- */
+    function zbw_run_method(zbw_m) {
+      var zbw_do_exec = function () {
+        var zbw_old = zbw_arr.slice();
+        var zbw_prev_len = zbw_arr.length;
+        var zbw_out = zbw_m.run();
+
+        var zbw_flash = [];
+        for (var zbw_i = 0; zbw_i < zbw_arr.length; zbw_i++) {
+          if (zbw_old[zbw_i] !== zbw_arr[zbw_i]) { zbw_flash.push(zbw_i); }
+        }
+        var zbw_pop = [];
+        if (zbw_m.mut && zbw_arr.length > zbw_prev_len) {
+          for (var zbw_j = zbw_prev_len; zbw_j < zbw_arr.length; zbw_j++) { zbw_pop.push(zbw_j); }
+        }
+        if (zbw_m.code.indexOf('sort') >= 0 || zbw_m.code.indexOf('reverse') >= 0) { zbw_flash = 'all'; }
+        zbw_refresh(zbw_flash === 'all' ? null : zbw_flash, zbw_pop);
+        if (zbw_flash === 'all') {
+          var zbw_boxes = document.getElementsByClassName('zbw_box');
+          for (var zbw_k = 0; zbw_k < zbw_boxes.length; zbw_k++) { zbw_boxes[zbw_k].className += ' zbw_flash'; }
+        }
+        zbw_show_result(zbw_m, zbw_out);
+        zbw_add_log(zbw_m, zbw_out);
+      };
+
+      // 有删除动作时，先播放移出动画再真正执行
+      if (zbw_m.rem && zbw_arr.length > 0) {
+        var zbw_rm = zbw_m.rem();
+        for (var zbw_r = 0; zbw_r < zbw_rm.length; zbw_r++) {
+          var zbw_el = document.getElementById('zbw_box_' + zbw_rm[zbw_r]);
+          if (zbw_el) { zbw_el.className += ' zbw_out'; }
+        }
+        window.setTimeout(zbw_do_exec, 300);
+      } else {
+        zbw_do_exec();
+      }
+    }
+
+    /* ---------- 生成按钮 ---------- */
+    var zbw_groups_el = document.getElementById('zbw_groups');
+    for (var zbw_g = 0; zbw_g < zbw_methods.length; zbw_g++) {
+      var zbw_group = zbw_methods[zbw_g];
+      var zbw_div = document.createElement('div');
+      zbw_div.className = 'zbw_group' + (zbw_group.mut ? ' zbw_g_mut' : (zbw_group.title.indexOf('变换') >= 0 ? ' zbw_g_iter' : ''));
+      zbw_div.innerHTML =
+        '<h3>' + zbw_group.title + '</h3>' +
+        '<p class="zbw_gnote">' + zbw_group.note + '</p>';
+      var zbw_row = document.createElement('div');
+      zbw_row.className = 'zbw_btnrow';
+      for (var zbw_b = 0; zbw_b < zbw_group.items.length; zbw_b++) {
+        var zbw_item = zbw_group.items[zbw_b];
+        var zbw_btn = document.createElement('button');
+        zbw_btn.type = 'button';
+        zbw_btn.className = 'zbw_btn';
+        zbw_btn.textContent = zbw_item.label;
+        zbw_btn.title = zbw_item.code;
+        zbw_btn.onclick = (function (zbw_m) { return function () { zbw_run_method(zbw_m); }; })(zbw_item);
+        zbw_row.appendChild(zbw_btn);
+      }
+      zbw_div.appendChild(zbw_row);
+      zbw_groups_el.appendChild(zbw_div);
+    }
+
+    /* ---------- 速查表数据 ---------- */
+    var zbw_sheet_data = [
+      { name: 'push()', g: 'mut', desc: '在数组末尾添加一个或多个元素', ex: '[5,3,8,1,4].push(6)', res: '返回 6（新长度）' },
+      { name: 'pop()', g: 'mut', desc: '删除数组末尾的元素', ex: '[5,3,8,1,4].pop()', res: '返回 4，数组变 [5,3,8,1]' },
+      { name: 'shift()', g: 'mut', desc: '删除数组开头的元素', ex: '[5,3,8,1,4].shift()', res: '返回 5，数组变 [3,8,1,4]' },
+      { name: 'unshift(0)', g: 'mut', desc: '在数组开头添加元素', ex: '[5,3,8].unshift(0)', res: '返回 4（新长度）' },
+      { name: 'splice(2, 1)', g: 'mut', desc: '从下标 2 开始删除 1 个元素，也可用于插入', ex: '[5,3,8,1,4].splice(2,1)', res: '返回 [8]' },
+      { name: 'sort((a,b) => b-a)', g: 'mut', desc: '对数组排序，回调决定升序或降序', ex: '[5,3,8].sort((a,b)=>b-a)', res: '[8,5,3]' },
+      { name: 'reverse()', g: 'mut', desc: '倒转数组元素的顺序', ex: '[5,3,8].reverse()', res: '[8,3,5]' },
+      { name: 'slice(1, 4)', g: 'pure', desc: '截取下标 [1, 4) 之间的元素，返回新数组', ex: '[5,3,8,1,4].slice(1,4)', res: '[3, 8, 1]' },
+      { name: 'concat([9, 10])', g: 'pure', desc: '合并数组（或值），返回新数组', ex: '[5,3].concat([9,10])', res: '[5, 3, 9, 10]' },
+      { name: "join(' · ')", g: 'pure', desc: '用指定分隔符把数组连接成字符串', ex: "[5,3,8].join(' · ')", res: "'5 · 3 · 8'" },
+      { name: 'indexOf(3)', g: 'pure', desc: '查找元素首次出现的下标，找不到返回 -1', ex: '[5,3,8].indexOf(3)', res: '1' },
+      { name: 'includes(8)', g: 'pure', desc: '判断数组是否包含某个元素', ex: '[5,3,8].includes(8)', res: 'true' },
+      { name: 'find(x => x > 3)', g: 'pure', desc: '返回第一个满足条件的元素', ex: '[5,3,8].find(x => x > 3)', res: '5' },
+      { name: 'findIndex(x => x > 3)', g: 'pure', desc: '返回第一个满足条件元素的下标', ex: '[5,3,8].findIndex(x => x > 3)', res: '0' },
+      { name: 'some(x => x > 4)', g: 'pure', desc: '只要有任一元素满足条件即为 true', ex: '[5,3,8].some(x => x > 4)', res: 'true' },
+      { name: 'every(x => x > 2)', g: 'pure', desc: '所有元素都满足条件才为 true', ex: '[5,3,8].every(x => x > 2)', res: 'false' },
+      { name: 'map(x => x * 10)', g: 'iter', desc: '对每个元素加工，返回新数组', ex: '[5,3,8].map(x => x * 10)', res: '[50, 30, 80]' },
+      { name: 'filter(x => x % 2 === 1)', g: 'iter', desc: '筛选出满足条件的元素，返回新数组', ex: '[5,3,8,1].filter(x => x % 2 === 1)', res: '[5, 3, 1]' },
+      { name: 'reduce((a,b) => a+b, 0)', g: 'iter', desc: '从左到右累加聚合，返回单个值', ex: '[5,3,8].reduce((a,b) => a+b, 0)', res: '16' },
+      { name: 'forEach(x => ...)', g: 'iter', desc: '逐个访问元素执行操作，没有返回值', ex: '[5,3,8].forEach(x => console.log(x))', res: 'undefined' }
+    ];
+
+    var zbw_sheet_el = document.getElementById('zbw_sheet');
+    for (var zbw_s = 0; zbw_s < zbw_sheet_data.length; zbw_s++) {
+      var zbw_it = zbw_sheet_data[zbw_s];
+      var zbw_card = document.createElement('div');
+      zbw_card.className = 'zbw_scard zbw_s_' + zbw_it.g;
+      zbw_card.innerHTML =
+        '<div class="zbw_sname">' + zbw_it.name + '</div>' +
+        '<div class="zbw_sdesc">' + zbw_it.desc + '</div>' +
+        '<div class="zbw_sex"><code>' + zbw_it.ex + '</code>' +
+        '<span class="zbw_sres">→ ' + zbw_it.res + '</span></div>' +
+        '<span class="zbw_stag ' + (zbw_it.g === 'mut' ? 'zbw_t_mut">改变原数组' : 'zbw_t_pure">不改变原数组') + '</span>';
+      zbw_sheet_el.appendChild(zbw_card);
+    }
+
+    /* ---------- 初始化 ---------- */
+    zbw_refresh();
+  </script>
+</body>
+</html>
