@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<!-- 姓名：赵壁文，日期：2026-10-29 -->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>16-2 JavaScript 对象与字符串</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: #0b1220;
+      background-image:
+        radial-gradient(ellipse 800px 400px at 85% -10%, rgba(167, 139, 250, .12), transparent),
+        radial-gradient(ellipse 800px 400px at 15% 0%, rgba(34, 211, 238, .10), transparent);
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    code, .zbw_mono { font-family: Consolas, "Courier New", monospace; }
+
+    .zbw_wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+    /* ===== 头部 ===== */
+    .zbw_head { text-align: center; padding: 46px 16px 26px; }
+    .zbw_head .zbw_kicker { color: #a78bfa; letter-spacing: 2px; font-size: 13px; margin-bottom: 14px; }
+    .zbw_head h1 {
+      font-size: 34px; line-height: 1.35;
+      background: linear-gradient(90deg, #a78bfa, #22d3ee, #34d399);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .zbw_head .zbw_sub { color: #94a3b8; font-size: 14px; margin-top: 14px; }
+    .zbw_head .zbw_sub b { color: #fbbf24; }
+
+    /* ===== 板块标题 ===== */
+    .zbw_sechead { display: flex; align-items: center; gap: 12px; margin: 36px 0 14px; }
+    .zbw_sechead .zbw_sno {
+      font-family: Consolas, monospace; font-size: 14px; font-weight: bold;
+      background: linear-gradient(135deg, #a78bfa, #22d3ee); color: #0b1220;
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .zbw_sechead h2 { font-size: 21px; }
+    .zbw_sechead .zbw_sen { font-size: 12px; color: #64748b; font-family: Consolas, monospace; margin-left: 4px; }
+    .zbw_tip {
+      background: rgba(251, 191, 36, .07); border: 1px dashed rgba(251, 191, 36, .45);
+      color: #fbbf24; border-radius: 10px; padding: 10px 16px;
+      font-size: 13px; line-height: 1.7; margin-bottom: 14px;
+    }
+    .zbw_tip code { color: #fde68a; }
+
+    /* ===== 舞台（对象 / 字符串共用） ===== */
+    .zbw_stage_sec {
+      background: #111a2e; border: 1px solid #1e293b; border-radius: 16px;
+      padding: 24px; margin-bottom: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+    }
+    .zbw_arrline { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+    .zbw_arrline .zbw_label {
+      font-size: 12px; color: #0b1220; background: #a78bfa;
+      padding: 3px 10px; border-radius: 20px; font-weight: bold; white-space: nowrap;
+    }
+    .zbw_arrline .zbw_lbstr { background: #22d3ee; }
+    .zbw_arrline code { color: #7dd3fc; font-size: 14px; word-break: break-all; }
+
+    .zbw_stage {
+      display: flex; flex-wrap: wrap; gap: 14px; justify-content: center;
+      min-height: 100px; padding: 14px 6px 34px; align-items: flex-end;
+      border-bottom: 2px dashed #334155;
+    }
+    .zbw_box {
+      width: 68px; height: 68px; border-radius: 12px; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: bold; color: #0b1220;
+      background: linear-gradient(145deg, #67e8f9, #22d3ee);
+      box-shadow: 0 6px 14px rgba(34, 211, 238, .25);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .zbw_box:hover { transform: translateY(-8px) scale(1.05); box-shadow: 0 12px 22px rgba(34, 211, 238, .45); }
+    .zbw_box .zbw_idx {
+      position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; color: #64748b; font-family: Consolas, monospace;
+    }
+    .zbw_box.zbw_sbox { width: 46px; height: 46px; font-size: 17px; font-family: Consolas, monospace; }
+    .zbw_box.zbw_spbox {
+      background: #0b1220; color: #64748b; font-size: 15px;
+      border: 1px dashed #475569; box-shadow: none;
+    }
+    .zbw_box.zbw_flash { animation: zbw_flash_anim .9s ease; }
+    .zbw_box.zbw_pop { animation: zbw_pop_anim .45s cubic-bezier(.34, 1.56, .64, 1); }
+    .zbw_box.zbw_out { animation: zbw_out_anim .3s ease forwards; }
+
+    @keyframes zbw_flash_anim {
+      0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, .9); background: linear-gradient(145deg, #fde68a, #fbbf24); }
+      70% { box-shadow: 0 0 0 14px rgba(251, 191, 36, 0); }
+      100% { background: linear-gradient(145deg, #67e8f9, #22d3ee); }
+    }
+    @keyframes zbw_pop_anim {
+      0% { transform: scale(0) rotate(-30deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0); opacity: 1; }
+    }
+    @keyframes zbw_out_anim {
+      100% { transform: scale(0) translateY(30px); opacity: 0; }
+    }
+
+    /* 对象键值块 */
+    .zbw_kv {
+      min-width: 108px; padding: 10px 16px; border-radius: 12px; text-align: center;
+      background: #0b1220; border: 1px solid #334155; position: relative;
+      transition: transform .25s, border-color .25s; cursor: default;
+    }
+    .zbw_kv:hover { transform: translateY(-6px); border-color: #a78bfa; }
+    .zbw_kv .zbw_k { display: block; font-family: Consolas, monospace; font-size: 12px; color: #a78bfa; margin-bottom: 5px; }
+    .zbw_kv .zbw_v { display: block; font-size: 16px; font-weight: bold; }
+    .zbw_kv .zbw_vstr { color: #34d399; }
+    .zbw_kv .zbw_vnum { color: #fbbf24; }
+    .zbw_kv .zbw_vobj { color: #7dd3fc; font-size: 12.5px; font-family: Consolas, monospace; }
+    .zbw_kv .zbw_idx { position: absolute; bottom: -24px; left: 0; right: 0; text-align: center; }
+    .zbw_kv.zbw_flash { animation: zbw_flash_kv .9s ease; }
+    .zbw_kv.zbw_pop { animation: zbw_pop_anim .45s cubic-bezier(.34, 1.56, .64, 1); }
+    .zbw_kv.zbw_out { animation: zbw_out_anim .3s ease forwards; }
+
+    @keyframes zbw_flash_kv {
+      0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, .9); border-color: #fbbf24; background: rgba(251, 191, 36, .18); }
+      70% { box-shadow: 0 0 0 14px rgba(251, 191, 36, 0); }
+      100% { background: #0b1220; border-color: #334155; }
+    }
+
+    .zbw_stage_tools { display: flex; justify-content: flex-end; margin-top: 30px; }
+    .zbw_reset {
+      background: transparent; color: #94a3b8; border: 1px solid #334155;
+      padding: 7px 16px; border-radius: 8px; cursor: pointer; font-size: 13px;
+      transition: all .2s;
+    }
+    .zbw_reset:hover { color: #fbbf24; border-color: #fbbf24; }
+
+    /* ===== 结果面板 ===== */
+    .zbw_result {
+      background: #111a2e; border: 1px solid #1e293b; border-left: 4px solid #fbbf24;
+      border-radius: 12px; padding: 18px 22px; margin-bottom: 18px;
+    }
+    .zbw_result.zbw_rstr { border-left-color: #22d3ee; }
+    .zbw_result .zbw_rline { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 6px 0; }
+    .zbw_result .zbw_rlabel { font-size: 12px; color: #64748b; white-space: nowrap; }
+    .zbw_result .zbw_rlabel::before { content: "> "; color: #a78bfa; font-family: Consolas, monospace; }
+    .zbw_result code.zbw_rcode { color: #fbbf24; font-size: 15px; word-break: break-all; }
+    .zbw_result code.zbw_rret { color: #34d399; font-size: 15px; word-break: break-all; }
+    .zbw_result code.zbw_rafter { color: #7dd3fc; font-size: 14px; word-break: break-all; }
+    .zbw_badge { font-size: 12px; padding: 3px 12px; border-radius: 20px; white-space: nowrap; font-weight: bold; }
+    .zbw_badge.zbw_b_mut { background: rgba(249, 115, 22, .15); color: #fb923c; border: 1px solid rgba(249, 115, 22, .5); }
+    .zbw_badge.zbw_b_pure { background: rgba(34, 211, 238, .12); color: #22d3ee; border: 1px solid rgba(34, 211, 238, .45); }
+
+    /* ===== 方法按钮分组 ===== */
+    .zbw_groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 18px; }
+    .zbw_group {
+      background: #111a2e; border: 1px solid #1e293b; border-radius: 14px; padding: 18px;
+      border-top: 3px solid #22d3ee;
+    }
+    .zbw_group.zbw_g_mut { border-top-color: #f97316; }
+    .zbw_group.zbw_g_iter { border-top-color: #34d399; }
+    .zbw_group.zbw_g_acc { border-top-color: #a78bfa; }
+    .zbw_group h3 { font-size: 15px; margin-bottom: 4px; }
+    .zbw_group .zbw_gnote { font-size: 12px; color: #64748b; margin-bottom: 14px; }
+    .zbw_btnrow { display: flex; flex-wrap: wrap; gap: 8px; }
+    .zbw_btn {
+      font-family: Consolas, monospace; font-size: 13px; cursor: pointer;
+      background: #0b1220; color: #e2e8f0; border: 1px solid #334155;
+      padding: 8px 13px; border-radius: 8px; transition: all .18s;
+    }
+    .zbw_btn:hover { transform: translateY(-2px); }
+    .zbw_g_mut .zbw_btn:hover { border-color: #f97316; color: #fb923c; box-shadow: 0 4px 12px rgba(249, 115, 22, .25); }
+    .zbw_g_iter .zbw_btn:hover { border-color: #34d399; color: #6ee7b7; box-shadow: 0 4px 12px rgba(52, 211, 153, .25); }
+    .zbw_g_acc .zbw_btn:hover { border-color: #a78bfa; color: #c4b5fd; box-shadow: 0 4px 12px rgba(167, 139, 250, .25); }
+    .zbw_group:not(.zbw_g_mut):not(.zbw_g_iter):not(.zbw_g_acc) .zbw_btn:hover { border-color: #22d3ee; color: #67e8f9; }
+
+    /* ===== 操作日志 ===== */
+    .zbw_logsec {
+      background: #111a2e; border: 1px solid #1e293b; border-radius: 14px;
+      padding: 18px 22px; margin-bottom: 34px;
+    }
+    .zbw_logsec h3 { font-size: 15px; margin-bottom: 12px; color: #fbbf24; }
+    .zbw_logsec ul { list-style: none; max-height: 230px; overflow-y: auto; }
+    .zbw_logsec li {
+      font-size: 13px; padding: 7px 4px; border-bottom: 1px dashed #1e293b;
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: baseline;
+    }
+    .zbw_logsec li .zbw_lno { color: #475569; font-size: 11px; min-width: 26px; }
+    .zbw_logsec li .zbw_ltag {
+      font-size: 10.5px; padding: 1px 8px; border-radius: 10px; white-space: nowrap;
+    }
+    .zbw_logsec li .zbw_lt_obj { background: rgba(167, 139, 250, .15); color: #c4b5fd; }
+    .zbw_logsec li .zbw_lt_str { background: rgba(34, 211, 238, .12); color: #67e8f9; }
+    .zbw_logsec li code { color: #fbbf24; word-break: break-all; }
+    .zbw_logsec li span { color: #94a3b8; word-break: break-all; }
+
+    /* ===== 速查表 ===== */
+    .zbw_sheethead { text-align: center; margin: 40px 0 20px; }
+    .zbw_sheethead h2 { font-size: 24px; }
+    .zbw_sheethead h3 { font-size: 16px; color: #a78bfa; margin: 22px 0 12px; text-align: left; }
+    .zbw_sheethead h3.zbw_hstr { color: #22d3ee; }
+    .zbw_sheethead p { color: #64748b; font-size: 13px; margin-top: 8px; }
+    .zbw_sheet { display: grid; grid-template-columns: repeat(auto-fill, minmax(235px, 1fr)); gap: 14px; }
+    .zbw_scard {
+      background: #111a2e; border: 1px solid #1e293b; border-radius: 12px;
+      padding: 14px 16px; transition: all .2s;
+    }
+    .zbw_scard:hover { transform: translateY(-4px); border-color: #334155; }
+    .zbw_scard.zbw_s_obj { border-top: 3px solid #a78bfa; }
+    .zbw_scard.zbw_s_str { border-top: 3px solid #22d3ee; }
+    .zbw_scard .zbw_sname { font-family: Consolas, monospace; font-size: 14.5px; color: #fbbf24; margin-bottom: 6px; word-break: break-all; }
+    .zbw_scard .zbw_sdesc { font-size: 12.5px; color: #94a3b8; line-height: 1.6; margin-bottom: 10px; }
+    .zbw_scard .zbw_sex { font-size: 12px; color: #64748b; line-height: 1.7; }
+    .zbw_scard .zbw_sex code { color: #7dd3fc; font-size: 11.5px; display: block; word-break: break-all; }
+    .zbw_scard .zbw_sex .zbw_sres { color: #34d399; }
+    .zbw_scard .zbw_stag { display: inline-block; font-size: 10.5px; padding: 1px 8px; border-radius: 10px; margin-top: 8px; }
+    .zbw_scard .zbw_stag.zbw_t_obj { background: rgba(167, 139, 250, .15); color: #c4b5fd; }
+    .zbw_scard .zbw_stag.zbw_t_str { background: rgba(34, 211, 238, .12); color: #67e8f9; }
+
+    /* ===== 底部 ===== */
+    .zbw_foot { text-align: center; color: #475569; font-size: 13px; margin-top: 50px; line-height: 2; }
+    .zbw_foot b { color: #94a3b8; }
+
+    @media (max-width: 600px) {
+      .zbw_head h1 { font-size: 24px; }
+      .zbw_box { width: 52px; height: 52px; font-size: 17px; }
+      .zbw_box.zbw_sbox { width: 34px; height: 38px; font-size: 13px; }
+      .zbw_kv { min-width: 88px; padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="zbw_head">
+    <p class="zbw_kicker">// LESSON 16-2 · JAVASCRIPT OBJECT &amp; STRING</p>
+    <h1>JavaScript 对象与字符串可视化演示</h1>
+    <p class="zbw_sub">姓名 <b>赵壁文</b> · 学号 109 · 计算机24001班 —— 点击方法按钮，直观查看对象与字符串的变化、返回值，以及「可变」与「不可变」的区别</p>
+  </header>
+
+  <div class="zbw_wrap">
+
+    <!-- ==================== ① 对象实验台 ==================== -->
+    <div class="zbw_sechead">
+      <span class="zbw_sno">01</span>
+      <h2>对象实验台</h2>
+      <span class="zbw_sen">Object</span>
+    </div>
+    <p class="zbw_tip">对象是<b>可变的</b>引用类型：由一组「键 : 值」组成，属性可以随时添加、修改、删除，改动会直接作用在对象本身上。</p>
+
+    <section class="zbw_stage_sec">
+      <div class="zbw_arrline">
+        <span class="zbw_label">当前对象</span>
+        <code id="zbw_objcode"></code>
+      </div>
+      <div class="zbw_stage" id="zbw_ostage"></div>
+      <div class="zbw_stage_tools">
+        <button class="zbw_reset" id="zbw_btn_objreset" type="button">↺ 重置对象</button>
+      </div>
+    </section>
+
+    <section class="zbw_result">
+      <div class="zbw_rline">
+        <span class="zbw_rlabel">执行代码</span>
+        <code class="zbw_rcode" id="zbw_o_code">点击下方按钮后，这里显示执行的代码</code>
+      </div>
+      <div class="zbw_rline">
+        <span class="zbw_rlabel">返回值</span>
+        <code class="zbw_rret" id="zbw_o_ret">—</code>
+        <span class="zbw_badge zbw_b_pure" id="zbw_o_badge">待演示</span>
+      </div>
+      <div class="zbw_rline" id="zbw_o_afterline" style="display:none">
+        <span class="zbw_rlabel">执行之后</span>
+        <code class="zbw_rafter" id="zbw_o_after"></code>
+      </div>
+    </section>
+
+    <section class="zbw_groups" id="zbw_ogroups"></section>
+
+    <!-- ==================== ② 字符串实验台 ==================== -->
+    <div class="zbw_sechead">
+      <span class="zbw_sno">02</span>
+      <h2>字符串实验台</h2>
+      <span class="zbw_sen">String</span>
+    </div>
+    <p class="zbw_tip">字符串是<b>不可变的（immutable）</b>：每一个字符都有自己的下标，但所有方法都<b>不会修改原字符串</b>，只会返回一个全新的字符串。空格用 <code>␣</code> 符号显示。</p>
+
+    <section class="zbw_stage_sec">
+      <div class="zbw_arrline">
+        <span class="zbw_label zbw_lbstr">当前字符串</span>
+        <code id="zbw_strcode"></code>
+      </div>
+      <div class="zbw_stage" id="zbw_sstage"></div>
+    </section>
+
+    <section class="zbw_result zbw_rstr">
+      <div class="zbw_rline">
+        <span class="zbw_rlabel">执行代码</span>
+        <code class="zbw_rcode" id="zbw_s_code">点击下方按钮后，这里显示执行的代码</code>
+      </div>
+      <div class="zbw_rline">
+        <span class="zbw_rlabel">返回值</span>
+        <code class="zbw_rret" id="zbw_s_ret">—</code>
+        <span class="zbw_badge zbw_b_pure" id="zbw_s_badge">待演示</span>
+      </div>
+    </section>
+
+    <section class="zbw_groups" id="zbw_sgroups"></section>
+
+    <!-- 共享操作日志 -->
+    <section class="zbw_logsec">
+      <h3>操作日志（最新的在最上面）</h3>
+      <ul id="zbw_log"></ul>
+    </section>
+
+    <!-- ==================== 速查表 ==================== -->
+    <div class="zbw_sheethead">
+      <h2>对象与字符串方法速查表</h2>
+      <p>紫色 = 对象操作 · 青色 = 字符串操作（全部不改变原字符串）</p>
+      <h3>对象 Object</h3>
+    </div>
+    <section class="zbw_sheet" id="zbw_osheet"></section>
+    <div class="zbw_sheethead">
+      <h3 class="zbw_hstr">字符串 String</h3>
+    </div>
+    <section class="zbw_sheet" id="zbw_ssheet"></section>
+
+  </div>
+
+  <footer class="zbw_foot">
+    <p><b>赵壁文</b> · 《高级网页设计》课堂实践 · 16-2 JavaScript 对象与字符串</p>
+    <p>原生 HTML / CSS / JavaScript 实现，无任何第三方库</p>
+  </footer>
+
+  <script>
+    // 全部变量以 zbw_ 开头
+    function zbw_make_obj() {
+      return { name: '赵壁文', stuId: 109, className: '计算机24001班', hobby: '网页设计', address: { city: '北京' } };
+    }
+    var zbw_obj = zbw_make_obj();
+    var zbw_str = ' Hello JavaScript ';
+    var zbw_logno = 0;
+
+    /* ---------- 对象文本化显示 ---------- */
+    function zbw_obj_text() {
+      var zbw_keys = Object.keys(zbw_obj);
+      var zbw_parts = [];
+      for (var zbw_i = 0; zbw_i < zbw_keys.length; zbw_i++) {
+        var zbw_k = zbw_keys[zbw_i];
+        var zbw_v = zbw_obj[zbw_k];
+        if (typeof zbw_v === 'string') { zbw_parts.push(zbw_k + ": '" + zbw_v + "'"); }
+        else if (typeof zbw_v === 'object' && zbw_v !== null) { zbw_parts.push(zbw_k + ': ' + JSON.stringify(zbw_v)); }
+        else { zbw_parts.push(zbw_k + ': ' + zbw_v); }
+      }
+      return 'zbw_obj = { ' + zbw_parts.join(', ') + ' }';
+    }
+
+    /* ---------- 渲染对象舞台 ---------- */
+    function zbw_render_obj(zbw_flashK, zbw_popK) {
+      var zbw_stage = document.getElementById('zbw_ostage');
+      zbw_stage.innerHTML = '';
+      var zbw_keys = Object.keys(zbw_obj);
+      for (var zbw_i = 0; zbw_i < zbw_keys.length; zbw_i++) {
+        var zbw_k = zbw_keys[zbw_i];
+        var zbw_v = zbw_obj[zbw_k];
+        var zbw_chip = document.createElement('div');
+        zbw_chip.className = 'zbw_kv';
+        zbw_chip.id = 'zbw_kv_' + zbw_k;
+        if (zbw_flashK && zbw_flashK.indexOf(zbw_k) >= 0) { zbw_chip.className += ' zbw_flash'; }
+        if (zbw_popK && zbw_popK.indexOf(zbw_k) >= 0) { zbw_chip.className += ' zbw_pop'; }
+        var zbw_vcls = 'zbw_vstr', zbw_vtxt = "'" + zbw_v + "'";
+        if (typeof zbw_v === 'number') { zbw_vcls = 'zbw_vnum'; zbw_vtxt = String(zbw_v); }
+        if (typeof zbw_v === 'object' && zbw_v !== null) { zbw_vcls = 'zbw_vobj'; zbw_vtxt = JSON.stringify(zbw_v); }
+        zbw_chip.innerHTML =
+          '<span class="zbw_k">' + zbw_k + '</span>' +
+          '<span class="zbw_v ' + zbw_vcls + '">' + zbw_vtxt + '</span>';
+        zbw_stage.appendChild(zbw_chip);
+      }
+      document.getElementById('zbw_objcode').textContent = zbw_obj_text();
+    }
+
+    /* ---------- 渲染字符串舞台 ---------- */
+    function zbw_render_str(zbw_hl) {
+      var zbw_stage = document.getElementById('zbw_sstage');
+      zbw_stage.innerHTML = '';
+      for (var zbw_i = 0; zbw_i < zbw_str.length; zbw_i++) {
+        var zbw_ch = zbw_str.charAt(zbw_i);
+        var zbw_box = document.createElement('div');
+        zbw_box.className = 'zbw_box zbw_sbox' + (zbw_ch === ' ' ? ' zbw_spbox' : '');
+        if (zbw_hl && zbw_i >= zbw_hl[0] && zbw_i < zbw_hl[1]) { zbw_box.className += ' zbw_flash'; }
+        zbw_box.innerHTML = '<span>' + (zbw_ch === ' ' ? '␣' : zbw_ch) + '</span><span class="zbw_idx">[' + zbw_i + ']</span>';
+        zbw_stage.appendChild(zbw_box);
+      }
+      document.getElementById('zbw_strcode').textContent =
+        "zbw_str = ' Hello JavaScript '   // length = " + zbw_str.length;
+    }
+
+    /* ---------- 结果面板 ---------- */
+    function zbw_show_result(zbw_side, zbw_m, zbw_out) {
+      document.getElementById(zbw_side + '_code').textContent = zbw_m.code;
+      document.getElementById(zbw_side + '_ret').textContent = zbw_out.ret;
+      var zbw_badge = document.getElementById(zbw_side + '_badge');
+      if (zbw_m.mut) {
+        zbw_badge.textContent = '会改变对象';
+        zbw_badge.className = 'zbw_badge zbw_b_mut';
+        document.getElementById('zbw_o_afterline').style.display = 'flex';
+        document.getElementById('zbw_o_after').textContent = zbw_obj_text();
+      } else {
+        zbw_badge.textContent = zbw_side === 'zbw_s' ? '不改变原字符串' : '不改变对象';
+        zbw_badge.className = 'zbw_badge zbw_b_pure';
+        if (zbw_side === 'zbw_o') { document.getElementById('zbw_o_afterline').style.display = 'none'; }
+      }
+    }
+
+    /* ---------- 日志 ---------- */
+    function zbw_add_log(zbw_tag, zbw_m, zbw_out) {
+      zbw_logno++;
+      var zbw_ul = document.getElementById('zbw_log');
+      var zbw_li = document.createElement('li');
+      zbw_li.innerHTML =
+        '<span class="zbw_lno">' + zbw_logno + '.</span>' +
+        '<span class="zbw_ltag ' + (zbw_tag === '对象' ? 'zbw_lt_obj' : 'zbw_lt_str') + '">' + zbw_tag + '</span>' +
+        '<code>' + zbw_m.code + '</code>' +
+        '<span>→ ' + zbw_out.ret + '</span>';
+      zbw_ul.insertBefore(zbw_li, zbw_ul.firstChild);
+      while (zbw_ul.children.length > 30) { zbw_ul.removeChild(zbw_ul.lastChild); }
+    }
+
+    /* ---------- 对象重置 ---------- */
+    function zbw_reset_obj(zbw_silent) {
+      zbw_obj = zbw_make_obj();
+      zbw_render_obj();
+      if (!zbw_silent) { zbw_add_log('对象', { code: 'zbw_obj = zbw_make_obj()', ret: '已恢复初始对象' }, { ret: '已恢复初始对象' }); }
+    }
+    document.getElementById('zbw_btn_objreset').onclick = function () { zbw_reset_obj(false); };
+
+    /* ---------- 对象方法定义 ---------- */
+    var zbw_obj_methods = [
+      {
+        title: '① 访问与检测', mut: false, cls: 'zbw_g_acc', note: '点号 / 方括号访问，Object 静态方法，检测属性（不改变对象）',
+        items: [
+          { label: 'obj.name', code: 'zbw_obj.name', mut: false,
+            run: function () { return { ret: "'" + zbw_obj.name + "'（点号访问属性）" }; } },
+          { label: "obj['name']", code: "zbw_obj['name']", mut: false,
+            run: function () { return { ret: "'" + zbw_obj['name'] + "'（方括号访问，键名是字符串）" }; } },
+          { label: 'obj.address.city', code: 'zbw_obj.address.city', mut: false,
+            run: function () { return { ret: "'" + zbw_obj.address.city + "'（嵌套对象逐层访问）" }; } },
+          { label: 'Object.keys()', code: 'Object.keys(zbw_obj)', mut: false,
+            run: function () { var zbw_r = Object.keys(zbw_obj); return { ret: '[' + zbw_r.map(function (zbw_k) { return "'" + zbw_k + "'"; }).join(', ') + ']（所有键名组成的数组）' }; } },
+          { label: 'Object.values()', code: 'Object.values(zbw_obj)', mut: false,
+            run: function () { var zbw_r = Object.values(zbw_obj); return { ret: '[' + zbw_r.map(function (zbw_v) { return typeof zbw_v === 'string' ? "'" + zbw_v + "'" : (typeof zbw_v === 'object' ? JSON.stringify(zbw_v) : zbw_v); }).join(', ') + ']（所有值组成的数组）' }; } },
+          { label: 'hasOwnProperty()', code: "zbw_obj.hasOwnProperty('name')", mut: false,
+            run: function () { return { ret: zbw_obj.hasOwnProperty('name') + '（对象自身是否拥有 name 属性）' }; } },
+          { label: "'stuId' in obj", code: "'stuId' in zbw_obj", mut: false,
+            run: function () { return { ret: ('stuId' in zbw_obj) + '（in 运算符检测键是否存在）' }; } },
+          { label: 'for...in 遍历', code: 'for (var k in zbw_obj) { ... }', mut: false,
+            run: function () {
+              var zbw_seq = [];
+              for (var zbw_k in zbw_obj) {
+                var zbw_v = zbw_obj[zbw_k];
+                zbw_seq.push(zbw_k + ' → ' + (typeof zbw_v === 'object' ? JSON.stringify(zbw_v) : zbw_v));
+              }
+              return { ret: zbw_seq.join('；') + '（for...in 依次遍历所有键值对）' };
+            } },
+          { label: 'JSON.stringify()', code: 'JSON.stringify(zbw_obj)', mut: false,
+            run: function () { return { ret: JSON.stringify(zbw_obj) + '（对象转 JSON 字符串）' }; } }
+        ]
+      },
+      {
+        title: '② 增删改属性', mut: true, cls: 'zbw_g_mut', note: '直接赋值即可添加或修改，delete 删除属性（会改变对象）',
+        items: [
+          { label: "obj.gender = '男'", code: "zbw_obj.gender = '男'", mut: true, target: 'gender', action: 'add',
+            run: function () {
+              zbw_obj.gender = '男';
+              var zbw_r = zbw_obj.gender;
+              return { ret: "'" + zbw_r + "'（赋值即添加：对象新增 gender 属性）" };
+            } },
+          { label: "obj.hobby = '前端开发'", code: "zbw_obj.hobby = '前端开发'", mut: true, target: 'hobby', action: 'mod',
+            run: function () {
+              var zbw_oldv = zbw_obj.hobby;
+              zbw_obj.hobby = '前端开发';
+              return { ret: "hobby 由 '" + zbw_oldv + "' 改为 '" + zbw_obj.hobby + "'（赋值即修改）" };
+            } },
+          { label: 'delete obj.gender', code: 'delete zbw_obj.gender', mut: true, target: 'gender', action: 'del',
+            run: function () {
+              var zbw_has = ('gender' in zbw_obj);
+              delete zbw_obj.gender;
+              return { ret: zbw_has ? 'true（gender 属性已从对象中删除）' : 'true（对象上没有 gender 属性，请先点「obj.gender = 男」添加）' };
+            } }
+        ]
+      }
+    ];
+
+    /* ---------- 字符串方法定义 ---------- */
+    var zbw_str_methods = [
+      {
+        title: '① 访问与查询', mut: false, cls: 'zbw_g_acc', note: 'length 属性、下标访问、查找与截取（都不改变原字符串）',
+        items: [
+          { label: 'length', code: 'zbw_str.length', mut: false,
+            run: function () { return { ret: zbw_str.length + '（属性：字符个数，空格也计入）' }; } },
+          { label: 'charAt(0)', code: 'zbw_str.charAt(0)', mut: false, hl: [0, 1],
+            run: function () { return { ret: "' '（下标 0 处的字符，是个空格）" }; } },
+          { label: "indexOf('Script')", code: "zbw_str.indexOf('Script')", mut: false, hl: [11, 17],
+            run: function () { return { ret: zbw_str.indexOf('Script') + "（'Script' 首次出现的下标）" }; } },
+          { label: "includes('Java')", code: "zbw_str.includes('Java')", mut: false, hl: [7, 11],
+            run: function () { return { ret: zbw_str.includes('Java') + '（是否包含 Java）' }; } },
+          { label: 'slice(1, 6)', code: 'zbw_str.slice(1, 6)', mut: false, hl: [1, 6],
+            run: function () { return { ret: "'" + zbw_str.slice(1, 6) + "'（截取下标 [1, 6) 得到的新字符串）" }; } },
+          { label: "split(' ')", code: "zbw_str.split(' ')", mut: false,
+            run: function () { var zbw_r = zbw_str.split(' '); return { ret: '[' + zbw_r.map(function (zbw_x) { return "'" + zbw_x + "'"; }).join(', ') + ']（按空格拆分成数组）' }; } }
+        ]
+      },
+      {
+        title: '② 加工与变换', mut: false, cls: 'zbw_g_iter', note: '大小写、去空格、替换、拼接……全部返回新字符串（原字符串不变）',
+        items: [
+          { label: 'toUpperCase()', code: 'zbw_str.toUpperCase()', mut: false,
+            run: function () { return { ret: "'" + zbw_str.toUpperCase() + "'（全部转为大写的新字符串）" }; } },
+          { label: 'toLowerCase()', code: 'zbw_str.toLowerCase()', mut: false,
+            run: function () { return { ret: "'" + zbw_str.toLowerCase() + "'（全部转为小写的新字符串）" }; } },
+          { label: 'trim()', code: 'zbw_str.trim()', mut: false,
+            run: function () { return { ret: "'" + zbw_str.trim() + "'（去掉两端空格的新字符串）" }; } },
+          { label: "replace('Hello', '你好')", code: "zbw_str.replace('Hello', '你好')", mut: false,
+            run: function () { return { ret: "'" + zbw_str.replace('Hello', '你好') + "'（替换第一个匹配后的新字符串）" }; } },
+          { label: "concat(' !')", code: "zbw_str.concat(' !')", mut: false,
+            run: function () { return { ret: "'" + zbw_str.concat(' !') + "'（拼接后的新字符串，效果同 + 号）" }; } },
+          { label: 'repeat(2)', code: 'zbw_str.repeat(2)', mut: false,
+            run: function () { return { ret: "'" + zbw_str.repeat(2) + "'（重复 2 次的新字符串）" }; } },
+          { label: "padStart(22, '*')", code: "zbw_str.padStart(22, '*')", mut: false,
+            run: function () { return { ret: "'" + zbw_str.padStart(22, '*') + "'（头部补 * 到 22 位）" }; } },
+          { label: '模板字符串', code: '`你好, ${zbw_str.trim()}`', mut: false,
+            run: function () { var zbw_r = '你好, ' + zbw_str.trim(); return { ret: "'" + zbw_r + "'（模板字符串：${} 里可以嵌入任意表达式）" }; } }
+        ]
+      }
+    ];
+
+    /* ---------- 对象方法执行 ---------- */
+    function zbw_run_obj(zbw_m) {
+      var zbw_do_exec = function () {
+        var zbw_old = JSON.parse(JSON.stringify(zbw_obj));
+        var zbw_out = zbw_m.run();
+        var zbw_flashK = [], zbw_popK = [];
+        var zbw_keys = Object.keys(zbw_obj);
+        for (var zbw_i = 0; zbw_i < zbw_keys.length; zbw_i++) {
+          var zbw_k = zbw_keys[zbw_i];
+          var zbw_newv = zbw_obj[zbw_k];
+          var zbw_oldv = zbw_old[zbw_k];
+          var zbw_same = (typeof zbw_newv === 'object' && zbw_newv !== null)
+            ? (JSON.stringify(zbw_oldv) === JSON.stringify(zbw_newv))
+            : (zbw_oldv === zbw_newv);
+          if (!zbw_same) {
+            zbw_flashK.push(zbw_k);
+            if (zbw_oldv === undefined) { zbw_popK.push(zbw_k); }
+          }
+        }
+        zbw_render_obj(zbw_flashK, zbw_popK);
+        zbw_show_result('zbw_o', zbw_m, zbw_out);
+        zbw_add_log('对象', zbw_m, zbw_out);
+      };
+      // 删除前先播放移出动画
+      if (zbw_m.action === 'del' && document.getElementById('zbw_kv_' + zbw_m.target)) {
+        document.getElementById('zbw_kv_' + zbw_m.target).className += ' zbw_out';
+        window.setTimeout(zbw_do_exec, 300);
+      } else {
+        zbw_do_exec();
+      }
+    }
+
+    /* ---------- 字符串方法执行 ---------- */
+    function zbw_run_str(zbw_m) {
+      var zbw_hl = (typeof zbw_m.hl === 'function') ? zbw_m.hl() : zbw_m.hl;
+      zbw_render_str(zbw_hl || null);
+      var zbw_out = zbw_m.run();
+      zbw_show_result('zbw_s', zbw_m, zbw_out);
+      zbw_add_log('字符串', zbw_m, zbw_out);
+    }
+
+    /* ---------- 生成按钮组 ---------- */
+    function zbw_build_groups(zbw_config, zbw_container_id, zbw_runner) {
+      var zbw_root = document.getElementById(zbw_container_id);
+      for (var zbw_g = 0; zbw_g < zbw_config.length; zbw_g++) {
+        var zbw_group = zbw_config[zbw_g];
+        var zbw_div = document.createElement('div');
+        zbw_div.className = 'zbw_group ' + zbw_group.cls;
+        zbw_div.innerHTML = '<h3>' + zbw_group.title + '</h3><p class="zbw_gnote">' + zbw_group.note + '</p>';
+        var zbw_row = document.createElement('div');
+        zbw_row.className = 'zbw_btnrow';
+        for (var zbw_b = 0; zbw_b < zbw_group.items.length; zbw_b++) {
+          var zbw_item = zbw_group.items[zbw_b];
+          var zbw_btn = document.createElement('button');
+          zbw_btn.type = 'button';
+          zbw_btn.className = 'zbw_btn';
+          zbw_btn.textContent = zbw_item.label;
+          zbw_btn.title = zbw_item.code;
+          zbw_btn.onclick = (function (zbw_m) { return function () { zbw_runner(zbw_m); }; })(zbw_item);
+          zbw_row.appendChild(zbw_btn);
+        }
+        zbw_div.appendChild(zbw_row);
+        zbw_root.appendChild(zbw_div);
+      }
+    }
+    zbw_build_groups(zbw_obj_methods, 'zbw_ogroups', zbw_run_obj);
+    zbw_build_groups(zbw_str_methods, 'zbw_sgroups', zbw_run_str);
+
+    /* ---------- 速查表数据 ---------- */
+    var zbw_osheet_data = [
+      { name: 'obj.key', desc: '点号访问：最常用的属性读取方式', ex: 'zbw_obj.name', res: "'赵壁文'" },
+      { name: "obj['key']", desc: '方括号访问：键名写成字符串，也可用变量', ex: "zbw_obj['stuId']", res: '109' },
+      { name: 'obj.newKey = v', desc: '直接赋值即可添加新属性', ex: "obj.gender = '男'", res: '对象新增 gender' },
+      { name: 'obj.key = v', desc: '对已有属性赋值即修改', ex: "obj.hobby = '前端开发'", res: '覆盖原值' },
+      { name: 'delete obj.key', desc: '删除对象的属性，返回 true', ex: 'delete obj.gender', res: 'true' },
+      { name: 'Object.keys(obj)', desc: '所有键名组成的数组', ex: 'Object.keys(obj)', res: "['name', 'stuId', ...]" },
+      { name: 'Object.values(obj)', desc: '所有属性值组成的数组', ex: 'Object.values(obj)', res: "['赵壁文', 109, ...]" },
+      { name: 'for...in', desc: '依次遍历对象的每一个键', ex: 'for (var k in obj) { ... }', res: '逐个访问键值对' },
+      { name: "hasOwnProperty('k')", desc: '检测对象自身是否拥有某属性', ex: "obj.hasOwnProperty('name')", res: 'true' },
+      { name: "'k' in obj", desc: 'in 运算符检测键是否存在（含原型链）', ex: "'stuId' in obj", res: 'true' },
+      { name: 'obj.a.b 嵌套访问', desc: '对象里可以再套对象，逐层用点号访问', ex: 'zbw_obj.address.city', res: "'北京'" },
+      { name: 'JSON.stringify(obj)', desc: '把对象序列化为 JSON 字符串', ex: 'JSON.stringify(obj)', res: '{"name":"赵壁文",...}' }
+    ];
+    var zbw_ssheet_data = [
+      { name: 'str.length', desc: '属性：字符个数，空格也算一个字符', ex: "' Hello JS '.length", res: '9' },
+      { name: 'str[i] / charAt(i)', desc: '访问指定下标处的单个字符', ex: "'Hello'.charAt(1)", res: "'e'" },
+      { name: "indexOf('x')", desc: '查找子串首次出现的下标，找不到返回 -1', ex: "'Hello JS'.indexOf('JS')", res: '6' },
+      { name: "includes('x')", desc: '判断是否包含某个子串', ex: "'Hello JS'.includes('JS')", res: 'true' },
+      { name: 'slice(start, end)', desc: '截取 [start, end) 区间，返回新字符串', ex: "'Hello'.slice(1, 3)", res: "'el'" },
+      { name: "split(sep)", desc: '按分隔符把字符串拆分成数组', ex: "'a,b,c'.split(',')", res: "['a', 'b', 'c']" },
+      { name: 'toUpperCase() / toLowerCase()', desc: '整串转大写 / 小写，返回新字符串', ex: "'Hello'.toUpperCase()", res: "'HELLO'" },
+      { name: 'trim()', desc: '去掉字符串两端的空格', ex: "'  Hi  '.trim()", res: "'Hi'" },
+      { name: 'replace(a, b)', desc: '把第一个匹配的子串替换掉', ex: "'Hello'.replace('l', 'L')", res: "'HeLlo'" },
+      { name: "concat(s) / +", desc: '拼接字符串，concat 与 + 号效果相同', ex: "'Hello'.concat('!')", res: "'Hello!'" },
+      { name: 'repeat(n)', desc: '把字符串重复 n 次返回新串', ex: "'ab'.repeat(3)", res: "'ababab'" },
+      { name: 'padStart(n, c)', desc: '用字符 c 在头部补齐到 n 位长度', ex: "'5'.padStart(3, '0')", res: "'005'" },
+      { name: '模板字符串 `...${x}...`', desc: '反引号包裹，${} 中可嵌入变量与表达式', ex: '`你好, ${name}`', res: "'你好, 赵壁文'" }
+    ];
+    function zbw_build_sheet(zbw_data, zbw_container_id, zbw_cls, zbw_tagcls, zbw_tagtxt) {
+      var zbw_root = document.getElementById(zbw_container_id);
+      for (var zbw_i = 0; zbw_i < zbw_data.length; zbw_i++) {
+        var zbw_it = zbw_data[zbw_i];
+        var zbw_card = document.createElement('div');
+        zbw_card.className = 'zbw_scard ' + zbw_cls;
+        zbw_card.innerHTML =
+          '<div class="zbw_sname">' + zbw_it.name + '</div>' +
+          '<div class="zbw_sdesc">' + zbw_it.desc + '</div>' +
+          '<div class="zbw_sex"><code>' + zbw_it.ex + '</code>' +
+          '<span class="zbw_sres">→ ' + zbw_it.res + '</span></div>' +
+          '<span class="zbw_stag ' + zbw_tagcls + '">' + zbw_tagtxt + '</span>';
+        zbw_root.appendChild(zbw_card);
+      }
+    }
+    zbw_build_sheet(zbw_osheet_data, 'zbw_osheet', 'zbw_s_obj', 'zbw_t_obj', '对象 · 可变');
+    zbw_build_sheet(zbw_ssheet_data, 'zbw_ssheet', 'zbw_s_str', 'zbw_t_str', '字符串 · 不可变');
+
+    /* ---------- 初始化 ---------- */
+    zbw_render_obj();
+    zbw_render_str();
+  </script>
+</body>
+</html>
