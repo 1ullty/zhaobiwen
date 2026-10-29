@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!-- 姓名：赵壁文，日期：2026-10-29 -->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>16-3 商品分类侧边栏</title>
+  <!-- 图标取自 font 目录 iconfont 图标库（播放器图标集），按语义挑选最接近原图的图标 -->
+  <link rel="stylesheet" href="font/font_5244901_v04o946cu5k/iconfont.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+      background: #f4f5f7;
+      min-height: 100vh;
+      padding: 40px 16px;
+      color: #111;
+    }
+
+    /* ===== 分类卡片 ===== */
+    .zbw_card {
+      max-width: 520px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 30px 38px 32px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .04);
+    }
+
+    .zbw_title {
+      font-size: 21px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 12px;
+    }
+
+    .zbw_list { list-style: none; }
+
+    .zbw_row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 13px 0;
+    }
+
+    .zbw_ico {
+      font-size: 22px;
+      color: #111;
+      line-height: 1.45;
+      flex-shrink: 0;
+    }
+
+    .zbw_links {
+      font-size: 16px;
+      line-height: 1.55;
+      color: #111;
+      flex: 1;
+    }
+
+    .zbw_links a {
+      color: #111;
+      text-decoration: none;
+      transition: color .15s;
+    }
+
+    .zbw_links a:hover { color: #e1251b; }
+
+    .zbw_links .zbw_sep { margin: 0 10px; }
+
+    @media (max-width: 480px) {
+      body { padding: 20px 10px; }
+      .zbw_card { padding: 22px 20px 24px; }
+      .zbw_links { font-size: 15px; }
+      .zbw_links .zbw_sep { margin: 0 7px; }
+      .zbw_ico { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <section class="zbw_card">
+    <h2 class="zbw_title">分类</h2>
+    <ul class="zbw_list">
+      <li class="zbw_row">
+        <i class="iconfont icon-bofangliebiao zbw_ico"></i>
+        <p class="zbw_links"><a href="#">冰洗</a><span class="zbw_sep">/</span><a href="#">空调</a><span class="zbw_sep">/</span><a href="#">电视</a><span class="zbw_sep">/</span><a href="#">厨卫大电</a></p>
+      </li>
+      <li class="zbw_row">
+        <i class="iconfont icon-shezhi zbw_ico"></i>
+        <p class="zbw_links"><a href="#">电脑</a><span class="zbw_sep">/</span><a href="#">办公</a><span class="zbw_sep">/</span><a href="#">文具用品</a></p>
+      </li>
+      <li class="zbw_row">
+        <i class="iconfont icon-xiaoxi zbw_ico"></i>
+        <p class="zbw_links"><a href="#">手机</a><span class="zbw_sep">/</span><a href="#">运营商</a><span class="zbw_sep">/</span><a href="#">数码</a></p>
+      </li>
+      <li class="zbw_row">
+        <i class="iconfont icon-bofangliebiao zbw_ico"></i>
+        <p class="zbw_links"><a href="#">生活电器</a><span class="zbw_sep">/</span><a href="#">厨房小电</a><span class="zbw_sep">/</span><a href="#">个护健康</a></p>
+      </li>
+      <li class="zbw_row">
+        <i class="iconfont icon-shangcheng zbw_ico"></i>
+        <p class="zbw_links"><a href="#">食品</a><span class="zbw_sep">/</span><a href="#">酒类</a><span class="zbw_sep">/</span><a href="#">生鲜</a><span class="zbw_sep">/</span><a href="#">特产</a></p>
+      </li>
+      <li class="zbw_row">
+        <i class="iconfont icon-maikefeng zbw_ico"></i>
+        <p class="zbw_links"><a href="#">美妆</a><span class="zbw_sep">/</span><a href="#">个护清洁</a><span class="zbw_sep">/</span><a href="#">宠物</a></p>
+      </li>
+      <li class="zbw_row">
+        <i class="iconfont icon-bofangliebiao zbw_ico"></i>
+        <p class="zbw_links"><a href="#">元器件</a><span class="zbw_sep">/</span><a href="#">劳保物资</a><span class="zbw_sep">/</span><a href="#">五金机电</a></p>
+      </li>
+      <li class="zbw_row">
+        <i class="iconfont icon-bofangliebiao zbw_ico"></i>
+        <p class="zbw_links"><a href="#">家装</a><span class="zbw_sep">/</span><a href="#">建材</a><span class="zbw_sep">/</span><a href="#">家具</a></p>
+      </li>
+      <li class="zbw_row">
+        <i class="iconfont icon-bofangliebiao zbw_ico"></i>
+        <p class="zbw_links"><a href="#">家居日用</a><span class="zbw_sep">/</span><a href="#">厨具</a></p>
+      </li>
+      <li class="zbw_row">
+        <i class="iconfont icon-denglu zbw_ico"></i>
+        <p class="zbw_links"><a href="#">男鞋</a><span class="zbw_sep">/</span><a href="#">运动</a><span class="zbw_sep">/</span><a href="#">户外</a></p>
+      </li>
+      <li class="zbw_row">
+        <i class="iconfont icon-wode zbw_ico"></i>
+        <p class="zbw_links"><a href="#">男装</a><span class="zbw_sep">/</span><a href="#">女装</a><span class="zbw_sep">/</span><a href="#">童装</a><span class="zbw_sep">/</span><a href="#">内衣</a></p>
+      </li>
+    </ul>
+  </section>
+</body>
+</html>
