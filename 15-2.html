@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<!-- 姓名：赵壁文，日期：2026-10-29 -->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>15-2 JavaScript 程序结构：条件与循环</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+      background: #0b1220;
+      background-image:
+        radial-gradient(ellipse 800px 400px at 15% -10%, rgba(52, 211, 153, .12), transparent),
+        radial-gradient(ellipse 800px 400px at 85% 0%, rgba(251, 191, 36, .10), transparent);
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    code, .zbw_mono { font-family: Consolas, "Courier New", monospace; }
+
+    .zbw_wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+    /* ===== 头部 ===== */
+    .zbw_head { text-align: center; padding: 46px 16px 26px; }
+    .zbw_head .zbw_kicker { color: #34d399; letter-spacing: 2px; font-size: 13px; margin-bottom: 14px; }
+    .zbw_head h1 {
+      font-size: 34px; line-height: 1.35;
+      background: linear-gradient(90deg, #34d399, #22d3ee, #fbbf24);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .zbw_head .zbw_sub { color: #94a3b8; font-size: 14px; margin-top: 14px; }
+    .zbw_head .zbw_sub b { color: #fbbf24; }
+
+    /* ===== 板块标题 ===== */
+    .zbw_sechead { display: flex; align-items: center; gap: 12px; margin: 36px 0 14px; }
+    .zbw_sechead .zbw_sno {
+      font-family: Consolas, monospace; font-size: 14px; font-weight: bold;
+      background: linear-gradient(135deg, #34d399, #22d3ee); color: #0b1220;
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .zbw_sechead h2 { font-size: 21px; }
+    .zbw_sechead .zbw_sen { font-size: 12px; color: #64748b; font-family: Consolas, monospace; margin-left: 4px; }
+    .zbw_tip {
+      background: rgba(251, 191, 36, .07); border: 1px dashed rgba(251, 191, 36, .45);
+      color: #fbbf24; border-radius: 10px; padding: 10px 16px;
+      font-size: 13px; line-height: 1.7; margin-bottom: 14px;
+    }
+    .zbw_tip code { color: #fde68a; }
+
+    /* ===== 舞台 ===== */
+    .zbw_stage_sec {
+      background: #111a2e; border: 1px solid #1e293b; border-radius: 16px;
+      padding: 24px; margin-bottom: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+    }
+    .zbw_arrline { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+    .zbw_arrline .zbw_label {
+      font-size: 12px; color: #0b1220; background: #34d399;
+      padding: 3px 10px; border-radius: 20px; font-weight: bold; white-space: nowrap;
+    }
+    .zbw_arrline .zbw_lbloop { background: #22d3ee; }
+    .zbw_arrline code { color: #7dd3fc; font-size: 14px; word-break: break-all; }
+
+    /* 分支流程图 */
+    .zbw_flow { display: flex; flex-direction: column; gap: 10px; padding: 10px 4px 4px; }
+    .zbw_brow {
+      display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+      background: #0b1220; border: 1px solid #334155; border-radius: 10px;
+      padding: 11px 18px; transition: all .25s;
+    }
+    .zbw_brow .zbw_bcond { color: #7dd3fc; font-size: 14px; }
+    .zbw_brow .zbw_barrow { color: #475569; }
+    .zbw_brow .zbw_bres { font-size: 15px; font-weight: bold; }
+    .zbw_brow .zbw_bex { color: #34d399; }
+    .zbw_brow .zbw_bok { color: #22d3ee; }
+    .zbw_brow .zbw_bmid { color: #fbbf24; }
+    .zbw_brow .zbw_bno { color: #f87171; }
+    .zbw_brow.zbw_hit {
+      border-color: #fbbf24; background: rgba(251, 191, 36, .12);
+      animation: zbw_hit_anim .8s ease;
+      transform: translateX(10px);
+    }
+    @keyframes zbw_hit_anim {
+      0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, .8); }
+      70% { box-shadow: 0 0 0 12px rgba(251, 191, 36, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
+    }
+
+    /* 分数输入 */
+    .zbw_scoreline { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+    .zbw_scoreline label { font-size: 13px; color: #94a3b8; }
+    .zbw_input {
+      width: 90px; padding: 8px 12px; border-radius: 8px; font-size: 15px;
+      background: #0b1220; border: 1px solid #334155; color: #fbbf24;
+      font-family: Consolas, monospace; outline: none;
+    }
+    .zbw_input:focus { border-color: #34d399; }
+    .zbw_chip {
+      font-size: 12px; font-family: Consolas, monospace; cursor: pointer;
+      background: #0b1220; color: #94a3b8; border: 1px solid #334155;
+      padding: 5px 11px; border-radius: 16px; transition: all .18s;
+    }
+    .zbw_chip:hover { color: #34d399; border-color: #34d399; }
+
+    /* 循环舞台方块 */
+    .zbw_stage {
+      display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+      min-height: 96px; padding: 14px 6px 34px; align-items: flex-end;
+      border-bottom: 2px dashed #334155;
+    }
+    .zbw_box {
+      width: 62px; height: 62px; border-radius: 12px; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 19px; font-weight: bold; color: #0b1220;
+      background: linear-gradient(145deg, #6ee7b7, #34d399);
+      box-shadow: 0 6px 14px rgba(52, 211, 153, .25);
+      transition: transform .25s;
+    }
+    .zbw_box:hover { transform: translateY(-8px) scale(1.05); }
+    .zbw_box .zbw_idx {
+      position: absolute; bottom: -24px; left: 50%; transform: translateX(-50%);
+      font-size: 11px; color: #64748b; font-family: Consolas, monospace;
+    }
+    .zbw_box.zbw_prod { width: auto; min-width: 66px; padding: 0 10px; font-size: 14px; font-family: Consolas, monospace; }
+    .zbw_box.zbw_skip {
+      background: #0b1220; color: #64748b; font-size: 15px;
+      border: 1px dashed #475569; box-shadow: none;
+    }
+    .zbw_box.zbw_brkbox {
+      background: linear-gradient(145deg, #fca5a5, #ef4444); color: #7f1d1d;
+      font-size: 15px; font-family: Consolas, monospace;
+    }
+    .zbw_box.zbw_pop { animation: zbw_pop_anim .4s cubic-bezier(.34, 1.56, .64, 1); }
+    @keyframes zbw_pop_anim {
+      0% { transform: scale(0) rotate(-30deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0); opacity: 1; }
+    }
+    .zbw_counter {
+      display: inline-block; font-family: Consolas, monospace; font-size: 13px;
+      color: #34d399; background: rgba(52, 211, 153, .1); border: 1px solid rgba(52, 211, 153, .4);
+      padding: 3px 12px; border-radius: 16px; margin-top: 14px;
+    }
+
+    /* ===== 结果面板 ===== */
+    .zbw_result {
+      background: #111a2e; border: 1px solid #1e293b; border-left: 4px solid #fbbf24;
+      border-radius: 12px; padding: 18px 22px; margin-bottom: 18px;
+    }
+    .zbw_result.zbw_rloop { border-left-color: #22d3ee; }
+    .zbw_result .zbw_rline { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 6px 0; }
+    .zbw_result .zbw_rlabel { font-size: 12px; color: #64748b; white-space: nowrap; }
+    .zbw_result .zbw_rlabel::before { content: "> "; color: #34d399; font-family: Consolas, monospace; }
+    .zbw_result code.zbw_rcode { color: #fbbf24; font-size: 14.5px; word-break: break-all; }
+    .zbw_result code.zbw_rret { color: #34d399; font-size: 15px; word-break: break-all; }
+    .zbw_badge { font-size: 12px; padding: 3px 12px; border-radius: 20px; white-space: nowrap; font-weight: bold; }
+    .zbw_badge.zbw_b_cond { background: rgba(52, 211, 153, .12); color: #34d399; border: 1px solid rgba(52, 211, 153, .45); }
+    .zbw_badge.zbw_b_loop { background: rgba(34, 211, 238, .12); color: #22d3ee; border: 1px solid rgba(34, 211, 238, .45); }
+
+    /* ===== 方法按钮分组 ===== */
+    .zbw_groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 18px; }
+    .zbw_group {
+      background: #111a2e; border: 1px solid #1e293b; border-radius: 14px; padding: 18px;
+      border-top: 3px solid #22d3ee;
+    }
+    .zbw_group.zbw_g_loop { border-top-color: #22d3ee; }
+    .zbw_group.zbw_g_cond { border-top-color: #34d399; }
+    .zbw_group h3 { font-size: 15px; margin-bottom: 4px; }
+    .zbw_group .zbw_gnote { font-size: 12px; color: #64748b; margin-bottom: 14px; }
+    .zbw_btnrow { display: flex; flex-wrap: wrap; gap: 8px; }
+    .zbw_btn {
+      font-family: Consolas, monospace; font-size: 13px; cursor: pointer;
+      background: #0b1220; color: #e2e8f0; border: 1px solid #334155;
+      padding: 8px 13px; border-radius: 8px; transition: all .18s;
+    }
+    .zbw_btn:hover { transform: translateY(-2px); }
+    .zbw_g_cond .zbw_btn:hover { border-color: #34d399; color: #6ee7b7; box-shadow: 0 4px 12px rgba(52, 211, 153, .25); }
+    .zbw_g_loop .zbw_btn:hover { border-color: #22d3ee; color: #67e8f9; box-shadow: 0 4px 12px rgba(34, 211, 238, .25); }
+    .zbw_btn[disabled] { opacity: .45; cursor: wait; transform: none; }
+
+    /* ===== 操作日志 ===== */
+    .zbw_logsec {
+      background: #111a2e; border: 1px solid #1e293b; border-radius: 14px;
+      padding: 18px 22px; margin-bottom: 34px;
+    }
+    .zbw_logsec h3 { font-size: 15px; margin-bottom: 12px; color: #fbbf24; }
+    .zbw_logsec ul { list-style: none; max-height: 230px; overflow-y: auto; }
+    .zbw_logsec li {
+      font-size: 13px; padding: 7px 4px; border-bottom: 1px dashed #1e293b;
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: baseline;
+    }
+    .zbw_logsec li .zbw_lno { color: #475569; font-size: 11px; min-width: 26px; }
+    .zbw_logsec li .zbw_ltag { font-size: 10.5px; padding: 1px 8px; border-radius: 10px; white-space: nowrap; }
+    .zbw_logsec li .zbw_lt_cond { background: rgba(52, 211, 153, .12); color: #6ee7b7; }
+    .zbw_logsec li .zbw_lt_loop { background: rgba(34, 211, 238, .12); color: #67e8f9; }
+    .zbw_logsec li code { color: #fbbf24; word-break: break-all; }
+    .zbw_logsec li span { color: #94a3b8; word-break: break-all; }
+
+    /* ===== 速查表 ===== */
+    .zbw_sheethead { text-align: center; margin: 40px 0 20px; }
+    .zbw_sheethead h2 { font-size: 24px; }
+    .zbw_sheethead p { color: #64748b; font-size: 13px; margin-top: 8px; }
+    .zbw_sheet { display: grid; grid-template-columns: repeat(auto-fill, minmax(235px, 1fr)); gap: 14px; margin-bottom: 20px; }
+    .zbw_scard {
+      background: #111a2e; border: 1px solid #1e293b; border-radius: 12px;
+      padding: 14px 16px; transition: all .2s;
+    }
+    .zbw_scard:hover { transform: translateY(-4px); border-color: #334155; }
+    .zbw_scard.zbw_s_cond { border-top: 3px solid #34d399; }
+    .zbw_scard.zbw_s_loop { border-top: 3px solid #22d3ee; }
+    .zbw_scard .zbw_sname { font-family: Consolas, monospace; font-size: 14.5px; color: #fbbf24; margin-bottom: 6px; word-break: break-all; }
+    .zbw_scard .zbw_sdesc { font-size: 12.5px; color: #94a3b8; line-height: 1.6; margin-bottom: 10px; }
+    .zbw_scard .zbw_sex { font-size: 12px; color: #64748b; line-height: 1.7; }
+    .zbw_scard .zbw_sex code { color: #7dd3fc; font-size: 11.5px; display: block; word-break: break-all; }
+    .zbw_scard .zbw_sex .zbw_sres { color: #34d399; }
+    .zbw_scard .zbw_stag { display: inline-block; font-size: 10.5px; padding: 1px 8px; border-radius: 10px; margin-top: 8px; }
+    .zbw_scard .zbw_stag.zbw_t_cond { background: rgba(52, 211, 153, .12); color: #6ee7b7; }
+    .zbw_scard .zbw_stag.zbw_t_loop { background: rgba(34, 211, 238, .12); color: #67e8f9; }
+
+    /* ===== 底部 ===== */
+    .zbw_foot { text-align: center; color: #475569; font-size: 13px; margin-top: 50px; line-height: 2; }
+    .zbw_foot b { color: #94a3b8; }
+
+    @media (max-width: 600px) {
+      .zbw_head h1 { font-size: 24px; }
+      .zbw_box { width: 48px; height: 48px; font-size: 15px; }
+      .zbw_brow { padding: 9px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="zbw_head">
+    <p class="zbw_kicker">// LESSON 15-2 · JAVASCRIPT CONDITIONALS &amp; LOOPS</p>
+    <h1>JavaScript 程序结构：条件与循环可视化演示</h1>
+    <p class="zbw_sub">姓名 <b>赵壁文</b> · 学号 109 · 计算机24001班 —— 输入分数查看条件分支命中，点击循环按钮观看逐个执行的动画</p>
+  </header>
+
+  <div class="zbw_wrap">
+
+    <!-- ==================== ① 条件结构 ==================== -->
+    <div class="zbw_sechead">
+      <span class="zbw_sno">01</span>
+      <h2>条件结构</h2>
+      <span class="zbw_sen">if / else if / else · switch · 三元运算符</span>
+    </div>
+    <p class="zbw_tip">程序根据<b>条件的真假</b>选择不同的执行路径：if...else if...else 逐条检查、命中即止；switch 按值精确匹配；三元运算符是只有两个分支的简写。</p>
+
+    <section class="zbw_stage_sec">
+      <div class="zbw_scoreline">
+        <label for="zbw_score_input">输入分数（0 ~ 100）：</label>
+        <input class="zbw_input" id="zbw_score_input" type="number" min="0" max="100" value="85">
+        <button class="zbw_chip" type="button" data-zbw-s="95">95</button>
+        <button class="zbw_chip" type="button" data-zbw-s="85">85</button>
+        <button class="zbw_chip" type="button" data-zbw-s="72">72</button>
+        <button class="zbw_chip" type="button" data-zbw-s="45">45</button>
+      </div>
+      <div class="zbw_arrline">
+        <span class="zbw_label">当前分数</span>
+        <code id="zbw_scorecode">var zbw_score = 85;</code>
+      </div>
+      <div class="zbw_flow" id="zbw_ifflow"></div>
+      <div class="zbw_arrline" style="margin-top:22px">
+        <span class="zbw_label">switch 匹配</span>
+        <code>switch ( Math.floor( zbw_score / 10 ) )</code>
+      </div>
+      <div class="zbw_flow" id="zbw_swflow"></div>
+      <div class="zbw_arrline" style="margin-top:22px">
+        <span class="zbw_label">三元运算符</span>
+        <code>zbw_score &gt;= 60 ? '及格' : '不及格'</code>
+      </div>
+      <div class="zbw_flow" id="zbw_teflow"></div>
+    </section>
+
+    <section class="zbw_result">
+      <div class="zbw_rline">
+        <span class="zbw_rlabel">执行代码</span>
+        <code class="zbw_rcode" id="zbw_c_code">点击下方按钮后，这里显示执行的代码</code>
+      </div>
+      <div class="zbw_rline">
+        <span class="zbw_rlabel">输出结果</span>
+        <code class="zbw_rret" id="zbw_c_ret">—</code>
+        <span class="zbw_badge zbw_b_cond" id="zbw_c_badge">待演示</span>
+      </div>
+    </section>
+
+    <section class="zbw_groups">
+      <div class="zbw_group zbw_g_cond">
+        <h3>条件判断演示</h3>
+        <p class="zbw_gnote">使用上方输入的分数，命中的分支会高亮并右移</p>
+        <div class="zbw_btnrow">
+          <button class="zbw_btn" id="zbw_btn_if" type="button">if...else if...else</button>
+          <button class="zbw_btn" id="zbw_btn_sw" type="button">switch...case</button>
+          <button class="zbw_btn" id="zbw_btn_te" type="button">三元运算符 ?:</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== ② 循环结构 ==================== -->
+    <div class="zbw_sechead">
+      <span class="zbw_sno">02</span>
+      <h2>循环结构</h2>
+      <span class="zbw_sen">for · while · do...while · for...in · for...of · break · continue</span>
+    </div>
+    <p class="zbw_tip">循环让一段代码<b>重复执行</b>：<code>for</code> 适合已知次数，<code>while</code> 先判断后执行，<code>do...while</code> 至少执行一次，<code>break</code> 提前终止，<code>continue</code> 跳过本次。点击按钮观看每次迭代的动画。</p>
+
+    <section class="zbw_stage_sec">
+      <div class="zbw_arrline">
+        <span class="zbw_label zbw_lbloop">循环过程</span>
+        <code id="zbw_loopcode">点击下方按钮，每次迭代会弹出一个小方块</code>
+      </div>
+      <div class="zbw_stage" id="zbw_lstage"></div>
+      <div style="text-align:center"><span class="zbw_counter" id="zbw_lcounter"></span></div>
+    </section>
+
+    <section class="zbw_result zbw_rloop">
+      <div class="zbw_rline">
+        <span class="zbw_rlabel">执行代码</span>
+        <code class="zbw_rcode" id="zbw_l_code">点击下方按钮后，这里显示执行的代码</code>
+      </div>
+      <div class="zbw_rline">
+        <span class="zbw_rlabel">输出结果</span>
+        <code class="zbw_rret" id="zbw_l_ret">—</code>
+        <span class="zbw_badge zbw_b_loop" id="zbw_l_badge">待演示</span>
+      </div>
+    </section>
+
+    <section class="zbw_groups" id="zbw_lgroups"></section>
+
+    <!-- 共享操作日志 -->
+    <section class="zbw_logsec">
+      <h3>操作日志（最新的在最上面）</h3>
+      <ul id="zbw_log"></ul>
+    </section>
+
+    <!-- ==================== 速查表 ==================== -->
+    <div class="zbw_sheethead">
+      <h2>程序结构速查表</h2>
+      <p>绿色 = 条件结构 · 青色 = 循环结构</p>
+    </div>
+    <section class="zbw_sheet" id="zbw_sheet"></section>
+
+  </div>
+
+  <footer class="zbw_foot">
+    <p><b>赵壁文</b> · 《高级网页设计》课堂实践 · 15-2 JavaScript 程序结构</p>
+    <p>原生 HTML / CSS / JavaScript 实现，无任何第三方库</p>
+  </footer>
+
+  <script>
+    // 全部变量以 zbw_ 开头
+    var zbw_score = 85;
+    var zbw_playing = false;
+    var zbw_logno = 0;
+
+    /* ---------- 日志 ---------- */
+    function zbw_add_log(zbw_tag, zbw_code, zbw_out) {
+      zbw_logno++;
+      var zbw_ul = document.getElementById('zbw_log');
+      var zbw_li = document.createElement('li');
+      zbw_li.innerHTML =
+        '<span class="zbw_lno">' + zbw_logno + '.</span>' +
+        '<span class="zbw_ltag ' + (zbw_tag === '条件' ? 'zbw_lt_cond' : 'zbw_lt_loop') + '">' + zbw_tag + '</span>' +
+        '<code>' + zbw_code + '</code>' +
+        '<span>→ ' + zbw_out + '</span>';
+      zbw_ul.insertBefore(zbw_li, zbw_ul.firstChild);
+      while (zbw_ul.children.length > 30) { zbw_ul.removeChild(zbw_ul.lastChild); }
+    }
+
+    /* ---------- 分数读取 ---------- */
+    function zbw_read_score() {
+      var zbw_v = parseInt(document.getElementById('zbw_score_input').value, 10);
+      if (isNaN(zbw_v)) { zbw_v = 0; }
+      if (zbw_v < 0) { zbw_v = 0; }
+      if (zbw_v > 100) { zbw_v = 100; }
+      zbw_score = zbw_v;
+      document.getElementById('zbw_scorecode').textContent = 'var zbw_score = ' + zbw_score + ';';
+      return zbw_v;
+    }
+    document.getElementById('zbw_score_input').addEventListener('change', zbw_read_score);
+    var zbw_chips = document.getElementsByClassName('zbw_chip');
+    for (var zbw_c = 0; zbw_c < zbw_chips.length; zbw_c++) {
+      zbw_chips[zbw_c].onclick = function () {
+        document.getElementById('zbw_score_input').value = this.getAttribute('data-zbw-s');
+        zbw_read_score();
+      };
+    }
+
+    /* ---------- 分支图构建 ---------- */
+    function zbw_build_rows(zbw_container_id, zbw_rows) {
+      var zbw_root = document.getElementById(zbw_container_id);
+      zbw_root.innerHTML = '';
+      for (var zbw_i = 0; zbw_i < zbw_rows.length; zbw_i++) {
+        var zbw_row = document.createElement('div');
+        zbw_row.className = 'zbw_brow';
+        zbw_row.id = zbw_container_id + '_' + zbw_i;
+        zbw_row.innerHTML =
+          '<code class="zbw_bcond">' + zbw_rows[zbw_i].cond + '</code>' +
+          '<span class="zbw_barrow">──→</span>' +
+          '<span class="zbw_bres ' + zbw_rows[zbw_i].cls + '">' + zbw_rows[zbw_i].res + '</span>';
+        zbw_root.appendChild(zbw_row);
+      }
+    }
+    var zbw_if_rows = [
+      { cond: 'if ( score &gt;= 90 )', res: '优秀（A）', cls: 'zbw_bex' },
+      { cond: 'else if ( score &gt;= 80 )', res: '良好（B）', cls: 'zbw_bok' },
+      { cond: 'else if ( score &gt;= 60 )', res: '及格（C）', cls: 'zbw_bmid' },
+      { cond: 'else', res: '不及格（D）', cls: 'zbw_bno' }
+    ];
+    var zbw_sw_rows = [
+      { cond: 'case 10: case 9:', res: '优', cls: 'zbw_bex' },
+      { cond: 'case 8:', res: '良', cls: 'zbw_bok' },
+      { cond: 'case 7: case 6:', res: '中', cls: 'zbw_bmid' },
+      { cond: 'default:', res: '差', cls: 'zbw_bno' }
+    ];
+    var zbw_te_rows = [
+      { cond: '条件为 true →', res: "'及格'", cls: 'zbw_bex' },
+      { cond: '条件为 false →', res: "'不及格'", cls: 'zbw_bno' }
+    ];
+    zbw_build_rows('zbw_ifflow', zbw_if_rows);
+    zbw_build_rows('zbw_swflow', zbw_sw_rows);
+    zbw_build_rows('zbw_teflow', zbw_te_rows);
+
+    function zbw_hit_row(zbw_container_id, zbw_idx) {
+      var zbw_rows = document.getElementById(zbw_container_id).children;
+      for (var zbw_i = 0; zbw_i < zbw_rows.length; zbw_i++) {
+        zbw_rows[zbw_i].className = 'zbw_brow' + (zbw_i === zbw_idx ? ' zbw_hit' : '');
+      }
+    }
+
+    /* ---------- 条件演示 ---------- */
+    function zbw_cond_result(zbw_code, zbw_ret, zbw_hit, zbw_container) {
+      if (zbw_hit >= 0) { zbw_hit_row(zbw_container, zbw_hit); }
+      document.getElementById('zbw_c_code').textContent = zbw_code;
+      document.getElementById('zbw_c_ret').textContent = zbw_ret;
+      document.getElementById('zbw_c_badge').textContent = '命中第 ' + (zbw_hit + 1) + ' 个分支';
+      zbw_add_log('条件', zbw_code, zbw_ret);
+    }
+
+    document.getElementById('zbw_btn_if').onclick = function () {
+      var zbw_s = zbw_read_score();
+      var zbw_hit = (zbw_s >= 90) ? 0 : (zbw_s >= 80 ? 1 : (zbw_s >= 60 ? 2 : 3));
+      var zbw_lv = ['优秀（A）', '良好（B）', '及格（C）', '不及格（D）'][zbw_hit];
+      zbw_cond_result(
+        "if (score >= 90) { 等级 = '优秀' } else if (score >= 80) { ... } else if (score >= 60) { ... } else { ... }",
+        '等级 = ' + zbw_lv + '（score = ' + zbw_s + '）', zbw_hit, 'zbw_ifflow');
+    };
+    document.getElementById('zbw_btn_sw').onclick = function () {
+      var zbw_s = zbw_read_score();
+      var zbw_g = Math.floor(zbw_s / 10);
+      var zbw_hit = (zbw_g >= 9) ? 0 : (zbw_g === 8 ? 1 : (zbw_g >= 6 ? 2 : 3));
+      var zbw_lv = ['优', '良', '中', '差'][zbw_hit];
+      zbw_cond_result(
+        "switch (Math.floor(score / 10)) { case 10: case 9: 等级='优'; break; case 8: ... default: ... }",
+        "等级 = '" + zbw_lv + "'（Math.floor(" + zbw_s + " / 10) = " + zbw_g + "）", zbw_hit, 'zbw_swflow');
+    };
+    document.getElementById('zbw_btn_te').onclick = function () {
+      var zbw_s = zbw_read_score();
+      var zbw_hit = zbw_s >= 60 ? 0 : 1;
+      var zbw_r = zbw_s >= 60 ? '及格' : '不及格';
+      zbw_cond_result("score >= 60 ? '及格' : '不及格'", "'" + zbw_r + "'（score = " + zbw_s + "）", zbw_hit, 'zbw_teflow');
+    };
+
+    /* ---------- 循环舞台 ---------- */
+    function zbw_play_seq(zbw_m) {
+      if (zbw_playing) { return; }
+      zbw_playing = true;
+      var zbw_stage = document.getElementById('zbw_lstage');
+      zbw_stage.innerHTML = '';
+      document.getElementById('zbw_lcounter').textContent = '循环执行中…';
+      var zbw_i = 0;
+      var zbw_timer = window.setInterval(function () {
+        if (zbw_i >= zbw_m.items.length) {
+          window.clearInterval(zbw_timer);
+          zbw_playing = false;
+          document.getElementById('zbw_lcounter').textContent = zbw_m.count;
+          return;
+        }
+        var zbw_it = zbw_m.items[zbw_i];
+        var zbw_box = document.createElement('div');
+        zbw_box.className = 'zbw_box zbw_pop' + (zbw_it.cls ? ' ' + zbw_it.cls : '');
+        zbw_box.innerHTML = '<span>' + zbw_it.t + '</span><span class="zbw_idx">[第 ' + (zbw_i + 1) + ' 次迭代]</span>';
+        zbw_stage.appendChild(zbw_box);
+        zbw_i++;
+      }, 260);
+      document.getElementById('zbw_l_code').textContent = zbw_m.code;
+      document.getElementById('zbw_l_ret').textContent = zbw_m.out;
+      document.getElementById('zbw_loopcode').textContent = zbw_m.loopnote;
+      zbw_add_log('循环', zbw_m.code, zbw_m.out);
+    }
+
+    /* ---------- 循环方法定义 ---------- */
+    var zbw_loop_methods = [
+      {
+        title: '① 基础循环', cls: 'zbw_g_loop', note: 'for 已知次数 / while 先判断 / do...while 至少一次',
+        items: [
+          { label: 'for 1~5', code: 'for (var i = 1; i <= 5; i++) { console.log(i); }', loopnote: '初始化 i=1 → 判断 i<=5 → 执行 → i++ → 再判断…',
+            count: '共循环 5 次', out: '1 2 3 4 5',
+            items: [{ t: 1 }, { t: 2 }, { t: 3 }, { t: 4 }, { t: 5 }] },
+          { label: 'while 1~5', code: 'var i = 1; while (i <= 5) { console.log(i); i++; }', loopnote: '先判断条件，条件为 true 才执行循环体',
+            count: '共循环 5 次', out: '1 2 3 4 5',
+            items: [{ t: 1 }, { t: 2 }, { t: 3 }, { t: 4 }, { t: 5 }] },
+          { label: 'do...while', code: 'var i = 1; do { console.log(i); i++; } while (i <= 5);', loopnote: '先执行一次循环体，再判断条件（至少执行 1 次）',
+            count: '共循环 5 次（即使条件不成立也先跑一次）', out: '1 2 3 4 5',
+            items: [{ t: 1 }, { t: 2 }, { t: 3 }, { t: 4 }, { t: 5 }] }
+        ]
+      },
+      {
+        title: '② 遍历循环', cls: 'zbw_g_loop', note: 'for...of 遍历数组值 / for...in 遍历对象键',
+        items: [
+          { label: 'for...of 数组', code: "for (var s of ['春','夏','秋','冬']) { console.log(s); }", loopnote: "依次取出数组 ['春','夏','秋','冬'] 的每一个值",
+            count: '共循环 4 次', out: '春 夏 秋 冬',
+            items: [{ t: '春' }, { t: '夏' }, { t: '秋' }, { t: '冬' }] },
+          { label: 'for...in 对象', code: "var obj = { name: '赵壁文', stuId: 109 }; for (var k in obj) { console.log(k, obj[k]); }", loopnote: '依次取出对象的每一个键名 k，再用 obj[k] 取值',
+            count: '共循环 2 次', out: "name 赵壁文；stuId 109",
+            items: [{ t: "k='name'", cls: 'zbw_prod' }, { t: "k='stuId'", cls: 'zbw_prod' }] }
+        ]
+      },
+      {
+        title: '③ 流程控制', cls: 'zbw_g_loop', note: 'break 提前终止整个循环 / continue 跳过本次进入下一次',
+        items: [
+          { label: 'break', code: 'for (var i = 1; i <= 10; i++) { if (i === 6) break; console.log(i); }', loopnote: 'i 等于 6 时执行 break，整个循环立即结束',
+            count: '循环 6 次后跳出（第 6 次未输出）', out: '1 2 3 4 5',
+            items: [{ t: 1 }, { t: 2 }, { t: 3 }, { t: 4 }, { t: 5 }, { t: 'break', cls: 'zbw_brkbox' }] },
+          { label: 'continue', code: 'for (var i = 1; i <= 10; i++) { if (i % 3 === 0) continue; console.log(i); }', loopnote: 'i 是 3 的倍数时执行 continue，跳过本次输出',
+            count: '循环 10 次，跳过 3 次', out: '1 2 4 5 7 8 10',
+            items: [{ t: 1 }, { t: 2 }, { t: 3, cls: 'zbw_skip' }, { t: 4 }, { t: 5 }, { t: 6, cls: 'zbw_skip' }, { t: 7 }, { t: 8 }, { t: 9, cls: 'zbw_skip' }, { t: 10 }] },
+          { label: '嵌套循环 九九表', code: 'for (var i = 1; i <= 3; i++) { for (var j = 1; j <= i; j++) { console.log(j + "×" + i + "=" + j * i); } }', loopnote: '外层 i 控制行，内层 j 控制列：3 行分别循环 1、2、3 次',
+            count: '外层 3 次，内层共 1+2+3=6 次', out: '1×1=1 | 1×2=2 2×2=4 | 1×3=3 2×3=6 3×3=9',
+            items: [{ t: '1×1=1', cls: 'zbw_prod' }, { t: '1×2=2', cls: 'zbw_prod' }, { t: '2×2=4', cls: 'zbw_prod' }, { t: '1×3=3', cls: 'zbw_prod' }, { t: '2×3=6', cls: 'zbw_prod' }, { t: '3×3=9', cls: 'zbw_prod' }] }
+        ]
+      }
+    ];
+
+    /* ---------- 生成循环按钮 ---------- */
+    var zbw_lroot = document.getElementById('zbw_lgroups');
+    for (var zbw_g = 0; zbw_g < zbw_loop_methods.length; zbw_g++) {
+      var zbw_group = zbw_loop_methods[zbw_g];
+      var zbw_div = document.createElement('div');
+      zbw_div.className = 'zbw_group ' + zbw_group.cls;
+      zbw_div.innerHTML = '<h3>' + zbw_group.title + '</h3><p class="zbw_gnote">' + zbw_group.note + '</p>';
+      var zbw_row = document.createElement('div');
+      zbw_row.className = 'zbw_btnrow';
+      for (var zbw_b = 0; zbw_b < zbw_group.items.length; zbw_b++) {
+        var zbw_item = zbw_group.items[zbw_b];
+        var zbw_btn = document.createElement('button');
+        zbw_btn.type = 'button';
+        zbw_btn.className = 'zbw_btn';
+        zbw_btn.textContent = zbw_item.label;
+        zbw_btn.title = zbw_item.code;
+        zbw_btn.onclick = (function (zbw_m, zbw_el) {
+          return function () {
+            zbw_play_seq(zbw_m);
+            zbw_el.setAttribute('disabled', '');
+            window.setTimeout(function () { zbw_el.removeAttribute('disabled'); }, zbw_m.items.length * 260 + 400);
+          };
+        })(zbw_item, zbw_btn);
+        zbw_row.appendChild(zbw_btn);
+      }
+      zbw_div.appendChild(zbw_row);
+      zbw_lroot.appendChild(zbw_div);
+    }
+
+    /* ---------- 速查表 ---------- */
+    var zbw_sheet_data = [
+      { name: 'if (条件) { ... }', g: 'zbw_s_cond', tag: '条件', desc: '条件为 true 时执行代码块', ex: "if (score >= 90) { 等级 = '优秀'; }", res: '满足才执行' },
+      { name: 'if...else if...else', g: 'zbw_s_cond', tag: '条件', desc: '多分支逐条检查，命中一个后不再往下', ex: 'if (a) {...} else if (b) {...} else {...}', res: '命中即止' },
+      { name: 'switch...case', g: 'zbw_s_cond', tag: '条件', desc: '按值精确匹配分支，记得写 break', ex: "switch (x) { case 1: ...; break; default: ... }", res: '匹配跳转' },
+      { name: '条件 ? A : B', g: 'zbw_s_cond', tag: '条件', desc: '三元运算符：两分支的简写形式', ex: "score >= 60 ? '及格' : '不及格'", res: '二选一' },
+      { name: 'for (初始; 条件; 更新)', g: 'zbw_s_loop', tag: '循环', desc: '适合已知循环次数的场景', ex: 'for (var i = 1; i <= 5; i++) {...}', res: '循环 5 次' },
+      { name: 'while (条件)', g: 'zbw_s_loop', tag: '循环', desc: '先判断后执行，条件不满足一次也不执行', ex: 'while (i <= 5) { ...; i++; }', res: '可能 0 次' },
+      { name: 'do...while (条件)', g: 'zbw_s_loop', tag: '循环', desc: '先执行一次再判断，至少执行 1 次', ex: 'do { ...; i++; } while (i <= 5);', res: '至少 1 次' },
+      { name: 'for...of', g: 'zbw_s_loop', tag: '循环', desc: '依次遍历数组（或字符串）的每一个值', ex: "for (var s of ['春','夏']) {...}", res: "s 依次为 '春','夏'" },
+      { name: 'for...in', g: 'zbw_s_loop', tag: '循环', desc: '遍历对象的每一个键名', ex: 'for (var k in obj) { obj[k] }', res: 'k 为键名' },
+      { name: 'break', g: 'zbw_s_loop', tag: '循环', desc: '立即终止整个循环', ex: 'if (i === 6) break;', res: '循环提前结束' },
+      { name: 'continue', g: 'zbw_s_loop', tag: '循环', desc: '跳过本次循环体，进入下一次迭代', ex: 'if (i % 3 === 0) continue;', res: '跳过 3/6/9' },
+      { name: '嵌套循环', g: 'zbw_s_loop', tag: '循环', desc: '循环里套循环，外层 1 次内层跑一整轮', ex: 'for (i) { for (j) {...} }', res: '九九乘法表' }
+    ];
+    var zbw_sheet_el = document.getElementById('zbw_sheet');
+    for (var zbw_s2 = 0; zbw_s2 < zbw_sheet_data.length; zbw_s2++) {
+      var zbw_it = zbw_sheet_data[zbw_s2];
+      var zbw_card = document.createElement('div');
+      zbw_card.className = 'zbw_scard ' + zbw_it.g;
+      zbw_card.innerHTML =
+        '<div class="zbw_sname">' + zbw_it.name + '</div>' +
+        '<div class="zbw_sdesc">' + zbw_it.desc + '</div>' +
+        '<div class="zbw_sex"><code>' + zbw_it.ex + '</code>' +
+        '<span class="zbw_sres">→ ' + zbw_it.res + '</span></div>' +
+        '<span class="zbw_stag ' + (zbw_it.g === 'zbw_s_cond' ? 'zbw_t_cond' : 'zbw_t_loop') + '">' + zbw_it.tag + '结构</span>';
+      zbw_sheet_el.appendChild(zbw_card);
+    }
+  </script>
+</body>
+</html>
